@@ -41,7 +41,7 @@ class Node implements EntityInterface, NodeInterface {
     /**
      * {@inheritdoc}
      */
-    public function __construct() {
+    public function __construct(GraphInterface $context) {
         $this->onEntityLoad();
         $this->edge_list = new EdgeList();
     }
