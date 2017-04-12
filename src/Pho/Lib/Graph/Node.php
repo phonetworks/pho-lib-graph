@@ -51,7 +51,7 @@ class Node implements EntityInterface, NodeInterface {
     public function __construct(GraphInterface $context) {
         $this->onEntityLoad();
         $this->edge_list = new EdgeList();
-        $this->context = $context->add($this);
+        $context->add($this)->context = $context;
     }
 
     /**

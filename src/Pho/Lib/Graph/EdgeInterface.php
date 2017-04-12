@@ -32,14 +32,14 @@ interface EdgeInterface {
     *
     * @return TailNode The source node.
     */
-   public function tail(): array;
+   public function tail(): TailNode;
 
    /**
     * Returns the node (in its object form) that this edge directed towards.
     *
     * @return HeadNode The head node.
     */
-   public function head(): array;
+   public function head(): HeadNode;
 
 
    /**
@@ -49,7 +49,7 @@ interface EdgeInterface {
     *
     * @return PredicateInterface The predicate.
     */
-   public function predicate(): array;
+   public function predicate(): PredicateInterface;
 
    /**
     * Checks if the Edge has tail and head.

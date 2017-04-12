@@ -38,11 +38,79 @@ class AdjacentNode implements NodeInterface, EntityInterface {
         $this->instance = $node;
     }
 
+    /**
+     * @internal
+     *
+     * @param string $method
+     * @param array $arguments
+     * @return void
+     */
     public function __call(string $method, array $arguments) //: mixed 
     {
         $this->instance->$method(...$arguments);
         $returns = call_user_func_array([$this->instance, $method], $arguments);
         return $returns; // will return null if void.
+    }
+
+    /*******************************************************
+     * The methods below are achievable with __call()       
+     * but must be implemented for Interface compatibility. 
+     *******************************************************/ 
+
+     /**
+      * {@inheritdoc}
+      */
+    public function edges(): EdgeList
+    {
+        return $this->instance->edges();
+    }
+
+    /**
+      * {@inheritdoc}
+      */
+    public function context(): GraphInterface
+    {
+        return $this->instance->context();
+    }
+
+    /**
+      * {@inheritdoc}
+      */
+    public function id(): ID
+    {
+        return $this->instance->id();
+    }
+
+    /**
+      * {@inheritdoc}
+      */
+    public function isA(string $class_name): bool
+    {
+        return $this->instance->isA();
+    }
+
+    /**
+      * {@inheritdoc}
+      */
+    public function label(): string
+    {
+        return $this->instance->label();
+    }
+
+    /**
+      * {@inheritdoc}
+      */
+    public function attributes(): AttributeBag
+    {
+        return $this->instance->attributes();
+    }
+
+    /**
+      * {@inheritdoc}
+      */
+    public function destroy(): void
+    {
+        $this->instance->destroy();
     }
 
 }

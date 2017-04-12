@@ -74,7 +74,7 @@ class TailNode extends AdjacentNode implements \SplSubject {
     public function notify(): void
     {
         foreach($this->observers as $observer) {
-            $observer->notify();
+            $observer->update($this);
         }
     }
 

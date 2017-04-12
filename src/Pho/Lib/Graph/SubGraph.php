@@ -23,4 +23,15 @@ class SubGraph extends Node implements GraphInterface {
 
     use ClusterTrait;
 
+    /**
+     * {@inheritdoc}
+     */
+    public function destroy(): void
+    {
+        foreach($this->nodes as $node) {
+            $node->destroy();
+        }
+        parent::destroy();
+    }
+
 }

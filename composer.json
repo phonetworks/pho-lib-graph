@@ -16,7 +16,9 @@
     },
     "require-dev": {
         "phpunit/phpunit": "^5.7",
-	    "phpdocumentor/phpdocumentor": "*"    
+	    "phpdocumentor/phpdocumentor": "*" ,
+        "psy/psysh": "*",
+        "fzaninotto/faker": "^1.6"
         },
     "autoload": {
 	     "psr-4": {
