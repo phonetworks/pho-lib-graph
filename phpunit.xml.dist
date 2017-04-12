@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<phpunit bootstrap="vendor/autoload.php"
+         colors="true"
+         convertErrorsToExceptions="true"
+         convertNoticesToExceptions="true"
+         convertWarningsToExceptions="true"
+>
+
+    <php>
+      <env name="DATABASE_TYPE" value="redis" />
+      <env name="DATABASE_URI" value="tcp://127.0.0.1:6379" />
+      <env name="STORAGE_TYPE" value="filesystem" />
+      <env name="STORAGE_URI" value="/tmp/pho" />
+    </php>
+
+    <testsuites>
+        <testsuite name="Pho Kernel Test Suite">
+            <directory>./tests/</directory>=
+        </testsuite>
+    </testsuites>
+
+    <filter>
+        <whitelist>
+            <directory>./src/</directory>
+        </whitelist>
+    </filter>
+
+</phpunit>

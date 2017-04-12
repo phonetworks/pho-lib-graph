@@ -1,0 +1,9 @@
+build
+docs
+*.DS_Store
+/composer.lock
+.git
+backup
+vendor
+.vagrant
+*.log
