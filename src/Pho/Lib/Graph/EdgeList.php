@@ -60,7 +60,7 @@ class EdgeList {
      */
     public function addIncoming(EdgeInterface $edge): void
     {
-            $this->to[(string) $edge->target()->id()][] = ["direction"=>Direction::in(), "edge"=>$edge];
+            $this->to[(string) $edge->tail()->id()][] = ["direction"=>Direction::in(), "edge"=>$edge];
             $this->in[] = $edge;
     }
 
@@ -75,7 +75,7 @@ class EdgeList {
      */
     public function addOutgoing(EdgeInterface $edge): void
     {
-            $this->to[(string) $edge->target()->id()][] = ["direction"=>Direction::out(), "edge"=>$edge];
+            $this->to[(string) $edge->head()->id()][] = ["direction"=>Direction::out(), "edge"=>$edge];
             $this->out[] = $edge;
     }
 

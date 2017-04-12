@@ -34,6 +34,13 @@ class Node implements EntityInterface, NodeInterface {
      */
     private $edge_list;
 
+    /**
+     * The graph context of this node
+     *
+     * @var GraphInterface
+     */
+    private $context;
+
     use EntityTrait {
         EntityTrait::__construct as onEntityLoad;
     }
@@ -41,9 +48,18 @@ class Node implements EntityInterface, NodeInterface {
     /**
      * {@inheritdoc}
      */
-    public function __construct() {
+    public function __construct(GraphInterface $context) {
         $this->onEntityLoad();
         $this->edge_list = new EdgeList();
+        $context->add($this)->context = $context;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function context(): GraphInterface
+    {
+        return $this->context;
     }
     
    /**

@@ -69,10 +69,11 @@ class Edge implements EntityInterface, EdgeInterface, \SplObserver {
 
         $this->head = new HeadNode();
         $this->head->set($head);
-        $this->head->edges()->addIncoming($this);
 
         $this->tail = new TailNode();
         $this->tail->set($tail);
+
+        $this->head->edges()->addIncoming($this);
         $this->tail->edges()->addOutgoing($this);
 
         $this->predicate = $predicate;
@@ -118,7 +119,7 @@ class Edge implements EntityInterface, EdgeInterface, \SplObserver {
     *
     * @return void
     */
-   public function update(): void
+   public function update(\SplSubject $subject): void
    {
     if($this->predicate->binding()) {
         $this->head()->destroy();
