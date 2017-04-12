@@ -41,14 +41,14 @@ interface NodeInterface {
    public function edges(): EdgeList;
 
    /**
-    * Returns an array of contexts this node is a member of.
+    * Returns the context that this node is a member of.
     *
-    * Contexts are GraphInterface objects that contain this node.
+    * Contexts are GraphInterface objects that contain nodes.
     *
-    * @return array An array of contexts in no particular order.
+    * @return ArrayObject An ArrayObject of contexts in no particular order.
     */
 
-   public function contexts(): array;
+   public function context(): GraphInterface;
 
 
 }

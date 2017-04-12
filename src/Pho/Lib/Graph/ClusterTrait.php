@@ -34,6 +34,9 @@ trait ClusterTrait {
     public function add(NodeInterface $node): NodeInterface
     {
         $this->nodes[(string) $node->id()] = $node;
+        if(isset($this->context)) {
+            $this->context->add($node);
+        }
         return $node;
     }
 
