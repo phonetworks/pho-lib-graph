@@ -1,0 +1,38 @@
+sudo: false
+language: php
+
+cache:
+  directories:
+  - $HOME/.composer/cache
+  - vendor
+
+matrix:
+  fast_finish: true
+  include:
+    - php: 5.3
+    - php: 5.4
+    - php: 5.5
+    - php: 5.6
+    - php: 7.0
+    - php: 7.1
+    - php: hhvm
+      env:
+        - HHVMPHP7=0
+    - php: hhvm
+      env:
+        - HHVMPHP7=1
+
+before_install:
+- PHP=$TRAVIS_PHP_VERSION
+- if [[ ! $PHP = hhvm* ]]; then phpenv config-rm xdebug.ini; fi
+- composer self-update
+
+install:
+- travis_retry composer install --no-interaction
+- composer info -i
+
+script:
+- ./vendor/bin/phpunit 
+
+notifications:
+  email: true
