@@ -2,6 +2,14 @@
   "name": "phonetworks/pho-lib-graph",
   "type": "library",
   "description": "A general purpose graph library in PHP",
+   "keywords": [
+        "graph",
+        "network",
+        "node",
+        "vertex",
+        "edge",
+	"predicate"
+    ],
   "homepage": "https://phonetworks.org",
   "license": "MIT",
   "authors": [
