@@ -69,4 +69,12 @@ trait ClusterTrait {
         }
     }
 
+    /**
+     * {@inheritdoc}
+     */        
+    public function members(): array
+    {
+        return $this->nodes;
+    }
+
 }

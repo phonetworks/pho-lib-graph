@@ -56,4 +56,12 @@ interface GraphInterface {
      */
     public function remove(ID $node_id): void;
 
+
+    /**
+     * Retrieves the array of members
+     *
+     * @return array
+     */
+    public function members(): array;
+
 }
