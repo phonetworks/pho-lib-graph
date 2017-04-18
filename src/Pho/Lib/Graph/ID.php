@@ -67,6 +67,15 @@ class ID  {
     }
 
     /**
+     * Verifies identicality
+     *
+     * @return bool
+     */
+    public function equals(ID $id) {
+        return ($this->value == (string) $id);
+    }
+
+    /**
      * Stringifies the object.
      * 
      * Returns a string representation of the object for portability.
