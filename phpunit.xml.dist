@@ -15,7 +15,7 @@
     </php>
 
     <testsuites>
-        <testsuite name="Pho Kernel Test Suite">
+        <testsuite name="Pho Lib Graph Test Suite">
             <directory>./tests/</directory>=
         </testsuite>
     </testsuites>
