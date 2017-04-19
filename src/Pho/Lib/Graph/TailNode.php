@@ -15,8 +15,8 @@ namespace Pho\Lib\Graph;
  * Edge's Tail
  * 
  * Identifies where an edge originates from. Differently from
- * head nodes, tail nodes also act as a subject in observance
- * of their edge for deletion.
+ * head nodes, the TailNode class implements the Observer
+ * pattern as a Subject to observe their edge for deletion.
  * 
  * @see AdjacentNode The parent.
  * 

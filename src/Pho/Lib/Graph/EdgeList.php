@@ -50,6 +50,30 @@ class EdgeList {
     }
 
     /**
+     * Removes the given edge from the list.
+     *
+     * @param ID $edge_id
+     * @return void
+     */
+    // what about the other end? observer pattern.
+    /*public function remove(ID $edge_id): void
+    {
+        $array_remove = function(string $id, array &$haystack) {
+            if(($key = array_search($id, $haystack)) !== false) {
+                unset($haystack[$key]);
+            }
+        };
+        $array_remove((string) $edge_id, $this->in);
+        $array_remove((string) $edge_id, $this->out);
+        foreach($this->to as $node=>$edges) {
+            foreach($edges as $key=>$edge) {
+                if($edge["edge"]->id()->equals($edge_id))
+                    unset($this->to[$node][$key]);
+            }
+        }
+    }*/
+
+    /**
      * Adds an incoming edge to the list.
      * 
      * The edge must be already initialized.
