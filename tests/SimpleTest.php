@@ -50,7 +50,7 @@ class SimpleTest extends \PHPUnit\Framework\TestCase
     public function testEdge() {
         $node1 = new Graph\Node($this->graph);
         $node2 = new Graph\Node($this->graph);
-        $edge = new Graph\Edge($node1, new Graph\Predicate(), $node2);
+        $edge = new Graph\Edge($node1, $node2);
         $this->assertEquals($edge->id(), $node1->edges()->out()[0]->id());
         $this->assertEquals($edge->id(), $node2->edges()->in()[0]->id());
         $this->assertEquals($edge->id(), $node2->edges()->all()[0]->id());
@@ -60,12 +60,22 @@ class SimpleTest extends \PHPUnit\Framework\TestCase
         $faker = \Faker\Factory::create();
         $node1 = new Graph\Node($this->graph);
         $node2 = new Graph\Node($this->graph);
-        $edge = new Graph\Edge($node1, new Graph\Predicate(), $node2);
+        $edge = new Graph\Edge($node1, $node2);
         $node1->attributes()->username = ($username1 = $faker->username);
         $node2->attributes()->username = ($username2 = $faker->username);
         $edge->attributes()->address = ($address = $faker->address);
         $this->assertEquals($username1, $node1->attributes()->username);
         $this->assertEquals($username2, $node2->attributes()->username);
         $this->assertEquals($address, $edge->attributes()->address);
+    }
+
+    public function testPredicateAssignment() {
+        $new_predicate = new class extends Graph\Predicate { public function test() { return "works"; }};
+        $node1 = new Graph\Node($this->graph);
+        $node2 = new Graph\Node($this->graph);
+        $edge1 = new Graph\Edge($node1, $node2);
+        $this->assertFalse(method_exists($edge1->predicate(), "test"));
+        $edge2 = new Graph\Edge($node1, $node2, $new_predicate);
+        $this->assertEquals("works", $edge2->predicate()->test());
     }
 }

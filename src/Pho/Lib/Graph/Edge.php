@@ -63,7 +63,7 @@ class Edge implements EntityInterface, EdgeInterface, \SplObserver {
      * @param PredicateInterface $predicate
      * @param NodeInterface $head
      */
-    public function __construct(NodeInterface $tail, PredicateInterface $predicate, NodeInterface $head) 
+    public function __construct(NodeInterface $tail, NodeInterface $head, ?PredicateInterface $predicate = null) 
     {
         $this->onEntityLoad();
 
@@ -76,7 +76,20 @@ class Edge implements EntityInterface, EdgeInterface, \SplObserver {
         $this->head->edges()->addIncoming($this);
         $this->tail->edges()->addOutgoing($this);
 
-        $this->predicate = $predicate;
+        if(!is_null($predicate)) {
+            $this->predicate = $predicate;
+        }
+        else {
+            $predicate_class = get_class($this)."Predicate";
+            if(class_exists($predicate_class)) {
+                $reflector = new \ReflectionClass($predicate_class);
+                if($reflector->implementsInterface(PredicateInterface::class)) {
+                    $this->predicate = new $predicate_class;
+                }
+            }
+            $this->predicate = new Predicate();
+        }
+        
     }
 
     /**
