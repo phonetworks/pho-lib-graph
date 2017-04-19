@@ -87,7 +87,9 @@ class Edge implements EntityInterface, EdgeInterface, \SplObserver {
                     $this->predicate = new $predicate_class;
                 }
             }
-            $this->predicate = new Predicate();
+            else {
+                $this->predicate = new Predicate();
+            }
         }
         
     }
