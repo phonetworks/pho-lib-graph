@@ -33,7 +33,7 @@ trait EntityTrait {
          *
          * @var ID
          */
-    private $id;
+    protected $id;
 
     /**
      * Attributes of the entity.
@@ -42,7 +42,7 @@ trait EntityTrait {
      *
      * @var AttributeBag $attributes;
      */
-    private $attributes;
+    protected $attributes;
 
     /**
      * Constructor.
@@ -95,6 +95,17 @@ trait EntityTrait {
    public function destroy(): void
    {
 
+   }
+
+   /**
+    * {@inheritdoc}
+    */
+   public function toArray(): array
+   {
+       return [
+           "id" => (string) $this->id,
+            "attributes" => $this->attributes->toArray()
+       ];
    }
 
 

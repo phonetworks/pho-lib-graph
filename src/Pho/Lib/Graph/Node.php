@@ -70,5 +70,11 @@ class Node implements EntityInterface, NodeInterface {
        return $this->edge_list;
    }
 
+   public function toArray(): array
+   {
+       $array = parent::toArray();
+       $array["edge_list"] = $this->edge_list->toArray();
+       return $array;
+   }
 
 }

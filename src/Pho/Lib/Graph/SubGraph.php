@@ -34,4 +34,14 @@ class SubGraph extends Node implements GraphInterface {
         parent::destroy();
     }
 
+    /**
+     * {@inheritdoc}
+     */
+    public function toArray(): array
+    {
+        $array = parent::toArray();
+        $array["members"] = $this->members();
+        return $array;
+    }
+
 }

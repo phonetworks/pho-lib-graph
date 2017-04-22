@@ -49,11 +49,16 @@ class Edge implements EntityInterface, EdgeInterface, \SplObserver {
     private $predicate;
 
     /**
-     * Attributes
-     *
-     * @var AttributeBag
+     * {@inheritdoc}
      */
-    private $attributes;
+    public function toArray(): array
+    {
+        $array = parent::toArray();
+        $array["tail"] = $this->tail->id();
+        $array["head"] = $this->head->id();
+        $array["predicate"] = get_class($this->predicate);
+        return $array;
+    }
 
 
     /**
