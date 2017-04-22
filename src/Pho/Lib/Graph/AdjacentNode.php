@@ -18,6 +18,9 @@ namespace Pho\Lib\Graph;
  * This class is created to make the portability of TailNode and HeadNode
  * classes easy.
  * 
+ * This class and its subclasses follow tbe 
+ * {@link https://sourcemaking.com/design_patterns/proxy Proxy pattern}.
+ * 
  * @see TailNode
  * @see HeadNode
  * 
@@ -27,8 +30,10 @@ class AdjacentNode implements NodeInterface, EntityInterface {
 
     private $instance;
 
+    
+
     /**
-     * Awra rgw 
+     * Sets the node instance that this 
      *
      * @param NodeInterface $node
      * @return void
@@ -36,6 +41,20 @@ class AdjacentNode implements NodeInterface, EntityInterface {
     public function set(NodeInterface $node): void
     {
         $this->instance = $node;
+    }
+
+    /**
+     * Retrieves the node represented
+     * 
+     * In light of Proxy pattern, adjacent nodes represent 
+     * an actual node, and pass any incoming method calls to 
+     * that object. This function returns the actual node.
+     *
+     * @return NodeInterface
+     */
+    public function node(): NodeInterface
+    {
+        return $this->instance;
     }
 
     /**
