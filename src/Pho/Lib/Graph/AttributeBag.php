@@ -38,6 +38,31 @@ class AttributeBag {
     private $bag;
 
     /**
+     * Constructor.
+     *
+     * Parameter optional.
+     * 
+     * @param array $bag Initial bag. Defaults to an empty array.
+     */
+    public function __construct(array $bag = []) {
+        if(count($bag)>0) {
+            $this->bag = $bag;
+        }
+    }
+
+    /**
+     * Retrieves the bag in array format
+     * 
+     * Useful for serialization/unserialization.
+     *
+     * @return array The object in pure array key/value pair form.
+     */
+    public function toArray(): array
+    {
+        return $this->bag;
+    }
+
+    /**
      * @internal
      * Fetches value
      *

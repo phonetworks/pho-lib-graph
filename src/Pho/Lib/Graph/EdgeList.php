@@ -29,6 +29,26 @@ class EdgeList {
     private $in = [];
     private $to = [];
 
+
+    /**
+     * Retrieves this object in array format
+     *
+     * With all "in" and "out" values in simple string format.
+     * The "to" array can be reconstructed.
+     * 
+     * @return array
+     */
+    public function toArray(): array 
+    {
+        $edge_id = function(EdgeInterface $edge): array {
+            return $edge->id();
+        };
+        return array(
+            "out" => array_map($edge_id, $this->out),
+            "in"  => array_map($edge_id, $this->in)
+        );
+    }
+
     /**
      * Adds a new edge to the list.
      * 
