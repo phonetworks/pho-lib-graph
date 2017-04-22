@@ -78,4 +78,17 @@ class SimpleTest extends \PHPUnit\Framework\TestCase
         $edge2 = new Graph\Edge($node1, $node2, $new_predicate);
         $this->assertEquals("works", $edge2->predicate()->test());
     }
+
+    public function testID() {
+        $id1 = Graph\ID::generate();
+        $id2 = Graph\ID::fromString((string)$id1);
+        $this->assertEquals($id1, $id2);
+    }
+
+    /**
+     * @expectedException  \Pho\Lib\Graph\Exceptions\MalformedGraphIDException
+     */
+    public function testInvalidID() {
+        Graph\ID::fromString("invalid");
+    }
 }

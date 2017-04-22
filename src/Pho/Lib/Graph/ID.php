@@ -56,7 +56,7 @@ class ID  {
      *
      * @link  https://en.wikipedia.org/wiki/Universally_unique_identifier UUIDv4 format
      *
-     * @return  String  random uuid in guid v4 format
+     * @return  ID  Random uuid in guid v4 format in ID object format.
      */
     public static function generate(): ID
     {
@@ -64,6 +64,27 @@ class ID  {
         $data[6] = chr(ord($data[6]) & 0x0f | 0x40); // set version to 0100
         $data[8] = chr(ord($data[8]) & 0x3f | 0x80); // set bits 6-7 to 10
         return new ID(vsprintf('%s%s-%s-%s-%s-%s%s%s', str_split(bin2hex($data), 4)));
+    }
+
+
+    /**
+     * Loads a UUIDv4 with the given string
+     * 
+     * Checks the validity of the string and throws an exception if it is not valid.
+     *
+     * @param string $id Must be in UUIDv4 format.
+     * 
+     * @return void Given UUIDv4 in ID object format.
+     * 
+     * @throws Exceptions\InvalidGraphIDException thrown when the given ID is not a valid UUIDv4
+     */
+    public static function fromString(string $id): ID
+    {
+        $uuid_format = '/^[0-9A-F]{8}-[0-9A-F]{4}-4[0-9A-F]{3}-[89AB][0-9A-F]{3}-[0-9A-F]{12}$/i';
+        if(!preg_match($uuid_format, $id)) {
+            throw new Exceptions\MalformedGraphIDException($id);
+        }
+        return new ID($id);
     }
 
     /**
