@@ -34,7 +34,7 @@ class ID  {
      *
      * @var string
      */
-    private $value;
+    protected $value;
 
     /**
      * @internal
