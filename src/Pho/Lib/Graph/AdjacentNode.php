@@ -132,4 +132,12 @@ class AdjacentNode implements NodeInterface, EntityInterface {
         $this->instance->destroy();
     }
 
+    /**
+      * {@inheritdoc}
+      */
+    public function toArray(): array
+    {
+        return $this->instance->toArray();
+    }
+
 }
