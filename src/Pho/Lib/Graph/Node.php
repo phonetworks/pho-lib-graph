@@ -43,6 +43,7 @@ class Node implements EntityInterface, NodeInterface {
 
     use EntityTrait {
         EntityTrait::__construct as onEntityLoad;
+        EntityTrait::toArray as entityToArray;
     }
 
     /**
@@ -72,7 +73,7 @@ class Node implements EntityInterface, NodeInterface {
 
    public function toArray(): array
    {
-       $array = parent::toArray();
+       $array = parent::entityToArray();
        $array["edge_list"] = $this->edge_list->toArray();
        return $array;
    }

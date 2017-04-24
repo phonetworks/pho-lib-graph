@@ -35,7 +35,7 @@ class AttributeBag {
      *
      * @var array
      */
-    private $bag;
+    private $bag = [];
 
     /**
      * Constructor.
