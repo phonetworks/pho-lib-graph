@@ -140,4 +140,12 @@ class AdjacentNode implements NodeInterface, EntityInterface {
         return $this->instance->toArray();
     }
 
+     /**
+      * {@inheritdoc}
+      */
+    public function update(\SplSubject $subject): void
+    {
+        $this->instance->update($subject);
+    }
+
 }

@@ -107,4 +107,15 @@ interface EntityInterface {
    public function toArray(): array;
 
 
+   /**
+    * Observed entities use this method to update the entity.
+    *
+    * @param \SplSubject $subject Updater.
+    *
+    * @return void
+    */
+   public function update(\SplSubject $subject): void;
+
+
+
 }

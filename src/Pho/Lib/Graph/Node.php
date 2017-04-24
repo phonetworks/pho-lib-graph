@@ -21,11 +21,13 @@ namespace Pho\Lib\Graph;
  * Nodes are indivisible, yet they share some common characteristics with edges.
  * In Pho context, these commonalities are represented with the EntityInterface.
  * 
+ * Uses Observer Pattern to observe updates from its attribute bags.
+ * 
  * @see EdgeList
  * 
  * @author Emre Sokullu <emre@phonetworks.org>
  */
-class Node implements EntityInterface, NodeInterface {
+class Node implements EntityInterface, NodeInterface, \SplObserver {
 
     /**
      * Internal variable that keeps track of edges in and out.
@@ -43,7 +45,6 @@ class Node implements EntityInterface, NodeInterface {
 
     use EntityTrait {
         EntityTrait::__construct as onEntityLoad;
-        EntityTrait::toArray as entityToArray;
     }
 
     /**
@@ -71,9 +72,12 @@ class Node implements EntityInterface, NodeInterface {
        return $this->edge_list;
    }
 
+   /**
+    * {@inheritdoc}
+    */
    public function toArray(): array
    {
-       $array = parent::entityToArray();
+       $array = $this->baseToArray();
        $array["edge_list"] = $this->edge_list->toArray();
        return $array;
    }

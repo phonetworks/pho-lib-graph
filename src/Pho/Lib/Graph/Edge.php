@@ -19,12 +19,16 @@ namespace Pho\Lib\Graph;
  * therefore it is a fundamental unit of 
  * which graphs are formed.
  * 
+ * Uses Observer Pattern to observe updates from its attribute bags,
+ * as well as tail nodes.
+ * 
  * @author Emre Sokullu <emre@phonetworks.org>
  */
 class Edge implements EntityInterface, EdgeInterface, \SplObserver {
 
     use EntityTrait {
         EntityTrait::__construct as onEntityLoad;
+        EntityTrait::update as onEntityUpdate;
     }
 
     /**
@@ -53,7 +57,7 @@ class Edge implements EntityInterface, EdgeInterface, \SplObserver {
      */
     public function toArray(): array
     {
-        $array = parent::toArray();
+        $array = $this->baseToArray();
         $array["tail"] = $this->tail->id();
         $array["head"] = $this->head->id();
         $array["predicate"] = get_class($this->predicate);
@@ -135,17 +139,35 @@ class Edge implements EntityInterface, EdgeInterface, \SplObserver {
    }
 
    /**
-    * Undocumented function
+    * Observed entities use this method to update the edge.
+    *
+    * @param \SplSubject $subject Updater.
     *
     * @return void
     */
    public function update(\SplSubject $subject): void
    {
-    if($this->predicate->binding()) {
-        $this->head()->destroy();
-    }
-    $this->destroy();
+       $this->onEntityUpdate($subject);
+       if($subject instanceof AttributeBag) {
+           $this->observeAttributeBagUpdate($subject);
+       }
    }
+
+   /**
+    * Tail Nodes use this method to update about deletion
+    *
+    * @param \SplSubject $subject Updater.
+    *
+    * @return void
+    */
+   protected function observeTailNodeUpdate(\SplSubject $subject): void
+   {
+        if($this->predicate->binding()) {
+            $this->head()->destroy();
+        }
+        $this->destroy();
+   }
+
 
     
 }

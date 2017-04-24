@@ -21,6 +21,8 @@ namespace Pho\Lib\Graph;
  * Entities is a Pho concept used to represent the commonalities between the most 
  * atomic graph elements, Nodes and Edges.
  * 
+ * All entities use Observer Pattern to observe the updates from their attribute bags.
+ * 
  * @see Edge
  * @see Node
  * 
@@ -52,7 +54,7 @@ trait EntityTrait {
     public function __construct()
     {
         $this->id = ID::generate();
-        $this->attributes = new AttributeBag();
+        $this->attributes = new AttributeBag($this);
     }
 
     /**
@@ -98,14 +100,53 @@ trait EntityTrait {
    }
 
    /**
-    * {@inheritdoc}
+    * Converts the object to array
+    *
+    * Used for serialization/unserialization. Converts internal 
+    * object properties into a simple format to help with
+    * reconstruction.
+    *
+    * @see toArray for actual implementation of this method by subclasses.
+    *
+    * @return array The object in array format.
     */
-   public function toArray(): array
+   protected function baseToArray(): array
    {
        return [
            "id" => (string) $this->id,
             "attributes" => $this->attributes->toArray()
        ];
+   }
+
+   /**
+    * {@inheritdoc}
+    */
+   public function toArray(): array
+   {
+       return $this->baseToArray();
+   }
+
+   /**
+    * {@inheritdoc}
+    */
+   public function update(\SplSubject $subject): void
+   {
+       if($subject instanceof AttributeBag) {
+           $this->observeAttributeBagUpdate($subject);
+       }
+   }
+
+
+   /**
+    * Attribute Bags use this method to update about setters
+    *
+    * @param \SplSubject $subject Updater.
+    *
+    * @return void
+    */
+   protected function observeAttributeBagUpdate(\SplSubject $subject): void
+   {
+        
    }
 
 
