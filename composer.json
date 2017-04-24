@@ -32,5 +32,10 @@
 	     "psr-4": {
 		       "Pho\\Lib\\Graph\\": "src/Pho/Lib/Graph/"
 	     }
+    },
+    "autoload-dev": {
+	     "psr-4": {
+		       "Pho\\Lib\\Graph\\": "tests/Pho/Lib/Graph/"
+	     }
     }
 }
