@@ -41,7 +41,7 @@ class EdgeList {
     public function toArray(): array 
     {
         $edge_id = function(EdgeInterface $edge): array {
-            return $edge->id();
+            return (string) $edge->id();
         };
         return array(
             "out" => array_map($edge_id, $this->out),
