@@ -40,7 +40,7 @@ class EdgeList {
      */
     public function toArray(): array 
     {
-        $edge_id = function(EdgeInterface $edge): array {
+        $edge_id = function(EdgeInterface $edge): string {
             return (string) $edge->id();
         };
         return array(
