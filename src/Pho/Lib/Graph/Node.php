@@ -34,14 +34,14 @@ class Node implements EntityInterface, NodeInterface, \SplObserver {
      *
      * @var EdgeList
      */
-    private $edge_list;
+    protected $edge_list;
 
     /**
      * The graph context of this node
      *
      * @var GraphInterface
      */
-    private $context;
+    protected $context;
 
     use EntityTrait {
         EntityTrait::__construct as onEntityLoad;
