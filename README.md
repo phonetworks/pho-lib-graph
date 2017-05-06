@@ -14,7 +14,9 @@ composer require phonetworks/pho-lib-graph
 
 Once you install, you can play with the library using the example application provided in the ```playground``` folder, named [bootstrap.php](https://github.com/phonetworks/pho-lib-graph/blob/master/playground/bootstrap.php)
 
-## Example
+## Documentation
+
+As described in the Wikipedia article, a graph consists of 
 
 ![Architecture](https://github.com/phonetworks/pho-lib-graph/raw/master/.github/lib-graph-components.png "Pho LibGraph Architecture")
 
@@ -103,7 +105,6 @@ $ray_kurzweil->attributes()->position = "futurist";
 
 Last but not least, a graph is formed by, not only nodes, but also edges. So let's give it a try:
 
-## Architecture
 
 ## License
 
