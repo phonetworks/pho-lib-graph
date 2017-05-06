@@ -40,7 +40,7 @@ class SubGraph extends Node implements GraphInterface {
     public function toArray(): array
     {
         $array = parent::toArray();
-        $array["members"] = $this->members();
+        $array["members"] = $this->membersSerialized();
         return $array;
     }
 

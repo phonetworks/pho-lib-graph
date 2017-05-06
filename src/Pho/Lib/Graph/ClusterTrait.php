@@ -77,4 +77,27 @@ trait ClusterTrait {
         return $this->nodes;
     }
 
+   
+   /**
+    * Returns Graph members in serialized format
+    *
+    * @return array A list of member IDs in string format
+    */
+   protected function membersSerialized(): array
+   {
+       $array = [];
+       foreach($this->nodes as $node) {
+            $array[] = (string) $node->id();
+       }
+       return $array;
+   }
+
+   /**
+     * {@inheritdoc}
+     */  
+   public function toArray(): array
+   {
+    return ["members"=>$this->membersSerialized()];
+   }
+
 }

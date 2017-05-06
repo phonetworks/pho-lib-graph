@@ -64,4 +64,15 @@ interface GraphInterface {
      */
     public function members(): array;
 
+    /**
+    * Converts the object to array
+    *
+    * Used for serialization/unserialization. Converts internal 
+    * object properties into a simple format to help with
+    * reconstruction.
+    *
+    * @return array The object in array format.
+    */
+    public function toArray(): array;
+
 }
