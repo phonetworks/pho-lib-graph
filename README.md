@@ -44,7 +44,6 @@ $mark_zuckerberg = new Node($world); // facebook
 $larry_page = new Node($google); // google
 $vincent_cerf = new Node($google); // google
 $yann_lecun = new Node($world); // facebook
-$brad_fitzpatrick = new Node($google); // google
 $ray_kurzweil = new Node($google); // google
 ```
 
