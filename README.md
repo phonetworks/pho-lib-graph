@@ -1,6 +1,8 @@
 # pho-lib-graph [![Build Status](https://travis-ci.org/phonetworks/pho-lib-graph.svg?branch=master)](https://travis-ci.org/phonetworks/pho-lib-graph) [![Code Climate](https://img.shields.io/codeclimate/github/phonetworks/pho-lib-graph.svg)](https://codeclimate.com/github/phonetworks/pho-lib-cli)
 
-A general purpose [graph](https://en.wikipedia.org/wiki/Graph_theory) library written in PHP (5.3+)
+A general purpose [graph](http://en.wikipedia.org/wiki/Graph_theory) library written in PHP (5.3+)
+
+![Graph](https://github.com/phonetworks/pho-lib-graph/raw/master/.github/socialgraph.gif "A Social Graph example")
 
 ## Install
 
