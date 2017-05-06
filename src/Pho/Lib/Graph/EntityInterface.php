@@ -53,7 +53,7 @@ interface EntityInterface {
    * A boolean method that verifies if the entity extends or is the given class.
    * 
    * This method is a helper and works identical to using 
-   * ```$node instanceof  $class_name`` or ```$edge instanceof  $class_name``
+   * ```$node instanceof  $class_name``` or ```$edge instanceof  $class_name``
    * 
    * Make sure the $class_name parameter is namespace-safe with ```get_class()``` 
    * method orthe special **::class** constant 
@@ -108,6 +108,8 @@ interface EntityInterface {
 
 
    /**
+    * @internal
+    *
     * Observed entities use this method to update the entity.
     *
     * @param \SplSubject $subject Updater.
