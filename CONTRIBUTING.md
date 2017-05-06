@@ -2,7 +2,7 @@ Thanks for your interest in contributing.
 
 More information about the libgraph internals can be found at the docs/ folder of this package.
 
-If the folder is not generated yet, you can form it by typing:
+You can generate the folder by typing:
 
 ```sh
 composer install
