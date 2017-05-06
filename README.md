@@ -4,7 +4,7 @@ A general purpose [graph](http://en.wikipedia.org/wiki/Graph_theory) library wri
 
 ![Graph](https://github.com/phonetworks/pho-lib-graph/raw/master/.github/socialgraph.gif "A Social Graph example")
 
-## Install
+## Getting Started
 
 The recommended way to install pho-lib-graph is [through composer](https://getcomposer.org/).
 
@@ -12,9 +12,11 @@ The recommended way to install pho-lib-graph is [through composer](https://getco
 composer require phonetworks/pho-lib-graph
 ```
 
+Once you install, you can play with the library using the example application provided in the ```playground``` folder, named [bootstrap.php](https://github.com/phonetworks/pho-lib-graph/blob/master/playground/bootstrap.php)
+
 ## Example
 
-(sample graph image)
+![Architecture](https://github.com/phonetworks/pho-lib-graph/raw/master/.github/lib-graph-components.png "Pho LibGraph Architecture")
 
 Don't forget to autoload:
 
