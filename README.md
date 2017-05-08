@@ -116,53 +116,64 @@ Below is an API reference for most of the Pho LibGraph classes:
 
 ### GraphInterface
 
-| Method       | Parameter(s)            | Description | Returns |
-| ------------ | ----------------------- | ---        | ----     |
-| add          | NodeInterface $node     | Adds a new node (unnecessary since | void |
-| contains     | NodeInterface $node     | Checks if a node is a member | bool |
-| get          | NodeInterface $node     | Fetches a member | NodeInterface |
-| remove       | NodeInterface $node     | Removes a member | void |
-| members      |                         | Lists members in their object form | array |
-| toArray      |                         | Lists member references in ID form | array |
+GraphInterface forms the basis of both Graph and SubGraph objects.
+
+| Method       | Parameter(s)            | Description                   | Returns              |
+| ------------ | ----------------------- | ----------------------------- | -------------------- |
+| add          | NodeInterface $node     | Adds a new node               | void                 |
+| contains     | ID $node_id             | Checks if a node is a member  | bool                 |
+| get          | ID $node_id             | Fetches a member              | NodeInterface        |
+| remove       | ID $node_id             | Removes a member              | void                 |
+| members      |                         | Lists members in  object form | array<NodeInterface> |
+| toArray      |                         | Lists member ref.s in ID form | array<ID>            |
 
 
 ## EntityInterface
-* id()
-* label()
-* isA()
-* attributes()
-* destroy()
-* toArray()
+
+EntityInterface constitutes the basis of both Node and Edge objects. Most important characteristics are:
+
+* Each entity has an auto-generated ID.
+* They hold customizable attributes accessible via **attributes()** call.
+
+| Method       | Parameter(s)            | Description                    | Returns              |
+| ------------ | ----------------------- | ------------------------------ | -------------------- |
+| id           |                         | Retrieves its ID               | ID                   |
+| label        |                         | Returns the class name         | string               |
+| isA          | string $class_name      | Validates object class         | bool                 |
+| attributes   | ID $node_id             | Returns the attributes class   | AttributeBag         |
+| destroy      |                         | Readies object for destruction | void                 |
+| toArray      |                         | Lists member ref.s in ID form  | array                |
+
 
 ## NodeInterface
-* edges()
-* context()
+
+NodeInterface extends EntityInterface, and adds two things:
+1. A reference to its context (a GraphInterface object) where it was created. So this is either a Graph or a SubGraph.
+2. It holds edges accessible via **edges()** call.
+
+| Method       | Parameter(s)  | Description                                              | Returns        |
+| ------------ | ------------- | -------------------------------------------------------- | -------------- |
+| edges        |               | Retrieves the EdgeList object that interfaces its edges. | EdgeList       |
+| context      |               | Retrieves its context                                    | GraphInterface |
 
 ## EdgeList
-* add()
+
+EdgeList, accessible via a node's edges() method, enables the developer to manipulate/retrieve a node's edges. A node has two types of edges:
+
+1. Incoming: Edges that are pointed towards this node.
+2. Outgoing: Edges that originate from this node.
+
+You add a new edge via:
+
 * addIncoming()
 * addOutgoing()
+
+You can list edges via:
+
 * in()
 * out()
 * all()
 * to()
-
-### Attributes
-
-The attributes() function gives access to a getter/setter, which is actually an instance of the AttributeBag class, and that you can use with any variable you'd like. Once you make an update to the AttributeBag instance (e.g set a new value, update an existing one or delete), it is passed to the node object via observeAttributeBagUpdate($subject) function where $subject is the AttributeBag itself in its current state.
-
-
-```php
-$mark_zuckerberg->attributes()->position = "ceo";
-$larry_page->attributes()->position = "ceo";
-$vincent_cerf->attributes()->position = "chief evangelist";
-$yann_lecun->attributes()->position = "director of ai research";
-$ray_kurzweil->attributes()->position = "chief futurist";
-```
-
-
-
-Last but not least, a graph is formed by, not only nodes, but also edges. So let's give it a try:
 
 
 ## License
