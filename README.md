@@ -14,11 +14,13 @@ composer require phonetworks/pho-lib-graph
 
 Once you install, you can play with the library using the example application provided in the ```playground``` folder, named [bootstrap.php](https://github.com/phonetworks/pho-lib-graph/blob/master/playground/bootstrap.php)
 
-## Documentation
+## Architecture
 
-As described in the Wikipedia article, a graph consists of 
+A graph consists of edges and nodes. In Pho architecture, the core components edges and nodes are organized as subclasses of [Entity](https://github.com/phonetworks/pho-lib-graph/blob/master/src/Pho/Lib/Graph/EntityInterface.php) for the common themes they share (such as an identifier, label etc). [Graph](https://github.com/phonetworks/pho-lib-graph/blob/master/src/Pho/Lib/Graph/GraphInterface.php) is positioned completely different, and [SubGraph](https://github.com/phonetworks/pho-lib-graph/blob/master/src/Pho/Lib/Graph/SubGraph.php) stands uniquely as a subclass of [Node](https://github.com/phonetworks/pho-lib-graph/blob/master/src/Pho/Lib/Graph/NodeInterface.php) that also shows [Graph traits](https://github.com/phonetworks/pho-lib-graph/blob/master/src/Pho/Lib/Graph/ClusterTrait.php) at the same time.
 
 ![Architecture](https://github.com/phonetworks/pho-lib-graph/raw/master/.github/lib-graph-components.png "Pho LibGraph Architecture")
+
+## Getting Started
 
 Don't forget to autoload:
 
@@ -52,6 +54,43 @@ $ray_kurzweil = new Node($google); // google
 ```
 
 So far, we have six nodes, a single subgraph and a single graph. The graph ($world) implements GraphInterface, the nodes (employees) implement NodeInterface and the only subgraph we have created (which is $google) does both. 
+
+We can set up their attributes as follows:
+
+```php
+$mark_zuckerberg->attributes()->position = "ceo";
+$larry_page->attributes()->position = "ceo";
+$vincent_cerf->attributes()->position = "chief evangelist";
+$yann_lecun->attributes()->position = "director of ai research";
+$ray_kurzweil->attributes()->position = "chief futurist";
+```
+
+> The **attributes()** function gives access to a getter/setter, which is actually an instance of the [AttributeBag
+> (https://github.com/phonetworks/pho-lib-graph/blob/master/src/Pho/Lib/Graph/AttributeBag.php) class, and that you can use
+> with any variable you'd like. Once you make an update to the AttributeBag instance (e.g set a new value, update an existing
+> one or delete), it is passed to the node object via **observeAttributeBagUpdate(\SplSubject $subject)** function where
+> $subject is the AttributeBag itself in its current state. You can fetch the latest attributes of the $subject via its
+> **toArray()** method.
+
+Each node and edge created is assigned a cryptographically secure unique identifier (in [UUIDv4](https://en.wikipedia.org/wiki/Universally_unique_identifier) format) automatically:
+
+```php
+echo $mark_zuckerberg->id(); 
+echo $vincent_cerf->id();
+```
+
+You create edges by passing by its tail (aka. origin or source) and head (target) nodes as well as a predicate (optional) as parameters.
+
+```php
+$ceo = new class extends \Pho\Lib\Graph\PredicateInterface {};
+$is_ceo_of = new \Pho\Lib\Graph\Edge($larry_page, $google, $ceo);
+echo $is_ceo_of->id();
+```
+
+
+## Reference
+
+
 
 ### GraphInterface
 
@@ -97,8 +136,7 @@ $mark_zuckerberg->attributes()->position = "ceo";
 $larry_page->attributes()->position = "ceo";
 $vincent_cerf->attributes()->position = "chief evangelist";
 $yann_lecun->attributes()->position = "director of ai research";
-$brad_fitzpatrick->attributes()->position = "staff software engineer";
-$ray_kurzweil->attributes()->position = "futurist";
+$ray_kurzweil->attributes()->position = "chief futurist";
 ```
 
 
