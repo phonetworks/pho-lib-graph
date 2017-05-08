@@ -33,6 +33,12 @@ $yann_lecun = new Graph\Node($world); // facebook
 $brad_fitzpatrick = new Graph\Node($google); // google
 $ray_kurzweil = new Graph\Node($google); // google
 
+/************************************************************
+ * Here is how you can play with it. Fore more information refer 
+ * to the README.md in the root folder.
+ ************************************************************/
+
+/*
 echo "Members of the World Graph:";
 nl();
 print_r($world->toArray()["members"]);
@@ -47,3 +53,4 @@ print_r($google->toArray()["members"]);
 
 nl();
 exit(0);
+*/
