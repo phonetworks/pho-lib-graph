@@ -112,24 +112,19 @@ Last but not least, please note all ids in Pho are a Pho\Lib\Graph\ID object. Yo
 
 ## Reference
 
-Below is a complete reference to Pho LibGraph classes:
+Below is an API reference for most of the Pho LibGraph classes:
 
 ### GraphInterface
 
-| Method | Parameter | Description | Returns |
-| ---    | ---       | ---        | ----     |
-| add    | $node     | Adds a new node | void |
+| Method       | Parameter(s)            | Description | Returns |
+| ------------ | ----------------------- | ---        | ----     |
+| add          | NodeInterface $node     | Adds a new node (unnecessary since | void |
+| contains     | NodeInterface $node     | Checks if a node is a member | bool |
+| get          | NodeInterface $node     | Fetches a member | NodeInterface |
+| remove       | NodeInterface $node     | Removes a member | void |
+| members      |                         | Lists members in their object form | array |
+| toArray      |                         | Lists member references in ID form | array |
 
-* add($node)
-* contains($node_id)
-* get($node_id)
-* remove($node)
-* members()
-* toArray()
-
-```php
-$world->add($)
-```
 
 ## EntityInterface
 * id()
