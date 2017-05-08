@@ -43,8 +43,8 @@ interface GraphInterface {
      * $world members, will include $google members as well, 
      * even though $google members were created with the
      * $google as their context parameter, and not $world.
-     * This is because we've set $google to be a subgraph
-     * of $world in its constructor function. The attachment 
+     * This is because $google was set to be a subgraph
+     * of $world in its constructor function. The link 
      * was made automatically, and this works recursively.
      *
      * @param NodeInterface $node
