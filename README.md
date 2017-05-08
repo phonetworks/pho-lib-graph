@@ -53,7 +53,7 @@ $yann_lecun = new Node($world); // facebook
 $ray_kurzweil = new Node($google); // google
 ```
 
-So far, we have six nodes, a single subgraph and a single graph. The graph ($world) implements GraphInterface, the nodes (employees) implement NodeInterface and the only subgraph we have created (which is $google) does both. 
+So far, we have five nodes, a single subgraph and a single graph. The graph ($world) implements GraphInterface, the nodes (employees) implement NodeInterface and the only subgraph we have created (which is $google) does both. 
 
 We can set up their attributes as follows:
 
@@ -87,12 +87,38 @@ $is_ceo_of = new \Pho\Lib\Graph\Edge($larry_page, $google, $ceo);
 echo $is_ceo_of->id();
 ```
 
+> Edges hold references to their tail and head and implement a predicate that defines their characteristics (e.g. whether it's
+> binding, which means, once the edge is deleted, the head nodes will also need to be deleted.) Plus, similarly to nodes, they
+> can hold attributes.
+
+It's important to note that when a NodeInterface object (such as Node or SubGraph) is created within a context (in other words, a GraphInterface object), its reference is added to the context and its parent contexts --if available-- automatically. To illustrate from the example below:
+
+```php
+foreach($google->members() as $google_employee) echo (string) $google_employee->id(). PHP_EOL;
+```
+
+will print three elements (as expected)
+
+while:
+
+```php
+print_r($world->toArray());
+```
+
+will print six. Five elements (with notable Google and Facebook employees), plus Google the company SubGraph -- even though we did not specify the $world context while setting up the Google employee nodes.
+
+Last but not least, please note all ids in Pho are a Pho\Lib\Graph\ID object. You use ```ID::generate()``` to generate new ID, or use ```ID::fromString($string)``` to enforce one from pure string. You can cast ID objects into string with (string) prefix as shown in examples above. You may also compare two ID objects via ```$node->id()->equals($another_node->id())``` call.
+
 
 ## Reference
 
-
+Below is a complete reference to Pho LibGraph classes:
 
 ### GraphInterface
+
+| Method | Parameter | Description | Returns |
+| ---    | ---       | ---        | ----     |
+| add    | $node     | Adds a new node | void |
 
 * add($node)
 * contains($node_id)
