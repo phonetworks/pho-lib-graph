@@ -20,7 +20,7 @@ A graph consists of edges and nodes. In Pho architecture, the core components ed
 
 ![Architecture](https://github.com/phonetworks/pho-lib-graph/raw/master/.github/lib-graph-components.png "Pho LibGraph Architecture")
 
-## Getting Started
+## Documentation
 
 Don't forget to autoload:
 
