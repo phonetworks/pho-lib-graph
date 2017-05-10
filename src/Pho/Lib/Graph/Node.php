@@ -79,6 +79,7 @@ class Node implements EntityInterface, NodeInterface, \SplObserver {
    {
        $array = $this->baseToArray();
        $array["edge_list"] = $this->edge_list->toArray();
+       $array["context"] = ( ( $this->context instanceof Graph ) ? Graph::class : $this->context->id() );
        return $array;
    }
 
