@@ -100,7 +100,7 @@ class SimpleTest extends \PHPUnit\Framework\TestCase
     public function testSubGraphToArray() {
         $subgraph = new SubGraph($this->graph);
         $node = new Node($subgraph);
-        eval(\Psy\sh());
+        // eval(\Psy\sh());
         $this->assertEquals($subgraph->id(), $this->graph->toArray()["members"][0]);
         $this->assertEquals($node->id(), $subgraph->toArray()["members"][0]);
     }
