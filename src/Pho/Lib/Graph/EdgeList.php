@@ -53,6 +53,7 @@ class EdgeList {
  */
     private function processArray(Direction $direction, array $edges): void 
     {
+        //eval(\Psy\sh());
         foreach($edges as $edge) {
             if($edge instanceof EdgeInterface)
                 $this->add($direction, $edge);
