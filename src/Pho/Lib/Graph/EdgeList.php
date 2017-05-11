@@ -29,6 +29,36 @@ class EdgeList {
     private $in = [];
     private $to = [];
 
+    /**
+     * Constructor
+     *
+     * @param array $data Initial data to seed.
+     */
+    public function __construct(array $data = [])
+    {
+        foreach($data as $direction => $edges) {
+            $this->processArray(Direction::fromString($direction), $edges);
+        }
+    }
+
+/**
+ * Internal helper method to feed the object with data
+ *
+ * Helps the constructor recreated the object from raw data.
+ * 
+ * @param Direction $direction Direction of the edge.
+ * @param array $edges An array that consists of EdgeInterface objects.
+ * 
+ * @return void
+ */
+    private function processArray(Direction $direction, array $edges): void 
+    {
+        foreach($edges as $edge) {
+            if($edge instanceof EdgeInterface)
+                $this->add($direction, $edge);
+        }
+    }
+
 
     /**
      * Retrieves this object in array format
@@ -48,6 +78,8 @@ class EdgeList {
             "in"  => array_map($edge_id, $this->in)
         );
     }
+
+    
 
     /**
      * Adds a new edge to the list.
