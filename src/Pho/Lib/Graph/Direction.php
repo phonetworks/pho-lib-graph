@@ -58,6 +58,25 @@ class Direction {
     }
 
     /**
+     * Reproduces Direction object from string representation.
+     *
+     * @param string $direction 
+     * 
+     * @return Direction
+     * 
+     * @throws Exceptions\InvalidDirectionException thrown when the direction string is not recognized.
+     */
+    public static function fromString(string $direction): Direction
+    {
+        if($direction == self::IN )
+            return self::in();
+        else if($direction == self::OUT)
+            return self::out();
+        else
+            throw new Exceptions\InvalidDirectionException($direction);
+    }
+
+    /**
      * Verifies identicality
      *
      * @return bool
