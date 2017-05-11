@@ -110,7 +110,7 @@ class Node implements EntityInterface, NodeInterface, \SplObserver, \Serializabl
     *
     * @return void
     */
-    public function unserialize(string $data): void 
+    public function unserialize(/* mixed */ $data): void 
     {
         $values = unserialize($data);
         foreach ($values as $key=>$value) {
