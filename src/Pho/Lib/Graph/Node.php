@@ -97,7 +97,7 @@ class Node implements EntityInterface, NodeInterface, \SplObserver, \Serializabl
     */
    public function serialize(): string 
    {
-        return serialize($this->data);
+        return serialize(get_object_vars($this));
     }
 
     /**
@@ -112,7 +112,10 @@ class Node implements EntityInterface, NodeInterface, \SplObserver, \Serializabl
     */
     public function unserialize($data): void 
     {
-        $this->data = unserialize($data);
+        $values = unserialize($data);
+        foreach ($values as $key=>$value) {
+            $this->$key = $value;
+        }
     }
 
 }
