@@ -23,11 +23,15 @@ namespace Pho\Lib\Graph;
  * 
  * Uses Observer Pattern to observe updates from its attribute bags.
  * 
+ * Last but not least, this class is declared \Serializable. While it does nothing
+ * special within this class, this declaration may be useful for subclasses to override
+ * and persist data.
+ * 
  * @see EdgeList
  * 
  * @author Emre Sokullu <emre@phonetworks.org>
  */
-class Node implements EntityInterface, NodeInterface, \SplObserver {
+class Node implements EntityInterface, NodeInterface, \SplObserver, \Serializable {
 
     /**
      * Internal variable that keeps track of edges in and out.
@@ -81,5 +85,33 @@ class Node implements EntityInterface, NodeInterface, \SplObserver {
        $array["edge_list"] = $this->edge_list->toArray();
        return $array;
    }
+
+   /**
+    * @internal
+    *
+    * Used for serialization. Nothing special here. Declared for 
+    * subclasses.
+    *
+    * @return string in PHP serialized format.
+    */
+   public function serialize(): string 
+   {
+        return serialize($this->data);
+    }
+
+    /**
+    * @internal
+    *
+    * Used for deserialization. Nothing special here. Declared for 
+    * subclasses.
+    *
+    * @param string $data 
+    *
+    * @return void
+    */
+    public function unserialize($data): void 
+    {
+        $this->data = unserialize($data);
+    }
 
 }
