@@ -130,7 +130,7 @@ GraphInterface forms the basis of both Graph and SubGraph objects.
 
 [\*] You won't need to use this function since graph adding is handled automatically at object construction.
 
-## EntityInterface
+### EntityInterface
 
 EntityInterface constitutes the basis of both Node and Edge objects. Most important characteristics are:
 
@@ -148,7 +148,7 @@ EntityInterface constitutes the basis of both Node and Edge objects. Most import
 
 [\*] Just a placeholder. May be extended in higher levels for dealing with persistence et al.
 
-## NodeInterface
+### NodeInterface
 
 NodeInterface extends EntityInterface, and adds two things:
 1. A reference to its context (a GraphInterface object) where it was created. So this is either a Graph or a SubGraph.
@@ -159,7 +159,7 @@ NodeInterface extends EntityInterface, and adds two things:
 | edges        |               | Retrieves the EdgeList object that interfaces its edges. | EdgeList       |
 | context      |               | Retrieves its context                                    | GraphInterface |
 
-## EdgeList
+### EdgeList
 
 EdgeList, accessible via a node's edges() method, enables the developer to manipulate/retrieve a node's edges. A node has two types of edges:
 
@@ -176,6 +176,28 @@ You can list edges via:
 | out      |               | Lists outgoing edges                                      | array\<EdgeList\> |
 | all      |               | Lists all edges, both incoming and outgoing.              | array\<EdgeList\> |
 | to       | ID $node_id   | Lists edges in between this node and the node in question | array\<EdgeList\> |
+
+
+## Extending Lib-Graph
+
+Lib-Graph comes with "protected" methods that you can override to extend the functionality of the library. 
+
+For Graph and SubGraph:
+
+* onAdd(NodeInterface $node): called at the end of add(NodeInterface $node) function. 
+* onRemove(ID $node_id): called at the end of remove(ID $node_id) function.
+* hydratetGet(ID $node_id): called when get(ID $node_id) can't find the object in $nodes. Enables you to access $node_ids to fetch the object from external sources.
+* hydratedMembers(): called when members() can't find any objects in $nodes. Enables you to access $node_ids to fetch the objects from external sources.
+
+For Edge:
+
+* hydratedHead(): called when head() can't find the head node. Enables you to access $head_id to fetch it from external sources.
+* hydratedTail(): called when tail() can't find the tail node. Enables you to access $tail_id to fetch it from external sources.
+* hydratedPredicate(): called when predicate() can't find the predicate object. Enables you to access $predicate_label to recreate it or fetch from external sources.
+
+For Node and SubGraph:
+
+* hydratedContext(): called when context() can't find the context. Enables you to access $context_id to fetch it from external sources.
 
 
 ## License
