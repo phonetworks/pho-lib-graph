@@ -182,7 +182,7 @@ You can list edges via:
 
 Lib-Graph comes with "protected" methods that you can override to extend the functionality of the library. 
 
-### For Graph and SubGraph:
+#### For Graph and SubGraph:
 
 * **onAdd(NodeInterface $node)**: called at the end of ```add(NodeInterface $node)``` function. 
 * **onRemove(ID $node_id)**: called at the end of ```remove(ID $node_id)``` function.
