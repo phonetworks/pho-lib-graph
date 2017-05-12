@@ -118,14 +118,15 @@ Below is an API reference for most of the Pho LibGraph classes:
 
 GraphInterface forms the basis of both Graph and SubGraph objects.
 
-| Method       | Parameter(s)            | Description                   | Returns              |
-| ------------ | ----------------------- | ----------------------------- | -------------------- |
-| *add*[\*]    | NodeInterface $node     | Adds a new node               | void                 |
-| contains     | ID $node_id             | Checks if a node is a member  | bool                 |
-| get          | ID $node_id             | Fetches a member              | NodeInterface        |
-| remove       | ID $node_id             | Removes a member              | void                 |
-| members      |                         | Lists members in  object form | array<NodeInterface> |
-| toArray      |                         | Lists member ref.s in ID form | array<ID>            |
+| Method       | Parameter(s)            | Description                   | Returns                |
+| ------------ | ----------------------- | ----------------------------- | ---------------------- |
+| id           |                         | Always returns "." as ID obj. | ID                     |
+| *add*[\*]    | NodeInterface $node     | Adds a new node               | void                   |
+| contains     | ID $node_id             | Checks if a node is a member  | bool                   |
+| get          | ID $node_id             | Fetches a member              | NodeInterface          |
+| remove       | ID $node_id             | Removes a member              | void                   |
+| members      |                         | Lists members in  object form | array\<NodeInterface\> |
+| toArray      |                         | Lists member ref.s in ID form | array\<ID\>            |
 
 [\*] You won't need to use this function since graph adding is handled automatically at object construction.
 
@@ -169,12 +170,12 @@ You add a new edge via **addIncoming(EdgeInterface $edge)** and **addOutgoing(Ed
 
 You can list edges via:
 
-| Method   | Parameter(s)  | Description                                               | Returns         |
-| -------- | ------------- | --------------------------------------------------------- | --------------- |
-| in       |               | Lists incoming edges.                                     | array<EdgeList> |
-| out      |               | Lists outgoing edges                                      | array<EdgeList> |
-| all      |               | Lists all edges, both incoming and outgoing.              | array<EdgeList> |
-| to       | ID $node_id   | Lists edges in between this node and the node in question | array<EdgeList> |
+| Method   | Parameter(s)  | Description                                               | Returns           |
+| -------- | ------------- | --------------------------------------------------------- | ----------------- |
+| in       |               | Lists incoming edges.                                     | array\<EdgeList\> |
+| out      |               | Lists outgoing edges                                      | array\<EdgeList\> |
+| all      |               | Lists all edges, both incoming and outgoing.              | array\<EdgeList\> |
+| to       | ID $node_id   | Lists edges in between this node and the node in question | array\<EdgeList\> |
 
 
 ## License
