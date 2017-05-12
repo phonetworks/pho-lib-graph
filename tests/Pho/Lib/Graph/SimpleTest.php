@@ -104,4 +104,9 @@ class SimpleTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($subgraph->id(), $this->graph->toArray()["members"][0]);
         $this->assertEquals($node->id(), $subgraph->toArray()["members"][0]);
     }
+
+    public function testPredicateString() {
+        $predicate = new Predicate();
+        $this->assertEquals("predicate", (string) $predicate);
+    }
 }

@@ -32,4 +32,11 @@ interface PredicateInterface {
      */
     public function binding(): bool;
 
+    /**
+     * Returns the predicate in string format
+     * 
+     * @return string
+     */
+    public function __toString(): string;
+
 }

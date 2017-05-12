@@ -47,6 +47,13 @@ class Node implements EntityInterface, NodeInterface, \SplObserver, \Serializabl
      */
     protected $context;
 
+    /**
+     * The ID of the graph context of this node
+     *
+     * @var string
+     */
+    protected $context_id;
+
     use EntityTrait {
         EntityTrait::__construct as onEntityLoad;
     }
@@ -58,6 +65,7 @@ class Node implements EntityInterface, NodeInterface, \SplObserver, \Serializabl
         $this->onEntityLoad();
         $this->edge_list = new EdgeList();
         $context->add($this)->context = $context;
+        $this->context_id = $context->id();
     }
 
     /**
@@ -83,7 +91,7 @@ class Node implements EntityInterface, NodeInterface, \SplObserver, \Serializabl
    {
        $array = $this->baseToArray();
        $array["edge_list"] = $this->edge_list->toArray();
-       $array["context"] = ( ( $this->context instanceof Graph ) ? Graph::class : $this->context->id() );
+       $array["context"] = $this->context_id;
        return $array;
    }
 

@@ -24,4 +24,12 @@ class Graph implements GraphInterface {
 
     use ClusterTrait;
 
+    /**
+     * {@inheritdoc}
+     */
+    public function id(): ID
+    {
+        return ID::root();
+    }
+
 }

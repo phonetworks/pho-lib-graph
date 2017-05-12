@@ -21,6 +21,18 @@ namespace Pho\Lib\Graph;
 interface GraphInterface {
 
     /**
+     * Returns the ID of the Graph
+     * 
+     * Normally the Graph object does not have an ID but it is
+     * implemented it here so that the functions that query
+     * GraphInterface objects such as SubGraphs, which do have,
+     * IDs associated, will be easier to design.
+     *
+     * @return ID The ID
+     */
+    public function id(): ID;
+
+    /**
      * Adds a new node to the Graph.
      * 
      * Under normal circumstances, you don't use this function

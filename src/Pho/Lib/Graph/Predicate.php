@@ -37,4 +37,12 @@ class Predicate implements PredicateInterface {
         return $this->binding; 
     }
 
+    /**
+     * {@inheritdoc}
+     */
+    public function __toString(): string
+    {
+        return strtolower((new \ReflectionClass($this))->getShortName());
+    }
+
 }

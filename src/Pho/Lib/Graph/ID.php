@@ -19,6 +19,10 @@ namespace Pho\Lib\Graph;
  * 
  * Pho IDs are used to define all graph entities, e.g nodes and edges.
  * 
+ * The only ID that doesn't conform with the UUID format is the Graph ID
+ * which is by default set to be a period (.) and it may be called as 
+ * ```ID::root()```
+ * 
  * Even at scale of billions of nodes and edges, the chances of collision 
  * is identical to zero.
  * 
@@ -85,6 +89,19 @@ class ID  {
             throw new Exceptions\MalformedGraphIDException($id);
         }
         return new ID($id);
+    }
+
+    /**
+     * Retrieves the root ID
+     * 
+     * Root ID is the ID of the Graph. It doesn't conform with regular
+     * ID requirements (namely UUID) and it is just a period (.)
+     *
+     * @return ID
+     */
+    public static function root(): ID
+    {
+        return new ID(".");
     }
 
     /**

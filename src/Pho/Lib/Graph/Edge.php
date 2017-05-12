@@ -36,21 +36,42 @@ class Edge implements EntityInterface, EdgeInterface, \SplObserver {
      *
      * @var TailNode
      */
-    private $tail;
+    protected $tail;
+
+    /**
+     * The ID of the tail node.
+     *
+     * @var string
+     */
+    protected $tail_id;
     
     /**
      * Head node. Where this is directed towards.
      *
      * @var HeadNode
      */
-    private $head;
+    protected $head;
+
+    /**
+     * The ID of the head node.
+     *
+     * @var string
+     */
+    protected $head_id;
 
     /**
      * Predicate.
      *
      * @var PredicateInterface
      */
-    private $predicate;
+    protected $predicate;
+
+    /**
+     * Predicate's label
+     *
+     * @var string
+     */
+    protected $predicate_label;
 
     /**
      * {@inheritdoc}
@@ -58,9 +79,9 @@ class Edge implements EntityInterface, EdgeInterface, \SplObserver {
     public function toArray(): array
     {
         $array = $this->baseToArray();
-        $array["tail"] = (string) $this->tail->id();
-        $array["head"] = (string) $this->head->id();
-        $array["predicate"] = get_class($this->predicate);
+        $array["tail"] = $this->tail_id;
+        $array["head"] = $this->head_id;
+        $array["predicate"] = $predicate_label;
         return $array;
     }
 
@@ -78,9 +99,11 @@ class Edge implements EntityInterface, EdgeInterface, \SplObserver {
 
         $this->head = new HeadNode();
         $this->head->set($head);
+        $this->head_id = $head->id();
 
         $this->tail = new TailNode();
         $this->tail->set($tail);
+        $this->tail_id = $tail->id();
 
         $this->head->edges()->addIncoming($this);
         $this->tail->edges()->addOutgoing($this);
@@ -100,6 +123,7 @@ class Edge implements EntityInterface, EdgeInterface, \SplObserver {
                 $this->predicate = new Predicate();
             }
         }
+        $this->predicate_label = (string) $predicate;
         
     }
 
@@ -167,7 +191,5 @@ class Edge implements EntityInterface, EdgeInterface, \SplObserver {
         }
         $this->destroy();
    }
-
-
     
 }
