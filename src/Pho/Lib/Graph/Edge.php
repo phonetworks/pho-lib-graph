@@ -24,7 +24,7 @@ namespace Pho\Lib\Graph;
  * 
  * @author Emre Sokullu <emre@phonetworks.org>
  */
-class Edge implements EntityInterface, EdgeInterface, \SplObserver {
+class Edge implements EntityInterface, EdgeInterface, \SplObserver, \Serializable {
 
     use EntityTrait {
         EntityTrait::__construct as onEntityLoad;
@@ -124,7 +124,6 @@ class Edge implements EntityInterface, EdgeInterface, \SplObserver {
             }
         }
         $this->predicate_label = (string) $predicate;
-        
     }
 
     /**
@@ -132,7 +131,15 @@ class Edge implements EntityInterface, EdgeInterface, \SplObserver {
      */
    public function head(): HeadNode
    {
-    return $this->head;
+    if(isset($this->head))
+        return $this->head;
+    else
+        return $this->hydratedHead();
+   }
+
+   protected function hydratedHead(): HeadNode
+   {
+
    }
 
    /**
@@ -140,7 +147,15 @@ class Edge implements EntityInterface, EdgeInterface, \SplObserver {
      */
    public function tail(): TailNode
    {
-    return $this->tail;
+       if(isset($this->tail))
+            return $this->tail;
+        else
+            return $this->hydratedTail();
+   }
+
+   protected function hydratedTail(): TailNode
+   {
+
    }
 
 
@@ -149,7 +164,15 @@ class Edge implements EntityInterface, EdgeInterface, \SplObserver {
      */
    public function predicate(): PredicateInterface
    {
-    return $this->predicate;
+       if(isset($this->predicate))
+            return $this->predicate;
+        else
+            return $this->hydratedPredicate();
+   }
+
+   protected function hydratedPredicate(): PredicateInterface
+   {
+
    }
 
    /**
@@ -186,10 +209,41 @@ class Edge implements EntityInterface, EdgeInterface, \SplObserver {
     */
    protected function observeTailNodeUpdate(\SplSubject $subject): void
    {
-        if($this->predicate->binding()) {
+        if($this->predicate()->binding()) {
             $this->head()->destroy();
         }
         $this->destroy();
    }
+
+   /**
+    * @internal
+    *
+    * Used for serialization. Nothing special here. Declared for 
+    * subclasses.
+    *
+    * @return string in PHP serialized format.
+    */
+   public function serialize(): string 
+   {
+        return serialize(get_object_vars($this));
+    }
+
+    /**
+    * @internal
+    *
+    * Used for deserialization. Nothing special here. Declared for 
+    * subclasses.
+    *
+    * @param string $data 
+    *
+    * @return void
+    */
+    public function unserialize(/* mixed */ $data): void 
+    {
+        $values = unserialize($data);
+        foreach ($values as $key=>$value) {
+            $this->$key = $value;
+        }
+    }
     
 }

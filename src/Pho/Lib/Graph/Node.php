@@ -73,7 +73,15 @@ class Node implements EntityInterface, NodeInterface, \SplObserver, \Serializabl
      */
     public function context(): GraphInterface
     {
-        return $this->context;
+        if(isset($this->context))
+            return $this->context;
+        else
+            return $this->hydratedContext();
+    }
+
+    protected function hydratedContext(): GraphInterface
+    {
+
     }
     
    /**
