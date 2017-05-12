@@ -70,9 +70,6 @@ trait EntityTrait {
      */    
     public function label(): string
     {
-        // $class_name = get_class($this);
-        // $stripped_namespace = substr($class_name, strrpos($class_name, '\\') + 1); // https://gist.github.com/jasondmoss/6200807
-        // return strtolower($stripped_namespace);
         return strtolower((new \ReflectionObject($this))->getShortName());
     }
 
