@@ -26,13 +26,21 @@ trait ClusterTrait {
      *
      * @var array
      */
-    private $nodes = [];
+    protected $nodes = [];
+
+    /**
+     * Holds node IDs only in string formt
+     *
+     * @var array
+     */
+    protected $node_ids = [];
 
     /**
      * {@inheritdoc}
      */
     public function add(NodeInterface $node): NodeInterface
     {
+        $this->node_ids[] = (string) $node->id();
         $this->nodes[(string) $node->id()] = $node;
         if($this instanceof SubGraph) {
             $this->context()->add($node);
@@ -55,7 +63,8 @@ trait ClusterTrait {
      */
     public function contains(ID $node_id): bool
     {
-        return isset($this->nodes[(string) $node_id]);
+        // return isset($this->nodes[(string) $node_id]);
+        return array_search((string)$node_id, $this->node_ids) !== false; // 
     }
     
     /**
@@ -66,6 +75,7 @@ trait ClusterTrait {
         if($this->contains($node_id)) {
             $this->get($node_id)->destroy();
             unset($this->nodes[(string) $node_id]);
+            unset($this->node_ids[array_search((string)$node_id, $this->node_ids)]);
         }
     }
 
@@ -85,11 +95,12 @@ trait ClusterTrait {
     */
    protected function membersSerialized(): array
    {
-       $array = [];
+       /*$array = [];
        foreach($this->nodes as $node) {
             $array[] = (string) $node->id();
        }
-       return $array;
+       return $array;*/
+       return $this->node_ids;
    }
 
    /**
