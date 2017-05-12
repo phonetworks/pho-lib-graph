@@ -97,7 +97,7 @@ class Node implements EntityInterface, NodeInterface, \SplObserver, \Serializabl
     */
    public function toArray(): array
    {
-       $array = $this->baseToArray();
+       $array = $this->entityToArray();
        $array["edge_list"] = $this->edge_list->toArray();
        $array["context"] = $this->context_id;
        return $array;

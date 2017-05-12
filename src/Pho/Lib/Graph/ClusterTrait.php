@@ -124,7 +124,7 @@ trait ClusterTrait {
     */
    public function toArray(): array
    {
-       return $this->baseToArray();
+       return $this->clusterToArray();
    }
 
    /**
@@ -138,7 +138,7 @@ trait ClusterTrait {
     *
     * @return array The object in array format.
     */  
-   protected function baseToArray(): array
+   protected function clusterToArray(): array
    {
     return ["members"=>$this->node_ids];
    }

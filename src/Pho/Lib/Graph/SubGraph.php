@@ -21,9 +21,7 @@ namespace Pho\Lib\Graph;
  */
 class SubGraph extends Node implements GraphInterface {
 
-    use ClusterTrait {
-        ClusterTrait::baseToArray as clusterToArray;
-    }
+    use ClusterTrait;
 
     /**
      * {@inheritdoc}

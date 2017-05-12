@@ -108,7 +108,7 @@ trait EntityTrait {
     *
     * @return array The object in array format.
     */
-   protected function baseToArray(): array
+   protected function entityToArray(): array
    {
        return [
            "id" => (string) $this->id,
@@ -121,7 +121,7 @@ trait EntityTrait {
     */
    public function toArray(): array
    {
-       return $this->baseToArray();
+       return $this->entityToArray();
    }
 
    /**
