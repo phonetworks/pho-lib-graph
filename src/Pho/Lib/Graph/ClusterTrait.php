@@ -45,7 +45,13 @@ trait ClusterTrait {
         if($this instanceof SubGraph) {
             $this->context()->add($node);
         }
+        $this->onAdd($node);
         return $node;
+    }
+
+    protected function onAdd(NodeInterface $node): void
+    {
+
     }
 
     /**
@@ -55,7 +61,17 @@ trait ClusterTrait {
     {
         if(!$this->contains($node_id))
             throw new Exceptions\NodeDoesNotExistException($node_id);
-        return $this->nodes[(string) $node_id];
+        if(isset($this->nodes[(string) $node_id]))
+            return $this->nodes[(string) $node_id];
+        else
+            return $this->hydratedGet($node_id);
+    }
+
+
+    
+    protected function hydratedGet(ID $node_id): NodeInterface
+    {
+
     }
 
     /**
@@ -63,7 +79,7 @@ trait ClusterTrait {
      */
     public function contains(ID $node_id): bool
     {
-        return array_search((string)$node_id, $this->node_ids) !== false; // 
+        return array_search((string)$node_id, $this->node_ids) !== false; 
     }
     
     /**
@@ -75,34 +91,56 @@ trait ClusterTrait {
             $this->get($node_id)->destroy();
             unset($this->nodes[(string) $node_id]);
             unset($this->node_ids[array_search((string)$node_id, $this->node_ids)]);
+            $this->onRemove($node_id);
         }
     }
+
+
+    protected function onRemove(ID $node_id): void
+    {
+
+    }
+
 
     /**
      * {@inheritdoc}
      */        
     public function members(): array
     {
-        return $this->nodes;
+        if(count($this->nodes)>0 || count($this->node_ids) == 0)
+            return $this->nodes;
+        else
+            return $this->hydratedMembers();
+    }
+
+    protected function hydratedMembers(): array
+    {
+
     }
 
    
    /**
-    * Returns Graph members in serialized format
-    *
-    * @return array A list of member IDs in string format
+    * {@inheritdoc}
     */
-   protected function membersSerialized(): array
+   public function toArray(): array
    {
-       return $this->node_ids;
+       return $this->baseToArray();
    }
 
    /**
-     * {@inheritdoc}
-     */  
-   public function toArray(): array
+    * Converts the object to array
+    *
+    * Used for serialization/unserialization. Converts internal 
+    * object properties into a simple format to help with
+    * reconstruction.
+    *
+    * @see toArray for actual implementation of this method by subclasses.
+    *
+    * @return array The object in array format.
+    */  
+   protected function baseToArray(): array
    {
-    return ["members"=>$this->membersSerialized()];
+    return ["members"=>$this->node_ids];
    }
 
 }

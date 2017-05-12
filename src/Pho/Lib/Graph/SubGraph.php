@@ -21,7 +21,9 @@ namespace Pho\Lib\Graph;
  */
 class SubGraph extends Node implements GraphInterface {
 
-    use ClusterTrait;
+    use ClusterTrait {
+        ClusterTrait::baseToArray as clusterToArray;
+    }
 
     /**
      * {@inheritdoc}
@@ -39,9 +41,7 @@ class SubGraph extends Node implements GraphInterface {
      */
     public function toArray(): array
     {
-        $array = parent::toArray();
-        $array["members"] = $this->membersSerialized();
-        return $array;
+        return array_merge(parent::toArray(), $this->clusterToArray());
     }
 
 }
