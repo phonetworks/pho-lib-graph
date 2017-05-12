@@ -63,7 +63,6 @@ trait ClusterTrait {
      */
     public function contains(ID $node_id): bool
     {
-        // return isset($this->nodes[(string) $node_id]);
         return array_search((string)$node_id, $this->node_ids) !== false; // 
     }
     
@@ -95,11 +94,6 @@ trait ClusterTrait {
     */
    protected function membersSerialized(): array
    {
-       /*$array = [];
-       foreach($this->nodes as $node) {
-            $array[] = (string) $node->id();
-       }
-       return $array;*/
        return $this->node_ids;
    }
 
