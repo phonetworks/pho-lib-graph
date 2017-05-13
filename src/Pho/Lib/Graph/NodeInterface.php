@@ -47,8 +47,20 @@ interface NodeInterface {
     *
     * @return ArrayObject An ArrayObject of contexts in no particular order.
     */
-
    public function context(): GraphInterface;
+
+   /**
+    * Changes the fundamental context of a node.
+    *
+    * Rarely, a node may need its fundamental context to change 
+    * after its construction. This method enables setting a new
+    * context for the node.
+    *
+    * @param GraphInterface $context
+    *
+    * @return void
+    */
+   public function changeContext(GraphInterface $context): void;
 
 
 }

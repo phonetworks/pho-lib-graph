@@ -138,6 +138,14 @@ class Edge implements EntityInterface, EdgeInterface, \SplObserver, \Serializabl
         return $this->hydratedHead();
    }
 
+   /**
+     * A protected method that enables higher-level packages
+     * to provide persistence for the head() call.
+     * 
+     * @see head() 
+     *
+     * @return HeadNode
+     */
    protected function hydratedHead(): HeadNode
    {
 
@@ -154,6 +162,14 @@ class Edge implements EntityInterface, EdgeInterface, \SplObserver, \Serializabl
             return $this->hydratedTail();
    }
 
+   /**
+     * A protected method that enables higher-level packages
+     * to provide persistence for the tail() call.
+     * 
+     * @see tail() 
+     *
+     * @return TailNode
+     */
    protected function hydratedTail(): TailNode
    {
 
@@ -171,6 +187,14 @@ class Edge implements EntityInterface, EdgeInterface, \SplObserver, \Serializabl
             return $this->hydratedPredicate();
    }
 
+   /**
+     * A protected method that enables higher-level packages
+     * to provide persistence for the predicate() call.
+     * 
+     * @see predicate() 
+     *
+     * @return PredicateInterface
+     */
    protected function hydratedPredicate(): PredicateInterface
    {
 

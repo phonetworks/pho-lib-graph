@@ -49,6 +49,16 @@ trait ClusterTrait {
         return $node;
     }
 
+    /**
+     * A protected method that enables higher-level packages
+     * to extend the functionality of the add() call.
+     * 
+     * @see add() 
+     *
+     * @param NodeInterface $node
+     * 
+     * @return void
+     */
     protected function onAdd(NodeInterface $node): void
     {
 
@@ -68,7 +78,14 @@ trait ClusterTrait {
     }
 
 
-    
+    /**
+     * A protected method that enables higher-level packages
+     * to provide persistence for the get() call.
+     * 
+     * @see get() 
+     *
+     * @return NodeInterface
+     */
     protected function hydratedGet(ID $node_id): NodeInterface
     {
 
@@ -95,7 +112,16 @@ trait ClusterTrait {
         }
     }
 
-
+    /**
+     * A protected method that enables higher-level packages
+     * to extend the functionality of the remove() call.
+     * 
+     * @see remove() 
+     *
+     * @param ID $node_id
+     * 
+     * @return void
+     */
     protected function onRemove(ID $node_id): void
     {
 
@@ -113,6 +139,14 @@ trait ClusterTrait {
             return $this->hydratedMembers();
     }
 
+    /**
+     * A protected method that enables higher-level packages
+     * to provide persistence for the members() call.
+     * 
+     * @see members() 
+     *
+     * @return array
+     */
     protected function hydratedMembers(): array
     {
 

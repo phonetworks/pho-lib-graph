@@ -81,9 +81,26 @@ class Node implements EntityInterface, NodeInterface, \SplObserver, \Serializabl
             return $this->hydratedContext();
     }
 
+    /**
+     * A protected method that enables higher-level packages
+     * to provide persistence for the context() call.
+     * 
+     * @see context() 
+     *
+     * @return GraphInterface
+     */
     protected function hydratedContext(): GraphInterface
     {
 
+    }
+
+    /**
+    * {@inheritdoc}
+    */
+    public function changeContext(GraphInterface $context): void
+    {
+        $this->context = $context;
+        $this->context_id = $context->id();
     }
     
    /**
