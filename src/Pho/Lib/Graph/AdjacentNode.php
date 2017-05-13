@@ -148,4 +148,12 @@ class AdjacentNode implements NodeInterface, EntityInterface {
         $this->instance->update($subject);
     }
 
+    /**
+      * {@inheritdoc}
+      */
+    public function changeContext(GraphInterface $context): void
+    {
+        $this->instance->changeContext($context);
+    }
+
 }
