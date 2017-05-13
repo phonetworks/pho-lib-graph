@@ -184,20 +184,20 @@ Lib-Graph comes with "protected" methods that you can override to extend the fun
 
 #### For Graph and SubGraph:
 
-* **onAdd(NodeInterface $node)**: called at the end of ```add(NodeInterface $node)``` function. 
-* **onRemove(ID $node_id)**: called at the end of ```remove(ID $node_id)``` function.
-* **hydratetGet(ID $node_id)**: called when ```get(ID $node_id)``` can't find the object in ```$nodes```. Enables you to access ```$node_ids``` to fetch the object from external sources.
-* **hydratedMembers()**: called when ```members()``` can't find any objects in ```$nodes```. Enables you to access ```$node_ids``` to fetch the objects from external sources.
+* **onAdd(NodeInterface $node)**: called at the end of ```add(NodeInterface $node)``` function. The return value is **void**.
+* **onRemove(ID $node_id)**: called at the end of ```remove(ID $node_id)``` function. The return value is **void**.
+* **hydratedGet(ID $node_id)**: called when ```get(ID $node_id)``` can't find the object in ```$nodes```. Enables you to access ```$node_ids``` to fetch the object from external sources. The return value is **NodeInterface**.
+* **hydratedMembers()**: called when ```members()``` can't find any objects in ```$nodes```. Enables you to access ```$node_ids``` to fetch the objects from external sources. The return value is **array** (of NodeInterface objects).
 
 #### For Edge:
 
-* **hydratedHead()**: called when ```head()``` can't find the head node. Enables you to access ```$head_id``` to fetch it from external sources.
-* **hydratedTail()**: called when ```tail()``` can't find the tail node. Enables you to access ```$tail_id``` to fetch it from external sources.
-* **hydratedPredicate()**: called when ```predicate()``` can't find the predicate object. Enables you to access ```$predicate_label``` to recreate it or fetch from external sources.
+* **hydratedHead()**: called when ```head()``` can't find the head node. Enables you to access ```$head_id``` to fetch it from external sources. The return value is **NodeInterface**.
+* **hydratedTail()**: called when ```tail()``` can't find the tail node. Enables you to access ```$tail_id``` to fetch it from external sources. The return value is **NodeInterface**.
+* **hydratedPredicate()**: called when ```predicate()``` can't find the predicate object. Enables you to access ```$predicate_label``` to recreate it or fetch from external sources. The return value is **PredicateInterface**.
 
 #### For Node and SubGraph:
 
-* **hydratedContext()**: called when ```context()``` can't find the context. Enables you to access ```$context_id``` to fetch it from external sources.
+* **hydratedContext()**: called when ```context()``` can't find the context. Enables you to access ```$context_id``` to fetch it from external sources. The return value is **GraphInterface**.
 
 
 ## License
