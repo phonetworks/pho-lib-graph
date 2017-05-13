@@ -33,6 +33,8 @@ namespace Pho\Lib\Graph;
  */
 class Node implements EntityInterface, NodeInterface, \SplObserver, \Serializable {
 
+    use SerializableTrait;
+
     /**
      * Internal variable that keeps track of edges in and out.
      *
@@ -102,36 +104,5 @@ class Node implements EntityInterface, NodeInterface, \SplObserver, \Serializabl
        $array["context"] = $this->context_id;
        return $array;
    }
-
-   /**
-    * @internal
-    *
-    * Used for serialization. Nothing special here. Declared for 
-    * subclasses.
-    *
-    * @return string in PHP serialized format.
-    */
-   public function serialize(): string 
-   {
-        return serialize(get_object_vars($this));
-    }
-
-    /**
-    * @internal
-    *
-    * Used for deserialization. Nothing special here. Declared for 
-    * subclasses.
-    *
-    * @param string $data 
-    *
-    * @return void
-    */
-    public function unserialize(/* mixed */ $data): void 
-    {
-        $values = unserialize($data);
-        foreach ($values as $key=>$value) {
-            $this->$key = $value;
-        }
-    }
 
 }

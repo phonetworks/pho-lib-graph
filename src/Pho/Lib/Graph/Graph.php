@@ -20,8 +20,9 @@ namespace Pho\Lib\Graph;
  * 
  * @author Emre Sokullu <emre@phonetworks.org>
  */
-class Graph implements GraphInterface {
+class Graph implements GraphInterface, \Serializable {
 
+    use SerializableTrait;
     use ClusterTrait;
 
     /**
