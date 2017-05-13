@@ -109,4 +109,13 @@ class SimpleTest extends \PHPUnit\Framework\TestCase
         $predicate = new Predicate();
         $this->assertEquals("predicate", (string) $predicate);
     }
+
+    public function testChangeContext() 
+    {
+        $subgraph = new SubGraph($this->graph);
+        $node = new Node($this->graph);
+        $this->assertEquals($this->graph->id(), $node->context()->id());
+        $node->changeContext($subgraph);
+        $this->assertEquals($subgraph->id(), $node->context()->id());
+    }
 }
