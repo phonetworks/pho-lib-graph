@@ -35,11 +35,25 @@ interface EdgeInterface {
    public function tail(): TailNode;
 
    /**
+    * Returns the ID of the tail node.
+    *
+    * @return ID The tail node ID.
+    */
+   public function tailID(): ID;
+
+   /**
     * Returns the node (in its object form) that this edge directed towards.
     *
     * @return HeadNode The head node.
     */
    public function head(): HeadNode;
+
+   /**
+    * Returns the ID of the head node.
+    *
+    * @return ID The head node ID.
+    */
+   public function headID(): ID;
 
 
    /**

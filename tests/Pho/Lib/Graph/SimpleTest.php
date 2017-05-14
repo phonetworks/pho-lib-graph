@@ -69,6 +69,15 @@ class SimpleTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($address, $edge->attributes()->address);
     }
 
+    public function testEdgeHeadTailIDs() {
+        $faker = \Faker\Factory::create();
+        $node1 = new Node($this->graph);
+        $node2 = new Node($this->graph);
+        $edge = new Edge($node1, $node2);
+        $this->assertEquals($node1->id(), $edge->tailID());
+        $this->assertEquals($node2->id(), $edge->headID());
+    }
+
     public function testPredicateAssignment() {
         $new_predicate = new class extends Predicate { public function test() { return "works"; }};
         $node1 = new Node($this->graph);

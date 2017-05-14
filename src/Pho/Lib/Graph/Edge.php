@@ -139,6 +139,14 @@ class Edge implements EntityInterface, EdgeInterface, \SplObserver, \Serializabl
    }
 
    /**
+     * {@inheritdoc}
+     */
+   public function headID(): ID
+   {
+        return ID::fromString($this->head_id);
+   }
+
+   /**
      * A protected method that enables higher-level packages
      * to provide persistence for the head() call.
      * 
@@ -160,6 +168,14 @@ class Edge implements EntityInterface, EdgeInterface, \SplObserver, \Serializabl
             return $this->tail;
         else
             return $this->hydratedTail();
+   }
+
+   /**
+     * {@inheritdoc}
+     */
+   public function tailID(): ID
+   {
+        return ID::fromString($this->tail_id);
    }
 
    /**
