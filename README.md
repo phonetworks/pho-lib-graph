@@ -146,7 +146,7 @@ EntityInterface constitutes the basis of both Node and Edge objects. Most import
 | *destroy*[\*] |                         | Readies object for destruction | void                 |
 | toArray       |                         | Lists member ref.s in ID form  | array                |
 
-[\*] Just a placeholder. May be extended in higher levels for dealing with persistence et al.
+> [\*] Just a placeholder. May be extended in higher levels for dealing with persistence et al.
 
 ### NodeInterface
 
@@ -158,6 +158,19 @@ NodeInterface extends EntityInterface, and adds two things:
 | ------------ | ------------- | -------------------------------------------------------- | -------------- |
 | edges        |               | Retrieves the EdgeList object that interfaces its edges. | EdgeList       |
 | context      |               | Retrieves its context                                    | GraphInterface |
+
+### EdgeInterface
+
+| Method       | Parameter(s)  | Description                                              | Returns            |
+| ------------ | ------------- | -------------------------------------------------------- | ------------------ |
+| tail         |               | Retrieves the tail node of the edge.                     | TailNode [\*]      |
+| tailID       |               | Retrieves the tail node's ID.                            | ID                 |
+| head         |               | Retrieves the head node of the edge.                     | HeadNode [\*]      |
+| headID       |               | Retrieves the head node's ID                             | ID                 |
+| predicate    |               | Retrieves the predicate                                  | PredicateInterface |
+| orphan       |               | Checks if the edge fails to possess a tail or a head     | bool               |
+
+> [\*] TailNode and HeadNode objects behave the same way with NodeInterface objects. You can query them all identically.
 
 ### EdgeList
 
