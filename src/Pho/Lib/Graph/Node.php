@@ -67,7 +67,7 @@ class Node implements EntityInterface, NodeInterface, \SplObserver, \Serializabl
         $this->onEntityLoad();
         $this->edge_list = new EdgeList();
         $context->add($this)->context = $context;
-        $this->context_id = $context->id();
+        $this->context_id = (string) $context->id();
     }
 
     /**

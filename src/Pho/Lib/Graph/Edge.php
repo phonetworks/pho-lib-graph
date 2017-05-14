@@ -100,11 +100,11 @@ class Edge implements EntityInterface, EdgeInterface, \SplObserver, \Serializabl
 
         $this->head = new HeadNode();
         $this->head->set($head);
-        $this->head_id = $head->id();
+        $this->head_id = (string) $head->id();
 
         $this->tail = new TailNode();
         $this->tail->set($tail);
-        $this->tail_id = $tail->id();
+        $this->tail_id = (string) $tail->id();
 
         $this->head->edges()->addIncoming($this);
         $this->tail->edges()->addOutgoing($this);
