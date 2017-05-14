@@ -82,7 +82,7 @@ class Edge implements EntityInterface, EdgeInterface, \SplObserver, \Serializabl
         $array = $this->entityToArray();
         $array["tail"] = $this->tail_id;
         $array["head"] = $this->head_id;
-        $array["predicate"] = $predicate_label;
+        $array["predicate"] = $this->predicate_label;
         return $array;
     }
 
@@ -124,7 +124,7 @@ class Edge implements EntityInterface, EdgeInterface, \SplObserver, \Serializabl
                 $this->predicate = new Predicate();
             }
         }
-        $this->predicate_label = (string) $predicate;
+        $this->predicate_label = (string) $this->predicate;
     }
 
     /**

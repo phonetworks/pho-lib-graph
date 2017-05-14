@@ -33,6 +33,31 @@ class FeedEdgeListTest extends \PHPUnit\Framework\TestCase
         unset($this->edge);
     }
 
+    public function testEdgeToArray() {
+        
+        $this->edge->attributes()->name = "emre";
+        $array = $this->edge->toArray();
+        
+        $this->assertArrayHasKey("id", $array);
+        $this->assertEquals((string)$this->edge->id(), $array["id"]);
+        
+        $this->assertArrayHasKey("attributes", $array);
+        $this->assertEquals($this->edge->attributes()->name, $array["attributes"]["name"]);
+        $this->assertEquals("emre", $array["attributes"]["name"]);
+
+        $this->assertArrayHasKey("tail", $array);
+        $this->assertEquals((string)$this->edge->tail()->id(), $array["tail"]);
+        $this->assertEquals((string)$this->node1->id(), $array["tail"]);
+
+        $this->assertArrayHasKey("head", $array);
+        $this->assertEquals((string)$this->edge->head()->id(), $array["head"]);
+        $this->assertEquals((string)$this->node2->id(), $array["head"]);
+        
+        $this->assertArrayHasKey("predicate", $array);
+        $this->assertEquals((string)$this->edge->predicate(), $array["predicate"]);
+        
+    }
+
     public function testFeedEdgeList() {
         $edge_list = $this->node1->edges()->toArray();
         // recreating the objects from serialized format
