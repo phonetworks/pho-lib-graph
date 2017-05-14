@@ -79,7 +79,7 @@ class Edge implements EntityInterface, EdgeInterface, \SplObserver, \Serializabl
      */
     public function toArray(): array
     {
-        $array = $this->baseToArray();
+        $array = $this->entityToArray();
         $array["tail"] = $this->tail_id;
         $array["head"] = $this->head_id;
         $array["predicate"] = $predicate_label;
