@@ -49,17 +49,17 @@ trait ClusterTrait {
         return $node;
     }
 
-    public function fromArray(array $nodes): void
+    public function laodNodesFromArray(array $nodes): void
     {
         foreach($nodes as $node)
             $this->add($node);
     }
 
-    public function fromIDArray(array $node_ids): void
+    public function loadNodesFromIDArray(array $node_ids): void
     {
         $this->node_ids = $node_ids;
         if($this instanceof SubGraph) {
-            $this->context()->add($node);
+            $this->context()->fromIDArray($node_ids);
         }
     }
 
