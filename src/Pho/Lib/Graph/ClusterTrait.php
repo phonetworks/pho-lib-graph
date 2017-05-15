@@ -59,7 +59,7 @@ trait ClusterTrait {
     {
         $this->node_ids = $node_ids;
         if($this instanceof SubGraph) {
-            $this->context()->fromIDArray($node_ids);
+            $this->context()->loadNodesFromIDArray($node_ids);
         }
     }
 
