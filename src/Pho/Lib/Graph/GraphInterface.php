@@ -101,6 +101,13 @@ interface GraphInterface {
     public function members(): array;
 
     /**
+     * Retrieves the number of graph's nodes
+     *
+     * @return int
+     */
+    public function count(): int;
+
+    /**
     * Converts the object to array
     *
     * Used for serialization/unserialization. Converts internal 
@@ -110,5 +117,26 @@ interface GraphInterface {
     * @return array The object in array format.
     */
     public function toArray(): array;
+
+
+    /**
+     * Fills up the graph with members
+     * 
+     * @param array $nodes An array of NodeInterface objects.
+     * 
+     * @return void
+     */
+    public function loadNodesFromArray(array $nodes): void;
+
+    /**
+     * Fills up the graph with member IDs
+     * 
+     * It doesn't actually create objects. Useful for lazy-loading post-unserialization.
+     * 
+     * @param array $nodes An array of NodeInterface IDs in string format.
+     * 
+     * @return void
+     */
+    public function loadNodesFromIDArray(array $nodes): void;
 
 }

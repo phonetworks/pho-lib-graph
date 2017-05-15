@@ -127,4 +127,19 @@ class SimpleTest extends \PHPUnit\Framework\TestCase
         $node->changeContext($subgraph);
         $this->assertEquals($subgraph->id(), $node->context()->id());
     }
+
+    public function testClusterLoadNodesFromIDArray()
+    {
+        $node1 =new Node($this->graph);
+        $subgraph = new SubGraph($this->graph);
+        $node2 = new Node($subgraph);
+        $this->assertCount(1, $subgraph->members());
+        $this->assertCount(3, $this->graph->members());
+
+        $new_subgraph  = new SubGraph($this->graph);
+        $new_subgraph->loadNodesFromIDArray($subgraph->toArray()["members"]);
+        $this->assertEquals(1, $new_subgraph->count()); // count(), not members() because we don't want hydratedMembers yet.
+        $this->assertEquals(4, $this->graph->count()); // only the new sub_graph, not its members because of overwrite.
+
+    }
 }

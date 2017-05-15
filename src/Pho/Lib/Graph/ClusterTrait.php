@@ -49,15 +49,21 @@ trait ClusterTrait {
         return $node;
     }
 
-    public function laodNodesFromArray(array $nodes): void
+    /**
+     * {@inheritdoc}
+     */
+    public function loadNodesFromArray(array $nodes): void
     {
         foreach($nodes as $node)
             $this->add($node);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function loadNodesFromIDArray(array $node_ids): void
     {
-        $this->node_ids = $node_ids;
+        $this->node_ids = array_unique(array_merge($this->node_ids, $node_ids));
         if($this instanceof SubGraph) {
             $this->context()->loadNodesFromIDArray($node_ids);
         }
@@ -153,6 +159,14 @@ trait ClusterTrait {
             return $this->nodes;
         else
             return $this->hydratedMembers();
+    }
+
+    /**
+     * {@inheritdoc}
+     */   
+    public function count(): int
+    {
+        return count($this->node_ids);
     }
 
     /**
