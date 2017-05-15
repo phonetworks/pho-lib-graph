@@ -49,6 +49,14 @@ trait ClusterTrait {
         return $node;
     }
 
+    public function fromArray(array $node_ids): void
+    {
+        $this->node_ids = $node_ids;
+        if($this instanceof SubGraph) {
+            $this->context()->add($node);
+        }
+    }
+
     /**
      * A protected method that enables higher-level packages
      * to extend the functionality of the add() call.
@@ -133,7 +141,9 @@ trait ClusterTrait {
      */        
     public function members(): array
     {
-        if(count($this->nodes)>0 || count($this->node_ids) == 0)
+        if(count($this->node_ids)<1)
+            return [];
+        else if(count($this->nodes) == count($this->node_ids))
             return $this->nodes;
         else
             return $this->hydratedMembers();
