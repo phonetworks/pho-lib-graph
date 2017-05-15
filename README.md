@@ -118,15 +118,18 @@ Below is an API reference for most of the Pho LibGraph classes:
 
 GraphInterface forms the basis of both Graph and SubGraph objects.
 
-| Method       | Parameter(s)            | Description                   | Returns                |
-| ------------ | ----------------------- | ----------------------------- | ---------------------- |
-| id           |                         | Always returns "." as ID obj. | ID                     |
-| *add*[\*]    | NodeInterface $node     | Adds a new node               | void                   |
-| contains     | ID $node_id             | Checks if a node is a member  | bool                   |
-| get          | ID $node_id             | Fetches a member              | NodeInterface          |
-| remove       | ID $node_id             | Removes a member              | void                   |
-| members      |                         | Lists members in  object form | array\<NodeInterface\> |
-| toArray      |                         | Lists member ref.s in ID form | array\<ID\>            |
+| Method               | Parameter(s)            | Description                   | Returns                |
+| -------------------- | ----------------------- | ----------------------------- | ---------------------- |
+| id                   |                         | Always returns "." as ID obj. | ID                     |
+| add [\*]             | NodeInterface $node     | Adds a new node               | void                   |
+| count                |                         | Counts the # of member nodes. | int                    |
+| contains             | ID $node_id             | Checks if a node is a member  | bool                   |
+| get                  | ID $node_id             | Fetches a member              | NodeInterface          |
+| remove               | ID $node_id             | Removes a member              | void                   |
+| members              |                         | Lists members in  object form | array\<NodeInterface\> |
+| toArray              |                         | Lists member ref.s in ID form | array\<ID\>            |
+| loadNodesFromArray   | array $nodes            | Array of NodeInteface objects | void                   |
+| loadNodesFromIDArray | array $node_ids         | Array of node IDs in string   | void                   |
 
 [\*] You won't need to use this function since graph adding is handled automatically at object construction.
 
