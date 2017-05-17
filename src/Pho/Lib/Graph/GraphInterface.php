@@ -133,10 +133,10 @@ interface GraphInterface {
      * 
      * It doesn't actually create objects. Useful for lazy-loading post-unserialization.
      * 
-     * @param array $nodes An array of NodeInterface IDs in string format.
+     * @param array $node_ids An array of NodeInterface IDs in string format.
      * 
      * @return void
      */
-    public function loadNodesFromIDArray(array $nodes): void;
+    public function loadNodesFromIDArray(array $node_ids): void;
 
 }
