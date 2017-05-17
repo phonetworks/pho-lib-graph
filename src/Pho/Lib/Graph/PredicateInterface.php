@@ -33,10 +33,20 @@ interface PredicateInterface {
     public function binding(): bool;
 
     /**
-     * Returns the predicate in string format
+     * Returns the full class name
      * 
      * @return string
      */
     public function __toString(): string;
+    
+    /**
+     * Returns the predicate in string format
+     *
+     * Label is actually the short-form class name. For
+     * full class name, use ```(string) $predicate```
+     *
+     * @return string
+     */
+    public function label(): string;
 
 }
