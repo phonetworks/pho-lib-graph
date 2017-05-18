@@ -116,7 +116,8 @@ class SimpleTest extends \PHPUnit\Framework\TestCase
 
     public function testPredicateString() {
         $predicate = new Predicate();
-        $this->assertEquals("predicate", (string) $predicate);
+        $this->assertEquals("predicate", $predicate->label());
+        $this->assertEquals(get_class($predicate), (string) $predicate);
     }
 
     public function testChangeContext() 
