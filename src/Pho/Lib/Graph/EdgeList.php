@@ -25,19 +25,42 @@ namespace Pho\Lib\Graph;
  */
 class EdgeList {
 
+    private $data_fridge = [];
+
     private $out = [];
     private $in = [];
     private $to = [];
 
     /**
      * Constructor
-     *
+     * 
+     * For performance reasons, the constructor doesn't load the seed data 
+     * (if available) but waits for a method to attempt to access.
+     * 
+     * @see _warmup for lazy loading in action.
+     * 
      * @param array $data Initial data to seed.
+     * @param bool $lazy_load if false loads all seed data to memory, otherwise loads them when a function needs them.
      */
-    public function __construct(array $data = [])
+    public function __construct(array $data = [], bool $lazy_load = true)
+    {
+        if(!$lazy_load) {
+            $this->fromArray($data);
+        }
+        $this->data_fridge = $data;
+    }
+
+    /**
+     * Fills the list with edges from array
+     *
+     * @param array $data
+     * 
+     * @return void
+     */
+    protected function fromArray(array $data): void
     {
         foreach($data as $direction => $edges) {
-            $this->processArray(Direction::fromString($direction), $edges);
+            $this->_processArray(Direction::fromString($direction), $edges);
         }
     }
 
@@ -51,13 +74,27 @@ class EdgeList {
  * 
  * @return void
  */
-    private function processArray(Direction $direction, array $edges): void 
+    private function _processArray(Direction $direction, array $edges): void 
     {
         //eval(\Psy\sh());
         foreach($edges as $edge) {
             if($edge instanceof EdgeInterface)
                 $this->add($direction, $edge);
         }
+    }
+
+    /**
+     * Fills the object with data (if available)
+     * 
+     * First, checks if lazy loading is enabled and necessary under current
+     * circumstances. Then fills the object with data.
+     *
+     * @return void
+     */
+    private function warmup(): void
+    {
+        if(count($this->in)==0 && count($this->out) == 0 && count($this->data_fridge) > 0 )
+            $this->fromArray($this->data_fridge);
     }
 
 
@@ -75,8 +112,16 @@ class EdgeList {
             return (string) $edge->id();
         };
         return array(
-            "out" => array_map($edge_id, $this->out),
-            "in"  => array_map($edge_id, $this->in)
+            "out" => 
+                array_merge(
+                    $this->data_friedge["out"], 
+                    array_map($edge_id, $this->out /* not function, no warmup!! */)
+                ),
+            "in"  => 
+                array_merge(
+                    $this->data_friedge["in"], 
+                    array_map($edge_id, $this->in /* not function, no warmup!! */)
+                )
         );
     }
 
@@ -164,6 +209,7 @@ class EdgeList {
     */
     public function in(): array 
     {
+        $this->warmup();
         return $this->in;
     }
 
@@ -175,6 +221,7 @@ class EdgeList {
     */
     public function out(): array 
     {
+        $this->warmup();
         return $this->out;
     }
 
@@ -186,6 +233,7 @@ class EdgeList {
     */
     public function all(): array
     {
+        $this->warmup();
         return array_merge($this->in, $this->out);
     }
 
@@ -199,6 +247,7 @@ class EdgeList {
     */
     public function to(ID $node_id): array 
     {
+        $this->warmup();
         if(!isset($this->to[(string) $node_id]))
             return [];
         return $this->to[(string) $node_id];
