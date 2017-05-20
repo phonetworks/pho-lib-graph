@@ -64,7 +64,7 @@ class FeedEdgeListTest extends \PHPUnit\Framework\TestCase
         foreach($edge_list as $direction => $edges) {
             foreach($edges as $key => $edge) {
                 if(isset($this->edge_store[$edge])) {
-                    $edge_list[$direction][$key] = unserialize($this->edge_store[$edge]);
+                    $edge_list[$direction][$key] = unserialize($this->edge_store[$edge])->id();
                 }
             }
         }

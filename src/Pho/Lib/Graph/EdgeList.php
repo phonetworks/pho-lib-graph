@@ -25,6 +25,7 @@ namespace Pho\Lib\Graph;
  */
 class EdgeList {
 
+    private $warm = false;
     private $data_fridge = [];
 
     private $out = [];
@@ -37,18 +38,74 @@ class EdgeList {
      * For performance reasons, the constructor doesn't load the seed data 
      * (if available) but waits for a method to attempt to access.
      * 
-     * @see _warmup for lazy loading in action.
-     * 
      * @param array $data Initial data to seed.
-     * @param bool $lazy_load if false loads all seed data to memory, otherwise loads them when a function needs them.
      */
-    public function __construct(array $data = [], bool $lazy_load = true)
+    public function __construct(array $data = [])
     {
-        if(!$lazy_load) {
-            $this->fromArray($data);
-        }
-        $this->data_fridge = $data;
+        if(count($data)==0)
+            $this->warm = true;
+        else
+            $this->data_fridge = $data;
     }
+
+       /**
+     * Retrieves this object in array format
+     *
+     * With all "in" and "out" values in simple string format.
+     * The "to" array can be reconstructed.
+     * 
+     * @return array
+     */
+    public function toArray(): array 
+    {
+        $edge_id = function(EdgeInterface $edge): string {
+            return (string) $edge->id();
+        };
+        return array(
+            "out" => 
+                array_merge(
+                    (isset($this->data_fridge["out"]) ? $this->data_fridge["out"] : []), 
+                    array_map($edge_id, $this->out /* not function, no warmup!! */)
+                ),
+            "in"  => 
+                array_merge(
+                    (isset($this->data_fridge["in"]) ? $this->data_fridge["in"] : []), 
+                    array_map($edge_id, $this->in /* not function, no warmup!! */)
+                )
+        );
+    }
+
+
+    /******************************
+     *  REVIEW
+     ******************************/ 
+
+
+       private function warm(): bool
+    {
+        return (count($this->in) > 0 || count($this->out) > 0);
+    }
+
+    /**
+     * Fills the object with data (if available)
+     * 
+     * First, checks if lazy loading is enabled and necessary under current
+     * circumstances. Then fills the object with data.
+     *
+     * @return void
+     */
+    private function warmup(): void
+    {
+        if(!$this->warm() && count($this->data_fridge) > 0 ) {
+            $this->fromArray($this->data_fridge);
+        }
+    }
+
+    protected function hydratedWarmup(): bool
+    {
+        return false;
+    }
+
 
     /**
      * Fills the list with edges from array
@@ -83,47 +140,11 @@ class EdgeList {
         }
     }
 
-    /**
-     * Fills the object with data (if available)
-     * 
-     * First, checks if lazy loading is enabled and necessary under current
-     * circumstances. Then fills the object with data.
-     *
-     * @return void
-     */
-    private function warmup(): void
-    {
-        if(count($this->in)==0 && count($this->out) == 0 && count($this->data_fridge) > 0 )
-            $this->fromArray($this->data_fridge);
-    }
-
-
-    /**
-     * Retrieves this object in array format
-     *
-     * With all "in" and "out" values in simple string format.
-     * The "to" array can be reconstructed.
-     * 
-     * @return array
-     */
-    public function toArray(): array 
-    {
-        $edge_id = function(EdgeInterface $edge): string {
-            return (string) $edge->id();
-        };
-        return array(
-            "out" => 
-                array_merge(
-                    $this->data_friedge["out"], 
-                    array_map($edge_id, $this->out /* not function, no warmup!! */)
-                ),
-            "in"  => 
-                array_merge(
-                    $this->data_friedge["in"], 
-                    array_map($edge_id, $this->in /* not function, no warmup!! */)
-                )
-        );
-    }
+ 
+/******************************
+     *  REVIEW ENDS
+     ******************************/
+ 
 
     
 
@@ -182,8 +203,9 @@ class EdgeList {
      */
     public function addIncoming(EdgeInterface $edge): void
     {
-            $this->to[(string) $edge->tail()->id()][] = ["direction"=>Direction::in(), "edge"=>$edge];
-            $this->in[] = $edge;
+        $edge_class = get_class($edge);
+            $this->to[(string) $edge->tail()->id()][] = ["direction"=>Direction::in(), "class"=>$edge_class, "edge"=>$edge];
+            $this->in[] = ["class" => $edge_class, "edge" => $edge ];
     }
 
     /**
@@ -197,17 +219,20 @@ class EdgeList {
      */
     public function addOutgoing(EdgeInterface $edge): void
     {
-            $this->to[(string) $edge->head()->id()][] = ["direction"=>Direction::out(), "edge"=>$edge];
-            $this->out[] = $edge;
+        $edge_class = get_class($edge);
+            $this->to[(string) $edge->head()->id()][] = ["direction"=>Direction::out(), "class"=>$edge_class, "edge"=>$edge];
+            $this->out[] = ["class" => $edge_class, "edge" => $edge ];
     }
 
     /**
     * Returns a list of all the edges directed towards
     * this particular node.
     *
+    * @param string $class The type of edge (defined in edge class) to return
+    *
     * @return array An array of EdgeInterface objects.
     */
-    public function in(): array 
+    public function in(string $class=""): array 
     {
         $this->warmup();
         return $this->in;
@@ -217,9 +242,11 @@ class EdgeList {
     * Returns a list of all the edges originating from
     * this particular node.
     *
+    * @param string $class The type of edge (defined in edge class) to return
+    *
     * @return array An array of EdgeInterface objects.
     */
-    public function out(): array 
+    public function out(string $class=""): array 
     {
         $this->warmup();
         return $this->out;
@@ -229,9 +256,11 @@ class EdgeList {
     * Returns a list of all the edges (both in and out) pertaining to
     * this particular node.
     *
+    * @param string $class The type of edge (defined in edge class) to return
+    *
     * @return array An array of EdgeInterface objects.
     */
-    public function all(): array
+    public function all(string $class=""): array
     {
         $this->warmup();
         return array_merge($this->in, $this->out);
@@ -241,11 +270,12 @@ class EdgeList {
     * Retrieves a list of edges between this list's owner node to the given 
     * target node.
     *
+    * @param string $class The type of edge (defined in edge class) to return
     * @param NodeInterface  $node Target node.
     *
     * @return array An array of edge objects in between. Returns an empty array if there is no connections in between.
     */
-    public function to(ID $node_id): array 
+    public function to(ID $node_id, string $class=""): array 
     {
         $this->warmup();
         if(!isset($this->to[(string) $node_id]))
