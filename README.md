@@ -214,6 +214,7 @@ Lib-Graph comes with "protected" methods that you can override to extend the fun
 #### For Node and SubGraph:
 
 * **hydratedContext()**: called when ```context()``` can't find the context. Enables you to access ```$context_id``` to fetch it from external sources. The return value is **GraphInterface**.
+* **hydratedEdge(string $edge_id)**: called to retrieve an edge object from external sources. The return value must be an **EdgeInterface**
 
 
 ## License

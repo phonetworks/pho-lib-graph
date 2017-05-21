@@ -25,12 +25,13 @@ namespace Pho\Lib\Graph;
  */
 class EdgeList {
 
-    private $warm = false;
+    private $master;
+
     private $data_fridge = [];
 
     private $out = [];
     private $in = [];
-    private $to = [];
+    private $between = [];
 
     /**
      * Constructor
@@ -38,17 +39,16 @@ class EdgeList {
      * For performance reasons, the constructor doesn't load the seed data 
      * (if available) but waits for a method to attempt to access.
      * 
+     * @param NodeInterface $node The master, the owner of this EdgeList object.
      * @param array $data Initial data to seed.
      */
-    public function __construct(array $data = [])
+    public function __construct(NodeInterface $node, array $data = [])
     {
-        if(count($data)==0)
-            $this->warm = true;
-        else
-            $this->data_fridge = $data;
+        $this->master = $node;
+        $this->data_fridge = $data;
     }
 
-       /**
+    /**
      * Retrieves this object in array format
      *
      * With all "in" and "out" values in simple string format.
@@ -58,20 +58,35 @@ class EdgeList {
      */
     public function toArray(): array 
     {
-        $edge_id = function(EdgeInterface $edge): string {
-            return (string) $edge->id();
+        
+        $strip_object = function(array $encapsulated): array {
+            return $this->decapsulate($encapsulated);
         };
+
+        $stripped_between = [];
+        foreach($this->between as $id => $between) {
+            foreach($between as $direction => $encapsulated) {
+                $stripped_between[$id][$direction] = $this->decapsulate($encapsulated);
+            }
+        }
+
         return array(
             "out" => 
                 array_merge(
                     (isset($this->data_fridge["out"]) ? $this->data_fridge["out"] : []), 
-                    array_map($edge_id, $this->out /* not function, no warmup!! */)
+                    array_map($strip_object, $this->out)
                 ),
             "in"  => 
                 array_merge(
                     (isset($this->data_fridge["in"]) ? $this->data_fridge["in"] : []), 
-                    array_map($edge_id, $this->in /* not function, no warmup!! */)
+                    array_map($strip_object, $this->in)
+                ),
+            "between" =>
+                array_merge(
+                    (isset($this->data_fridge["between"]) ? $this->data_fridge["between"] : []), 
+                    $stripped_between
                 )
+
         );
     }
 
@@ -79,32 +94,6 @@ class EdgeList {
     /******************************
      *  REVIEW
      ******************************/ 
-
-
-       private function warm(): bool
-    {
-        return (count($this->in) > 0 || count($this->out) > 0);
-    }
-
-    /**
-     * Fills the object with data (if available)
-     * 
-     * First, checks if lazy loading is enabled and necessary under current
-     * circumstances. Then fills the object with data.
-     *
-     * @return void
-     */
-    private function warmup(): void
-    {
-        if(!$this->warm() && count($this->data_fridge) > 0 ) {
-            $this->fromArray($this->data_fridge);
-        }
-    }
-
-    protected function hydratedWarmup(): bool
-    {
-        return false;
-    }
 
 
     /**
@@ -203,9 +192,9 @@ class EdgeList {
      */
     public function addIncoming(EdgeInterface $edge): void
     {
-        $edge_class = get_class($edge);
-            $this->to[(string) $edge->tail()->id()][] = ["direction"=>Direction::in(), "class"=>$edge_class, "edge"=>$edge];
-            $this->in[] = ["class" => $edge_class, "edge" => $edge ];
+            $edge_encapsulated = $this->encapsulate($edge);
+            $this->between[(string) $edge->tail()->id()][Direction::in()][] = $edge_encapsulated;
+            $this->in[] = $edge_encapsulated;
     }
 
     /**
@@ -219,14 +208,31 @@ class EdgeList {
      */
     public function addOutgoing(EdgeInterface $edge): void
     {
-        $edge_class = get_class($edge);
-            $this->to[(string) $edge->head()->id()][] = ["direction"=>Direction::out(), "class"=>$edge_class, "edge"=>$edge];
-            $this->out[] = ["class" => $edge_class, "edge" => $edge ];
+            $edge_encapsulated = $this->encapsulate($edge);
+            $this->between[(string) $edge->head()->id()][Direction::out()][] = $edge_encapsulated;
+            $this->out[] = $edge_encapsulated;
+    }
+
+    private function encapsulate(EdgeInterface $edge): array
+    {
+        $get_ancestors = function(string $class): array
+        {
+            for ($classes[] = $class; $class = get_parent_class ($class); $classes[] = $class); 
+                return $classes;
+        };
+        return ["id" => (string) $edge->id(), "classes"=>$get_ancestors(get_class($edge)), "object"=>$edge];
+    }
+
+    private function decapsulate(array $encapsulated): array
+    {
+        return ["id"=>$encapsulated["id"], "classes"=>$encapsulated["classes"]];
     }
 
     /**
     * Returns a list of all the edges directed towards
     * this particular node.
+    *
+    * @see _retrieve Used by this method to fetch objects.
     *
     * @param string $class The type of edge (defined in edge class) to return
     *
@@ -234,13 +240,14 @@ class EdgeList {
     */
     public function in(string $class=""): array 
     {
-        $this->warmup();
-        return $this->in;
+        return $this->_retrieve(Direction::in(), $class);
     }
 
     /**
     * Returns a list of all the edges originating from
     * this particular node.
+    *
+    * @see _retrieve Used by this method to fetch objects.
     *
     * @param string $class The type of edge (defined in edge class) to return
     *
@@ -248,8 +255,47 @@ class EdgeList {
     */
     public function out(string $class=""): array 
     {
-        $this->warmup();
-        return $this->out;
+        return $this->_retrieve(Direction::out(), $class);
+    }
+
+
+    /**
+     * A helper method to retrieve edges.
+     * 
+     * @see out A method that uses this function
+     * @see in A method that uses this function
+     *
+     * @param Direction $direction Lets you choose to fetch incoming or outgoing edges.
+     * @param string $class The type of edge (defined in edge class) to return
+     * 
+     * @return array An array of EdgeInterface objects.
+     */
+    protected function _retrieve(Direction $direction, string $class): array
+    {
+        $d = (string) $direction;
+
+        $hydrate = function(array $encapsulated): EdgeInterface
+        {
+            return $this->master->hydratedEdge($encapsulated["id"]);
+        };
+
+        $filter_classes = function(array $encapsulated) use($class): EdgeInterface
+        {
+            return in_array($class, $encapsulated["classes"]);
+        };
+
+        if(empty($class)) {
+            return array_merge(
+                    array_column($this->$d, "object"),
+                    array_map($hydrate, $this->data_fridge[$d])
+            );
+        }
+        else {
+            return array_merge(
+                array_column(array_filter($this->$d, $filter_classes), "object"),
+                array_map($hydrate, array_filter($this->data_fridge[$d], $filter_classes))
+            );
+        }
     }
 
     /**
@@ -262,8 +308,7 @@ class EdgeList {
     */
     public function all(string $class=""): array
     {
-        $this->warmup();
-        return array_merge($this->in, $this->out);
+        return array_merge($this->in($class), $this->out($class));
     }
 
     /**
@@ -277,10 +322,64 @@ class EdgeList {
     */
     public function to(ID $node_id, string $class=""): array 
     {
-        $this->warmup();
-        if(!isset($this->to[(string) $node_id]))
-            return [];
-        return $this->to[(string) $node_id];
+        return $this->_returnDirected(Direction::out(), $node_id, $class);
+    }
+
+    public function from(ID $node_id, string $class=""): array
+    {
+        return $this->_returnDirected(Direction::in(), $node_id, $class);
+    }
+
+    public function between(ID $node_id, string $class=""): array
+    {
+        return array_merge($this->from($node_id, $class), $this->to($node_id, $class));
+    }
+
+    /**
+     * A helper method to retrieve directed edges.
+     * 
+     * @see from A method that uses this function
+     * @see to A method that uses this function
+     *
+     * @param Direction $direction Lets you choose to fetch incoming or outgoing edges.
+     * @param ID $node_id Directed towards which node.
+     * @param string $class The type of edge (defined in edge class) to return.
+     * 
+     * @return array An array of EdgeInterface objects.
+     */
+    protected function _retrieveDirected(Direction $direction, ID $node_id, string $class): array
+    {
+        $hydrate = function(array $encapsulated): EdgeInterface
+        {
+            return $this->master->hydratedEdge($encapsulated["id"]);
+        };
+
+        $filter_classes = function(array $encapsulated) use($class): EdgeInterface
+        {
+            return in_array($class, $encapsulated["classes"]);
+        };
+
+        $return = [];
+
+        if(isset($this->between[(string) $node_id][$direction])) 
+        {
+            if(empty($class)) 
+                $return =  array_column($this->between[(string) $node_id][$direction], "object");
+            else {
+                $return = array_column(array_filter($this->between[(string) $node_id][$direction], $filter_classes), "object");
+            }
+        }
+
+        if(isset($this->data_fridge["between"][(string) $node_id][$direction]))
+        {
+            if(empty($class))
+                $return = array_merge($return, array_map($hydrate, $this->data_fridge["between"][(string) $node_id][$direction]));
+            else {
+                $return = array_merge($return, array_map($hydrate, array_filter($this->data_fridge["between"][(string) $node_id][$direction], $filter_classes)));
+            }
+        }
+
+        return $return;
     }
 
 
