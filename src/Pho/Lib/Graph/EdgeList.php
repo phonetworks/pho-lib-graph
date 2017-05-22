@@ -25,13 +25,13 @@ namespace Pho\Lib\Graph;
  */
 class EdgeList {
 
-    private $master;
-
-    private $data_fridge = [];
+    public $master;
 
     private $out = [];
     private $in = [];
-    private $between = [];
+
+    private $from = [];
+    private $to = [];
 
     /**
      * Constructor
@@ -45,7 +45,32 @@ class EdgeList {
     public function __construct(NodeInterface $node, array $data = [])
     {
         $this->master = $node;
-        $this->data_fridge = $data;
+        $this->import($data);
+    }
+
+    private function import(array $data): void
+    {
+        if(!$this->isDataSetProperly($data))
+            return;
+
+        $wakeup = function(string $serialized): EncapsulatedEdge
+        {
+            return unserialize($serialized);
+        };
+
+        $this->out = array_map($wakeup, $data["out"]);
+        $this->in = array_map($wakeup, $data["in"]);
+        foreach($data["from"] as $from => $frozen) {
+            $this->from[$from] = array_map($wakeup, $frozen);
+        }
+        foreach($data["to"] as $to => $frozen) {
+            $this->to[$to] = array_map($wakeup, $frozen);
+        }
+    }
+
+    private function isDataSetProperly(array $data): bool
+    {
+        return (isset($data["in"]) && isset($data["out"]) && isset($data["from"]) && isset($data["to"]));
     }
 
     /**
@@ -58,83 +83,26 @@ class EdgeList {
      */
     public function toArray(): array 
     {
-        
-        $strip_object = function(array $encapsulated): array {
-            return $this->decapsulate($encapsulated);
+        $deobject = function(EncapsulatedEdge $encapsulated): string  {
+            return serialize($encapsulated);
         };
 
-        $stripped_between = [];
-        foreach($this->between as $id => $between) {
-            foreach($between as $direction => $encapsulated) {
-                $stripped_between[$id][$direction] = $this->decapsulate($encapsulated);
-            }
+        $returner = function(array $array): array { return $array; };
+
+        $array = [];
+
+        foreach($this->to as $to => $encapsulated) {
+            $array["to"][$to] = array_map($deobject, $encapsulated);
+        }
+        foreach($this->from as $from => $encapsulated) {
+            $array["from"][$from] = array_map($deobject, $encapsulated);
         }
 
-        return array(
-            "out" => 
-                array_merge(
-                    (isset($this->data_fridge["out"]) ? $this->data_fridge["out"] : []), 
-                    array_map($strip_object, $this->out)
-                ),
-            "in"  => 
-                array_merge(
-                    (isset($this->data_fridge["in"]) ? $this->data_fridge["in"] : []), 
-                    array_map($strip_object, $this->in)
-                ),
-            "between" =>
-                array_merge(
-                    (isset($this->data_fridge["between"]) ? $this->data_fridge["between"] : []), 
-                    $stripped_between
-                )
+        $array["in"] = array_map($deobject, $this->in);
+        $array["out"] = array_map($deobject, $this->out);
 
-        );
+        return $array;
     }
-
-
-    /******************************
-     *  REVIEW
-     ******************************/ 
-
-
-    /**
-     * Fills the list with edges from array
-     *
-     * @param array $data
-     * 
-     * @return void
-     */
-    protected function fromArray(array $data): void
-    {
-        foreach($data as $direction => $edges) {
-            $this->_processArray(Direction::fromString($direction), $edges);
-        }
-    }
-
-/**
- * Internal helper method to feed the object with data
- *
- * Helps the constructor recreated the object from raw data.
- * 
- * @param Direction $direction Direction of the edge.
- * @param array $edges An array that consists of EdgeInterface objects.
- * 
- * @return void
- */
-    private function _processArray(Direction $direction, array $edges): void 
-    {
-        //eval(\Psy\sh());
-        foreach($edges as $edge) {
-            if($edge instanceof EdgeInterface)
-                $this->add($direction, $edge);
-        }
-    }
-
- 
-/******************************
-     *  REVIEW ENDS
-     ******************************/
- 
-
     
 
     /**
@@ -157,29 +125,7 @@ class EdgeList {
         }
     }
 
-    /**
-     * Removes the given edge from the list.
-     *
-     * @param ID $edge_id
-     * @return void
-     */
-    // what about the other end? observer pattern.
-    /*public function remove(ID $edge_id): void
-    {
-        $array_remove = function(string $id, array &$haystack) {
-            if(($key = array_search($id, $haystack)) !== false) {
-                unset($haystack[$key]);
-            }
-        };
-        $array_remove((string) $edge_id, $this->in);
-        $array_remove((string) $edge_id, $this->out);
-        foreach($this->to as $node=>$edges) {
-            foreach($edges as $key=>$edge) {
-                if($edge["edge"]->id()->equals($edge_id))
-                    unset($this->to[$node][$key]);
-            }
-        }
-    }*/
+
 
     /**
      * Adds an incoming edge to the list.
@@ -192,9 +138,9 @@ class EdgeList {
      */
     public function addIncoming(EdgeInterface $edge): void
     {
-            $edge_encapsulated = $this->encapsulate($edge);
-            $this->between[(string) $edge->tail()->id()][Direction::in()][] = $edge_encapsulated;
-            $this->in[] = $edge_encapsulated;
+            $edge_encapsulated = EncapsulatedEdge::create($edge);
+            $this->from[(string) $edge->tail()->id()][(string) $edge->id()] = $edge_encapsulated;
+            $this->in[(string) $edge->id()] = $edge_encapsulated;
     }
 
     /**
@@ -208,25 +154,11 @@ class EdgeList {
      */
     public function addOutgoing(EdgeInterface $edge): void
     {
-            $edge_encapsulated = $this->encapsulate($edge);
-            $this->between[(string) $edge->head()->id()][Direction::out()][] = $edge_encapsulated;
-            $this->out[] = $edge_encapsulated;
+            $edge_encapsulated = EncapsulatedEdge::create($edge);
+            $this->to[(string) $edge->head()->id()][(string) $edge->id()] = $edge_encapsulated;
+            $this->out[(string) $edge->id()] = $edge_encapsulated;
     }
 
-    private function encapsulate(EdgeInterface $edge): array
-    {
-        $get_ancestors = function(string $class): array
-        {
-            for ($classes[] = $class; $class = get_parent_class ($class); $classes[] = $class); 
-                return $classes;
-        };
-        return ["id" => (string) $edge->id(), "classes"=>$get_ancestors(get_class($edge)), "object"=>$edge];
-    }
-
-    private function decapsulate(array $encapsulated): array
-    {
-        return ["id"=>$encapsulated["id"], "classes"=>$encapsulated["classes"]];
-    }
 
     /**
     * Returns a list of all the edges directed towards
@@ -274,27 +206,24 @@ class EdgeList {
     {
         $d = (string) $direction;
 
-        $hydrate = function(array $encapsulated): EdgeInterface
+        $hydrate = function(EncapsulatedEdge $encapsulated): EdgeInterface
         {
-            return $this->master->hydratedEdge($encapsulated["id"]);
+            if(!$encapsulated->hydrated())
+                return $this->master->hydratedEdge($encapsulated->id());
+            else
+                return $encapsulated->edge();
         };
 
-        $filter_classes = function(array $encapsulated) use($class): EdgeInterface
+        $filter_classes = function(EncapsulatedEdge $encapsulated) use($class): bool
         {
-            return in_array($class, $encapsulated["classes"]);
+            return in_array($class, $encapsulated->classes());
         };
 
         if(empty($class)) {
-            return array_merge(
-                    array_column($this->$d, "object"),
-                    array_map($hydrate, $this->data_fridge[$d])
-            );
+            return array_map($hydrate, $this->$d);
         }
         else {
-            return array_merge(
-                array_column(array_filter($this->$d, $filter_classes), "object"),
-                array_map($hydrate, array_filter($this->data_fridge[$d], $filter_classes))
-            );
+            return array_map($hydrate, array_filter($this->$d, $filter_classes));
         }
     }
 
@@ -322,12 +251,12 @@ class EdgeList {
     */
     public function to(ID $node_id, string $class=""): array 
     {
-        return $this->_returnDirected(Direction::out(), $node_id, $class);
+        return $this->_retrieveDirected(Direction::out(), $node_id, $class);
     }
 
     public function from(ID $node_id, string $class=""): array
     {
-        return $this->_returnDirected(Direction::in(), $node_id, $class);
+        return $this->_retrieveDirected(Direction::in(), $node_id, $class);
     }
 
     public function between(ID $node_id, string $class=""): array
@@ -349,37 +278,33 @@ class EdgeList {
      */
     protected function _retrieveDirected(Direction $direction, ID $node_id, string $class): array
     {
-        $hydrate = function(array $encapsulated): EdgeInterface
+        
+        $direction = (string) $direction;
+        $key = $direction->equals(Direction::in()) ? "from" : "to";
+
+        $hydrate = function(EncapsulatedEdge $encapsulated): EdgeInterface
         {
-            return $this->master->hydratedEdge($encapsulated["id"]);
+            if(!$encapsulated->hydrated())
+                return $this->master->hydratedEdge($encapsulated->id());
+            else
+                return $encapsulated->edge();
         };
 
-        $filter_classes = function(array $encapsulated) use($class): EdgeInterface
+        $filter_classes = function(EncapsulatedEdge $encapsulated) use($class): bool
         {
-            return in_array($class, $encapsulated["classes"]);
+            return in_array($class, $encapsulated->classes());
         };
 
-        $return = [];
-
-        if(isset($this->between[(string) $node_id][$direction])) 
-        {
-            if(empty($class)) 
-                $return =  array_column($this->between[(string) $node_id][$direction], "object");
-            else {
-                $return = array_column(array_filter($this->between[(string) $node_id][$direction], $filter_classes), "object");
-            }
+        if(!isset($this->$key[(string) $node_id])) 
+            return [];
+        
+        if(empty($class)) {
+            return array_map($hydrate, $this->$key[(string) $node_id]);
+        }
+        else {
+            return array_map($hydrate, array_filter($this->$key[(string) $node_id], $filter_classes));
         }
 
-        if(isset($this->data_fridge["between"][(string) $node_id][$direction]))
-        {
-            if(empty($class))
-                $return = array_merge($return, array_map($hydrate, $this->data_fridge["between"][(string) $node_id][$direction]));
-            else {
-                $return = array_merge($return, array_map($hydrate, array_filter($this->data_fridge["between"][(string) $node_id][$direction], $filter_classes)));
-            }
-        }
-
-        return $return;
     }
 
 
