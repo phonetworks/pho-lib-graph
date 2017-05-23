@@ -25,12 +25,43 @@ namespace Pho\Lib\Graph;
  */
 class EdgeList {
 
+    /**
+     * The node thay this edgelist belongs to
+     *
+     * @var NodeInterface
+     */
     private $master;
 
+    /**
+     * An internal pointer of outgoing nodes in [ID=>EncapsulatedEdge] format 
+     * where ID belongs to the edge.
+     *
+     * @var array
+     */
     private $out = [];
+
+    /**
+     * An internal pointer of incoming nodes in [ID=>EncapsulatedEdge] format
+     * where ID belongs to the edge
+     *
+     * @var array
+     */
     private $in = [];
 
+    /**
+     * An internal pointer of incoming nodes in [ID=>[ID=>EncapsulatedEdge]] format
+     * where first ID belongs to the node, and second to the edge.
+     *
+     * @var array
+     */
     private $from = [];
+
+    /**
+     * An internal pointer of outgoing nodes in [ID=>[ID=>EncapsulatedEdge]] format
+     * where first ID belongs to the node, and second to the edge.
+     *
+     * @var array
+     */
     private $to = [];
 
     /**
