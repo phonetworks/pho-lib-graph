@@ -114,6 +114,8 @@ class ID  {
     }
 
     /**
+     * {@internal}
+     * 
      * Stringifies the object.
      * 
      * Returns a string representation of the object for portability.
@@ -124,6 +126,21 @@ class ID  {
      * @return string
      */
     public function __toString(): string
+    {
+        return $this->value;
+    }
+
+    /**
+     * Stringifies the object.
+     * 
+     * Returns a string representation of the object for portability.
+     * Use with PHP 
+     * {@link http://php.net/manual/en/language.types.type-juggling.php#language.types.typecasting type-casting}
+     * as follows; ```(string) $ID_object```
+     *
+     * @return string
+     */
+    public function toString(): string
     {
         return $this->value;
     }

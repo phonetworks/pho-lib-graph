@@ -65,7 +65,7 @@ class Node implements EntityInterface, NodeInterface, \SplObserver, \Serializabl
      */
     public function __construct(GraphInterface $context) {
         $this->onEntityLoad();
-        $this->edge_list = new EdgeList();
+        $this->edge_list = new EdgeList($this);
         $context->add($this)->context = $context;
         $this->context_id = (string) $context->id();
     }
@@ -120,6 +120,19 @@ class Node implements EntityInterface, NodeInterface, \SplObserver, \Serializabl
        $array["edge_list"] = $this->edge_list->toArray();
        $array["context"] = $this->context_id;
        return $array;
+   }
+
+   /**
+    * A protected method that enables higher-level packages
+    * to retrieve Edge objects given its ID.
+    *
+    * @param string $id The Edge ID in string format
+    *
+    * @return EdgeInterface
+    */
+   protected function hydratedEdge(string $id): EdgeInterface
+   {
+
    }
 
 }

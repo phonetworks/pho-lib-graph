@@ -186,12 +186,14 @@ You add a new edge via **addIncoming(EdgeInterface $edge)** and **addOutgoing(Ed
 
 You can list edges via:
 
-| Method   | Parameter(s)  | Description                                               | Returns           |
-| -------- | ------------- | --------------------------------------------------------- | ----------------- |
-| in       |               | Lists incoming edges.                                     | array\<EdgeList\> |
-| out      |               | Lists outgoing edges                                      | array\<EdgeList\> |
-| all      |               | Lists all edges, both incoming and outgoing.              | array\<EdgeList\> |
-| to       | ID $node_id   | Lists edges in between this node and the node in question | array\<EdgeList\> |
+| Method   | Parameter(s)                  | Description                                               | Returns                          |
+| -------- | ----------------------------- | --------------------------------------------------------- | -------------------------------- |
+| in       | string $class=""              | Lists incoming edges.                                     | \\ArrayIterator\<EdgeInterface\> |
+| out      | string $class=""              | Lists outgoing edges                                      | \\ArrayIterator\<EdgeInterface\> |
+| all      | string $class=""              | Lists all edges, both incoming and outgoing.              | \\ArrayIterator\<EdgeInterface\> |
+| to       | ID $node_id, string $class="" | Lists edges from this node to the node in question        | \\ArrayIterator\<EdgeInterface\> |
+| from     | ID $node_id, string $class="" | Lists edges to this node from the node in question        | \\ArrayIterator\<EdgeInterface\> |
+| between  | ID $node_id, string $class="" | Lists edges in between this node and the node in question | \\ArrayIterator\<EdgeInterface\> |
 
 
 ## Extending Lib-Graph
@@ -214,6 +216,7 @@ Lib-Graph comes with "protected" methods that you can override to extend the fun
 #### For Node and SubGraph:
 
 * **hydratedContext()**: called when ```context()``` can't find the context. Enables you to access ```$context_id``` to fetch it from external sources. The return value is **GraphInterface**.
+* **hydratedEdge(string $edge_id)**: called to retrieve an edge object from external sources. The return value must be an **EdgeInterface**
 
 
 ## License

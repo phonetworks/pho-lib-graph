@@ -25,6 +25,11 @@ class Direction {
     const IN = "in";
     const OUT = "out";
 
+    /**
+     * Either "in" or "out"
+     *
+     * @var string
+     */
     private $value;
     
     /**
@@ -93,6 +98,16 @@ class Direction {
      * @return string
      */
     public function __toString() {
+        return $this->value;
+    }
+
+    /**
+     * Stringifies
+     *
+     * @return string
+     */
+    public function toString(): string
+    {
         return $this->value;
     }
 
