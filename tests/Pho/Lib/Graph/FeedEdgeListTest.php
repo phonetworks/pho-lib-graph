@@ -60,9 +60,10 @@ class FeedEdgeListTest extends \PHPUnit\Framework\TestCase
 
     // this proves, toArray and fromArray work fine. 
     public function testFeedEdgeList() {
-        $edge_list = $this->node1->edges()->toArray();
-        $new_edge_list = $this->recreateEdgeListForNode1($edge_list, $this->edge);
-        $this->assertEquals($this->node1->edges()->toArray(), $new_edge_list->toArray());
+        //$edge_list = $this->node1->edges()->toArray();
+        //$new_edge_list = $this->recreateEdgeListForNode1($edge_list, $this->edge);
+        $node1 = $this->recreateNode($this->node1);
+        $this->assertEquals($this->node1->edges()->toArray(), $node1->edges()->toArray());
     }
 
     public function testInOutAll() {
@@ -71,48 +72,14 @@ class FeedEdgeListTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($ins->current()->id(), $outs->current()->id());
         $alls = $this->node2->edges()->all();
         $this->assertEquals($ins->current()->id(), $alls->current()->id());
-    }
+    }    
 
-    private function recreateNode(NodeInterface $node) {
-        //$edge_list = ;
-        
-        $node1_mock = \Mockery::mock($node)->shouldAllowMockingProtectedMethods();
-        $node1_mock->shouldReceive("hydratedEdge")->andReturnUsing(function($id) use ($node) {
-            $GLOBALS["id_feededgelisttest"] = $id;
-            return new class($node, $node) extends Edge {
-                public function id(): ID { return ID::fromString($GLOBALS["id_feededgelisttest"]); }
-            };
-            unset($GLOBALS["id_feededgelisttest"]);
-        });
-
-        $reflection = new \ReflectionObject($node1_mock);
-        $edge_list_property = $reflection->getProperty("edge_list");
-        $edge_list_property->setAccessible(true);
-        $edge_list_property->setValue($node1_mock, new EdgeList($node1_mock, $node->edges()->toArray()));
-
-        return $node1_mock;
-    }
-
-    public function testInOutAllFromSerialized2() {
-        //eval(\Psy\sh());
-        // $this->recreateNode($this->node1);
+    public function testInOutAllFromSerialized() {
         $node1 = $this->recreateNode($this->node1);
         $outs = $node1->edges()->out();
         $ins = $this->node2->edges()->in();
         $this->assertEquals($ins->current()->id(), $outs->current()->id());
         $alls = $node1->edges()->all();
-        $this->assertEquals($ins->current()->id(), $alls->current()->id());
-    }
-
-    public function testInOutAllFromSerialized() {
-        //eval(\Psy\sh());
-        // $this->recreateNode($this->node1);
-        $edge_list = $this->node1->edges()->toArray();
-        $new_edge_list = $this->recreateEdgeListForNode1($edge_list, $this->edge);
-        $outs = $new_edge_list->out();
-        $ins = $this->node2->edges()->in();
-        $this->assertEquals($ins->current()->id(), $outs->current()->id());
-        $alls = $new_edge_list->all();
         $this->assertEquals($ins->current()->id(), $alls->current()->id());
     }
 
@@ -125,56 +92,35 @@ class FeedEdgeListTest extends \PHPUnit\Framework\TestCase
     }
 
     public function testToFromBetweenSerialized() {
-        $edge_list = $this->node1->edges()->toArray();
-        //eval(\Psy\sh());
-        $new_edge_list = $this->recreateEdgeListForNode1($edge_list, $this->edge);
-        $to = $new_edge_list->to($this->node2->id());
-        $from = $this->node2->edges()->from($this->node1->id());
+        $node1 = $this->recreateNode($this->node1);
+        $to = $node1->edges()->to($this->node2->id());
+        $from = $this->node2->edges()->from($node1->id());
         $this->assertEquals($to->current()->id(), $from->current()->id());
-        $between = $new_edge_list->between($this->node2->id());
+        $between = $node1->edges()->between($this->node2->id());
         $this->assertEquals($from->current()->id(), $between->current()->id());
     }
 
-    /**
-     * Case of wrong hydration
-     * Which shouldn't happen. This is the test the "right" one actually works.
-     */
-    /*
-    public function testInOutAllFromSerializedWithFaultyEdge() {
-        $edge_list = $this->node1->edges()->toArray();
-        //$GLOBALS["test"] = 1;
-        $new_edge_list = $this->recreateEdgeListForNode1($edge_list, (new Edge($this->node2, $this->node1)));
-        $outs = $new_edge_list->out();
-        $ins = $this->node2->edges()->in();
-        eval(\Psy\sh());
-        $this->assertNotEquals($ins->current()->id(), $outs->current()->id());
-        $alls = $new_edge_list->all();
-        $this->assertNotEquals($ins->current()->id(), $alls->current()->id());
-    }
-    */
-
     public function testSerializeThenAdd() {
         $get_id = function($value) {return (string) $value->id();};
-        $edge_list = $this->node1->edges()->toArray();
-        $new_edge_list = $this->recreateEdgeListForNode1($edge_list, $this->edge);
-        $this->assertCount(0, $this->node2->edges()->to($this->node1->id()));
-        $this->assertCount(1, $this->node2->edges()->from($this->node1->id()));
-        $this->assertCount(0, $this->node1->edges()->from($this->node2->id()));
-        $this->assertCount(1, $this->node1->edges()->to($this->node2->id()));
-        $new_edge_list->addIncoming((new Edge($this->node2, $this->node1)));
-        $node1_outs = $new_edge_list->out();
-        $node1_ins = $new_edge_list->in();
+        $node1 = $this->recreateNode($this->node1);
+        $this->assertCount(0, $this->node2->edges()->to($node1->id()));
+        $this->assertCount(1, $this->node2->edges()->from($node1->id()));
+        $this->assertCount(0, $node1->edges()->from($this->node2->id()));
+        $this->assertCount(1, $node1->edges()->to($this->node2->id()));
+        $node1->edges()->addIncoming((new Edge($this->node2, $node1)));
+        $node1_outs = $node1->edges()->out();
+        $node1_ins = $node1->edges()->in();
         $node2_ins = $this->node2->edges()->in();
         $node2_outs = $this->node2->edges()->out();
         $this->assertEquals($node2_ins->current()->id(), $node1_outs->current()->id());
         $this->assertEquals($node2_outs->current()->id(), $node1_ins->current()->id());
-        $this->assertEquals($this->node2->edges()->from($this->node1->id())->current()->id(), $node1_outs->current()->id());
-        $this->assertEquals($this->node2->edges()->to($this->node1->id())->current()->id(), $node1_ins->current()->id());
-        $this->assertCount(1, $this->node2->edges()->from($this->node1->id()));
-        $this->assertCount(1, $this->node2->edges()->to($this->node1->id()));
-        $this->assertCount(1, $this->node2->edges()->to($this->node1->id()));
-        $this->assertCount(1, $this->node2->edges()->from($this->node1->id()));
-        $node1_alls = $new_edge_list->all();
+        $this->assertEquals($this->node2->edges()->from($node1->id())->current()->id(), $node1_outs->current()->id());
+        $this->assertEquals($this->node2->edges()->to($node1->id())->current()->id(), $node1_ins->current()->id());
+        $this->assertCount(1, $this->node2->edges()->from($node1->id()));
+        $this->assertCount(1, $this->node2->edges()->to($node1->id()));
+        $this->assertCount(1, $this->node2->edges()->to($node1->id()));
+        $this->assertCount(1, $this->node2->edges()->from($node1->id()));
+        $node1_alls = $node1->edges()->all();
         $node1_all_ids = array_map($get_id, $node1_alls->getArrayCopy());
         $node2_alls = $this->node2->edges()->all();
         $this->assertContains((string) $node2_ins->current()->id(), $node1_all_ids);
@@ -236,12 +182,11 @@ class FeedEdgeListTest extends \PHPUnit\Framework\TestCase
 
     public function testSerializeThenAddWithNewEdgeType() {
         $get_id = function($value) {return $value->id();};
-        $edge_list = $this->node1->edges()->toArray();
-        $new_edge_list = $this->recreateEdgeListForNode1($edge_list, $this->edge);
+        $node1 = $this->recreateNode($this->node1);
         $new_predicate = new class extends Predicate {};
-        $second_edge = new class($this->node1, $this->node2, $new_predicate) extends Edge {};
+        $second_edge = new class($node1, $this->node2, $new_predicate) extends Edge {};
         $new_edge_class = get_class($second_edge);
-        $new_edge_list->addOutgoing($second_edge);
+        $new_edge_list = $node1->edges();
         $this->assertCount(0, $this->node2->edges()->out());
         $this->assertCount(0, $new_edge_list->in());
         $this->assertCount(2, $new_edge_list->out(Edge::class));
@@ -256,28 +201,30 @@ class FeedEdgeListTest extends \PHPUnit\Framework\TestCase
         $this->assertCount(0, $new_edge_list->from($this->node2->id()));
         $this->assertCount(0, $this->node2->edges()->to($this->node1->id()));
         $this->assertCount(2, $new_edge_list->to($this->node2->id()));
-        $this->assertCount(2, $this->node2->edges()->from($this->node1->id()));
-        $this->assertCount(2, $this->node2->edges()->between($this->node1->id()));
+        $this->assertCount(2, $this->node2->edges()->from($node1->id()));
+        $this->assertCount(2, $this->node2->edges()->between($node1->id()));
         $this->assertCount(1, $new_edge_list->to($this->node2->id(),$new_edge_class));
-        $this->assertCount(1, $this->node2->edges()->from($this->node1->id(),$new_edge_class));
-        $this->assertCount(1, $this->node2->edges()->between($this->node1->id(),$new_edge_class));
+        $this->assertCount(1, $this->node2->edges()->from($node1->id(),$new_edge_class));
+        $this->assertCount(1, $this->node2->edges()->between($node1->id(),$new_edge_class));
         $this->assertCount(2, $new_edge_list->to($this->node2->id(),Edge::class));
-        $this->assertCount(2, $this->node2->edges()->from($this->node1->id(),Edge::class));
-        $this->assertCount(2, $this->node2->edges()->between($this->node1->id(),Edge::class));
+        $this->assertCount(2, $this->node2->edges()->from($node1->id(),Edge::class));
+        $this->assertCount(2, $this->node2->edges()->between($node1->id(),Edge::class));
     }
 
     public function testSerializeThenAddThenSerializeThenAddAgain() {
         $get_id = function($value) {return (string) $value->id();};
         $edge_list = $this->node1->edges()->toArray();
-        $newer_edge_list = $this->recreateEdgeListForNode1($edge_list, $this->edge);
-        $second_edge = new Edge($this->node2, $this->node1);
-        $newer_edge_list->addIncoming($second_edge);
-        $newest_edge_list = $this->recreateEdgeListForNode1($newer_edge_list->toArray(), $this->edge);
-        $newest_edge_list->addIncoming((new Edge($this->node2, $this->node1)));
+        $node1 = $this->recreateNode($this->node1, $edge_list);
+        $second_edge = new Edge($this->node2, $node1);
+        $newer_edge_list = $node1->edges();
+        $node1_2 = $this->recreateNode($this->node1, $newer_edge_list->toArray());
+        $third_edge = new Edge($this->node2, $node1_2);
+        $newest_edge_list = $node1_2->edges();
         $node1_outs = $newest_edge_list->out();
         $node1_ins = $newest_edge_list->in();
         $node2_ins = $this->node2->edges()->in();
         $node2_outs = $this->node2->edges()->out();
+        //eval(\Psy\sh());
         $this->assertEquals($node2_ins->current()->id(), $node1_outs->current()->id());
         $node1_in_ids = array_map($get_id, $node1_ins->getArrayCopy());
         $this->assertContains((string)$node2_outs->current()->id(), $node1_in_ids);
@@ -295,46 +242,48 @@ class FeedEdgeListTest extends \PHPUnit\Framework\TestCase
         $this->assertContains((string)$node2_alls->current()->id(), $node1_all_ids);
         $node2_alls->rewind();
         //eval(\Psy\sh());
-        $this->assertContains((string)$node2_ins->current()->id(), array_map($get_id, $newest_edge_list->between($this->node2->id())));
+        $this->assertContains((string)$node2_ins->current()->id(), array_map($get_id, $newest_edge_list->between($this->node2->id())->getArrayCopy()));
         $this->assertContains((string)$this->node2->edges()->to($this->node1->id())->current()->id(), $node1_all_ids);
-        $this->assertCount(2, $this->node2->edges()->to($this->node1->id()));
-        $this->assertCount(1, $this->node1->edges()->to($this->node2->id()));
-        $this->assertCount(3, $this->node1->edges()->between($this->node2->id()));
-        //$this->assertCount(1, $newer_edge_list->to($this->node2->id()));
-        //$this->assertCount(2, $newer_edge_list->between($this->node2->id()));
+        $this->assertCount(2, $this->node2->edges()->to($node1->id()));
+        $this->assertCount(1, $node1_2->edges()->to($this->node2->id()));
+        $this->assertCount(3, $node1_2->edges()->between($this->node2->id()));
+        $this->assertCount(1, $newer_edge_list->to($this->node2->id()));
+        $this->assertCount(2, $newer_edge_list->between($this->node2->id()));
         //eval(\Psy\sh());
-        //$this->assertCount(1, $newest_edge_list->to($this->node2->id()));
-        //$this->assertCount(2, $newest_edge_list->between($this->node2->id()));
-        //$this->assertContains((string)$node2_alls->current()->id(), $node1_all_ids);
-        //$this->assertContains((string)$node2_alls[1]->id(), $node1_all_ids);
+        $this->assertCount(1, $newest_edge_list->to($this->node2->id()));
+        $this->assertCount(3, $newest_edge_list->between($this->node2->id()));
+        $this->assertContains((string)$node2_alls->current()->id(), $node1_all_ids);
+        $node2_alls->next();
+        $this->assertContains((string)$node2_alls->current()->id(), $node1_all_ids);
     }
 
     public function testSerializeThenAddThenSerializeThenAddAgainForToFromBetween() {
         $get_id = function($value) {return (string) $value->id();};
-        $edge_list = $this->node1->edges()->toArray();
-        $newer_edge_list = $this->recreateEdgeListForNode1($edge_list, $this->edge);
-        $second_edge = new Edge($this->node2, $this->node1);
-        $newer_edge_list->addIncoming($second_edge);
+        $edge_list = $this->node1->edges();
+        $node1 = $this->recreateNode($this->node1);
+        $second_edge = new Edge($this->node2, $node1);
+        $newer_edge_list = $node1->edges();
         //eval(\Psy\sh());
-        $newest_edge_list = $this->recreateEdgeListForNode1($newer_edge_list->toArray(), $this->edge);
-        $third_edge = new Edge($this->node2, $this->node1);
-        $newest_edge_list->addIncoming($third_edge);
-        
+        $node1_new = $this->recreateNode($this->node1, $newer_edge_list->toArray());
+        $third_edge = new Edge($this->node2, $node1_new);
+        $newest_edge_list = $node1_new->edges();
+
+        //eval(\Psy\sh());
         $this->assertCount(1, $newer_edge_list->to($this->node2->id()));
         $this->assertCount(2, $newer_edge_list->between($this->node2->id()));
         
-        //$this->assertCount(1, $newest_edge_list->to($this->node2->id()));
+        $this->assertCount(1, $newest_edge_list->to($this->node2->id()));
         $this->assertEquals($this->edge->id(), $newest_edge_list->to($this->node2->id())->current()->id());
         $this->assertCount(1, $newest_edge_list->to($this->node2->id()));
         $newest_edge_list->to($this->node2->id()); // this is just to even it out, because of mock call.
         $between_node_1_and_2 = array_map($get_id, $newest_edge_list->between($this->node2->id())->getArrayCopy());
-        //$this->assertCount(3,  $between_node_1_and_2);
+        $this->assertCount(3,  $between_node_1_and_2);
         
-        //$this->assertContains((string)$this->edge->id(), $between_node_1_and_2);
-        //$this->assertContains((string)$second_edge->id(), $between_node_1_and_2);
-        //$this->assertContains((string)$third_edge->id(), $between_node_1_and_2);
-        //$this->assertContains(3, array_map($get_id, $newest_edge_list->between($this->node2->id())));
-        $from_node2 = array_map($get_id, $newest_edge_list->from($this->node2->id()));
+        $this->assertContains((string)$this->edge->id(), $between_node_1_and_2);
+        $this->assertContains((string)$second_edge->id(), $between_node_1_and_2);
+        $this->assertContains((string)$third_edge->id(), $between_node_1_and_2);
+        $this->assertCount(3, array_map($get_id, $newest_edge_list->between($this->node2->id())->getArrayCopy()));
+        $from_node2 = array_map($get_id, $newest_edge_list->from($this->node2->id())->getArrayCopy());
         $this->assertCount(2, $from_node2);
         //eval(\Psy\sh());
         $this->assertContains((string)$second_edge->id(), $from_node2);
@@ -342,20 +291,17 @@ class FeedEdgeListTest extends \PHPUnit\Framework\TestCase
         $this->assertCount(2, $this->node2->edges()->to($this->node1->id()));
     }
 
-    private function recreateEdgeListForNode1(array $edge_list_array, EdgeInterface $master): EdgeList
-    {
-        // eval(\Psy\sh());
-        $node1_mock = \Mockery::mock($this->node1)->shouldAllowMockingProtectedMethods();
-        $node1_mock->shouldReceive("hydratedEdge")->andReturnUsing(function($id) use ($master) {
-            $GLOBALS["id_feededgelisttest"] = $id;
-            return new class($master->tail(), $master->head(), $master->predicate()) extends Edge {
-                public function id(): ID { return ID::fromString($GLOBALS["id_feededgelisttest"]); }
-            };
-            unset($GLOBALS["id_feededgelisttest"]);
+    private function recreateNode(NodeInterface $node, ?array $list = null) {
+        $node1_mock = \Mockery::mock($node)->shouldAllowMockingProtectedMethods();
+        $node1_mock->shouldReceive("hydratedEdge")->andReturnUsing(function($id) {
+            $random_edge = new Edge(new Node($this->graph), new Node($this->graph));
+            $edge = \Mockery::mock($random_edge);
+            $edge->shouldReceive("id")->andReturn(ID::fromString($id));
+            return $edge;
         });
-
-        return new EdgeList($node1_mock, $edge_list_array);
+        //$node1_mock = $this->recreatedEdgeList($node1_mock, true, (is_null($list) ? $node->edges()->toArray() : $list));
+        $node1_mock->shouldReceive("edges")->andReturn(new EdgeList($node1_mock, (!is_null($list) ? $list : $node->edges()->toArray())));
+        return $node1_mock;
     }
-
 
 }
