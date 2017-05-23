@@ -51,9 +51,9 @@ class SimpleTest extends \PHPUnit\Framework\TestCase
         $node1 = new Node($this->graph);
         $node2 = new Node($this->graph);
         $edge = new Edge($node1, $node2);
-        $this->assertEquals($edge->id(), $node1->edges()->out()[0]->id());
-        $this->assertEquals($edge->id(), $node2->edges()->in()[0]->id());
-        $this->assertEquals($edge->id(), $node2->edges()->all()[0]->id());
+        $this->assertEquals($edge->id(), $node1->edges()->out()->current()->id());
+        $this->assertEquals($edge->id(), $node2->edges()->in()->current()->id());
+        $this->assertEquals($edge->id(), $node2->edges()->all()->current()->id());
     }
 
     public function testAttributes() {
