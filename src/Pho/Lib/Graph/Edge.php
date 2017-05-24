@@ -130,7 +130,7 @@ class Edge implements EntityInterface, EdgeInterface, \SplObserver, \Serializabl
     /**
      * {@inheritdoc}
      */
-   public function head(): HeadNode
+   public function head(): NodeInterface
    {
     if(isset($this->head))
         return $this->head;
@@ -152,9 +152,9 @@ class Edge implements EntityInterface, EdgeInterface, \SplObserver, \Serializabl
      * 
      * @see head() 
      *
-     * @return HeadNode
+     * @return NodeInterface
      */
-   protected function hydratedHead(): HeadNode
+   protected function hydratedHead(): NodeInterface
    {
 
    }
@@ -162,7 +162,7 @@ class Edge implements EntityInterface, EdgeInterface, \SplObserver, \Serializabl
    /**
      * {@inheritdoc}
      */
-   public function tail(): TailNode
+   public function tail(): NodeInterface
    {
        if(isset($this->tail))
             return $this->tail;
@@ -184,9 +184,9 @@ class Edge implements EntityInterface, EdgeInterface, \SplObserver, \Serializabl
      * 
      * @see tail() 
      *
-     * @return TailNode
+     * @return NodeInterface
      */
-   protected function hydratedTail(): TailNode
+   protected function hydratedTail(): NodeInterface
    {
 
    }

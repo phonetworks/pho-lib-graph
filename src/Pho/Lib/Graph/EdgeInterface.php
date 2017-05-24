@@ -30,9 +30,9 @@ interface EdgeInterface {
    /**
     * Returns the node (in its object form) that this edge originates from.
     *
-    * @return TailNode The source node.
+    * @return NodeInterface The source node.
     */
-   public function tail(): TailNode;
+   public function tail(): NodeInterface;
 
    /**
     * Returns the ID of the tail node.
@@ -44,9 +44,9 @@ interface EdgeInterface {
    /**
     * Returns the node (in its object form) that this edge directed towards.
     *
-    * @return HeadNode The head node.
+    * @return NodeInterface The head node.
     */
-   public function head(): HeadNode;
+   public function head(): NodeInterface;
 
    /**
     * Returns the ID of the head node.
