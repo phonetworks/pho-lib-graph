@@ -123,14 +123,15 @@ class Node implements EntityInterface, NodeInterface, \SplObserver, \Serializabl
    }
 
    /**
-    * A protected method that enables higher-level packages
-    * to retrieve Edge objects given its ID.
+    * Retrieve Edge objects given its ID.
+    *
+    * Used in serialization.
     *
     * @param string $id The Edge ID in string format
     *
     * @return EdgeInterface
     */
-   protected function hydratedEdge(string $id): EdgeInterface
+   public function hydratedEdge(string $id): EdgeInterface
    {
 
    }
