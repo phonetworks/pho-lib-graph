@@ -91,18 +91,18 @@ class EdgeList {
         if(!$this->isDataSetProperly($data))
             return;
 
-        $wakeup = function(string $serialized): EncapsulatedEdge
+        $wakeup = function(array $array): EncapsulatedEdge
         {
-            return unserialize($serialized);
+            return EncapsulatedEdge::fromArray($array);
         };
 
-        $this->out = array_map($wakeup, $data["out"]);
-        $this->in = array_map($wakeup, $data["in"]);
+        $this->out = array_map($wakeup, $data["out"]); 
+        $this->in = array_map($wakeup, $data["in"]); 
         foreach($data["from"] as $from => $frozen) {
-            $this->from[$from] = array_map($wakeup, $frozen);
+            $this->from[$from] = array_map($wakeup, $frozen); 
         }
         foreach($data["to"] as $to => $frozen) {
-            $this->to[$to] = array_map($wakeup, $frozen);
+            $this->to[$to] = array_map($wakeup, $frozen); 
         }
     }
 
@@ -128,20 +128,26 @@ class EdgeList {
      */
     public function toArray(): array 
     {
+
+        $to_array = function(EncapsulatedEdge $encapsulated): array
+        {
+            return $encapsulated->toArray();
+        };
+
         $array = [];
 
         $array["to"] = [];
         foreach($this->to as $to => $encapsulated) {
-            $array["to"][$to] = array_map("serialize", $encapsulated);
+            $array["to"][$to] = array_map($to_array, $encapsulated);
         }
 
         $array["from"] = [];
         foreach($this->from as $from => $encapsulated) {
-            $array["from"][$from] = array_map("serialize", $encapsulated);
+            $array["from"][$from] = array_map($to_array, $encapsulated);
         }
 
-        $array["in"] = array_map("serialize", $this->in);
-        $array["out"] = array_map("serialize", $this->out);
+        $array["in"] = array_map($to_array, $this->in);
+        $array["out"] = array_map($to_array, $this->out);
 
         return $array;
     }
@@ -180,7 +186,7 @@ class EdgeList {
      */
     public function addIncoming(EdgeInterface $edge): void
     {
-            $edge_encapsulated = EncapsulatedEdge::create($edge);
+            $edge_encapsulated = EncapsulatedEdge::fromEdge($edge);
             $this->from[(string) $edge->tail()->id()][(string) $edge->id()] = $edge_encapsulated;
             $this->in[(string) $edge->id()] = $edge_encapsulated;
     }
@@ -196,7 +202,7 @@ class EdgeList {
      */
     public function addOutgoing(EdgeInterface $edge): void
     {
-            $edge_encapsulated = EncapsulatedEdge::create($edge);
+            $edge_encapsulated = EncapsulatedEdge::fromEdge($edge);
             $this->to[(string) $edge->head()->id()][(string) $edge->id()] = $edge_encapsulated;
             $this->out[(string) $edge->id()] = $edge_encapsulated;
     }

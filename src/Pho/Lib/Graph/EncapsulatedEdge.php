@@ -32,7 +32,7 @@ namespace Pho\Lib\Graph;
  * 
  * @author Emre Sokullu <emre@phonetworks.org>
  */
-class EncapsulatedEdge implements \Serializable {
+class EncapsulatedEdge {
 
     /**
      * @var EdgeInterface
@@ -51,14 +51,10 @@ class EncapsulatedEdge implements \Serializable {
 
     /**
      * Constructor.
-     *
-     * @param EdgeInterface $edge
      */
-    private function __construct(EdgeInterface $edge) 
+    private function __construct() 
     {
-        $this->id = $edge->id();
-        $this->object = $edge;
-        $this->classes = $this->findClasses(get_class($edge));
+        
     }
 
     /**
@@ -101,9 +97,24 @@ class EncapsulatedEdge implements \Serializable {
      * 
      * @return EncapsulatedEdge A hydrated encapsulated edge object.
      */
-    public static function create(EdgeInterface $edge): EncapsulatedEdge
+    public static function fromEdge(EdgeInterface $edge): EncapsulatedEdge
     {
-        return new EncapsulatedEdge($edge);
+        $encapsulated =  new EncapsulatedEdge();
+        $encapsulated->id = $edge->id();
+        $encapsulated->object = $edge;
+        $encapsulated->classes = $encapsulated->findClasses(get_class($edge));
+        return $encapsulated;
+    }
+
+    public static function fromArray(array $array): EncapsulatedEdge
+    {
+        if(!isset($array["id"])||!isset($array["classes"])||!$array["id"] instanceof ID||!is_array($array["classes"])) {
+            throw new Exceptions\InvalidEncapsulatedEdgeException($array);
+        }
+        $encapsulated =  new EncapsulatedEdge();
+        $encapsulated->id = $array["id"];
+        $encapsulated->classes = $array["classes"];
+        return $encapsulated;
     }
 
     /**
@@ -138,36 +149,12 @@ class EncapsulatedEdge implements \Serializable {
         return $this->object;
     }
 
-    /**
-    * @internal
-    *
-    * Used for serialization. 
-    *
-    * @return string in PHP serialized format.
-    */
-   public function serialize(): string 
-   {
-        return serialize(array(
+    public function toArray(): array
+    {
+        return array(
             "id" => $this->id,
             "classes" => $this->classes
-        ));
-    }
-
-    /**
-    * @internal
-    *
-    * Used for deserialization. 
-    *
-    * @param string $data 
-    *
-    * @return void
-    */
-    public function unserialize(/* mixed */ $data): void 
-    {
-        $values = unserialize($data);
-        foreach ($values as $key=>$value) {
-            $this->$key = $value;
-        }
+        );
     }
 
 }
