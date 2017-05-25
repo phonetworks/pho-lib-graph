@@ -27,7 +27,7 @@ class Predicate implements PredicateInterface {
      *
      * @var boolean
      */
-    private $binding = false;
+    protected $binding = false;
 
     /**
      * {@inheritdoc}
