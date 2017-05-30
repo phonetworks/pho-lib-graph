@@ -47,6 +47,30 @@ class SimpleTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($this->graph->contains($subgraph->id()));
     }
 
+    public function testSimpleRemove() {
+        $node = new Node($this->graph);
+        $this->assertCount(1, $this->graph->members());
+        $this->graph->remove($node->id());
+        $this->assertCount(0, $this->graph->members());
+        $this->graph->add($node);
+        $this->assertCount(1, $this->graph->members());
+        $node->destroy();
+        $this->assertCount(0, $this->graph->members());
+    }
+
+    public function testRecursiveRemove() {
+        $subgraph = new SubGraph($this->graph);
+        $node1 = new Node($subgraph);
+        $node2 = new Node($subgraph);
+        $this->assertCount(3, $this->graph->members());
+        $this->assertCount(2, $subgraph->members());
+        $node1->destroy();
+        $this->assertCount(2, $this->graph->members());
+        $this->assertCount(1, $subgraph->members());
+        $subgraph->destroy();
+        $this->assertCount(0, $this->graph->members());
+    }
+
     public function testEdge() {
         $node1 = new Node($this->graph);
         $node2 = new Node($this->graph);

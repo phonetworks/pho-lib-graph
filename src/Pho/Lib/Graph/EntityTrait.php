@@ -129,8 +129,11 @@ trait EntityTrait {
     */
    public function update(\SplSubject $subject): void
    {
-       if($subject instanceof AttributeBag) {
+       if($subject instanceof AttributeBag && $this instanceof NodeInterface) {
            $this->observeAttributeBagUpdate($subject);
+       }
+       else if($subject instanceof NodeInterface && $this instanceof GraphInterface) {
+        $this->observeNodeDeletion($subject);
        }
    }
 

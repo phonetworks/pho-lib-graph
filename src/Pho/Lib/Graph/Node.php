@@ -31,7 +31,7 @@ namespace Pho\Lib\Graph;
  * 
  * @author Emre Sokullu <emre@phonetworks.org>
  */
-class Node implements EntityInterface, NodeInterface, \SplObserver, \Serializable {
+class Node implements EntityInterface, NodeInterface, \SplObserver,  \SplSubject, \Serializable {
 
     use SerializableTrait;
 
@@ -56,6 +56,14 @@ class Node implements EntityInterface, NodeInterface, \SplObserver, \Serializabl
      */
     protected $context_id;
 
+    /**
+     * The observers of this object. 
+     * Normally just the owner.
+     *
+     * @var array
+     */
+    protected $observers = array();
+
     use EntityTrait {
         EntityTrait::__construct as onEntityLoad;
     }
@@ -68,6 +76,24 @@ class Node implements EntityInterface, NodeInterface, \SplObserver, \Serializabl
         $this->edge_list = new EdgeList($this);
         $context->add($this)->context = $context;
         $this->context_id = (string) $context->id();
+        $this->populateGraphObservers($context);
+    }
+
+    /**
+     * Adds the context itself and the context's contexts (if available)
+     * recursively to the list of observers for deletion.
+     *
+     * @param GraphInterface $context
+     * 
+     * @return void
+     */
+    private function populateGraphObservers(GraphInterface $context): void
+    {
+        while($context instanceof SubGraph) {
+            $this->attach($context);
+            $context = $context->context();
+        }
+        $this->attach($context);
     }
 
     /**
@@ -135,5 +161,49 @@ class Node implements EntityInterface, NodeInterface, \SplObserver, \Serializabl
    {
 
    }
+
+   public function destroy(): void 
+   {
+       $this->notify();
+   }
+
+   /**
+     * Adds a new observer to the object
+     * 
+     * @param \SplObserver $observer
+     * 
+     * @return void
+     */
+    public function attach(\SplObserver $observer): void 
+    {
+        $this->observers[] = $observer;
+    }
+    
+    /**
+     * Removes an observer from the object
+     * 
+     * @param \SplObserver $observer
+     * 
+     * @return void
+     */
+    public function detach(\SplObserver $observer): void 
+    {
+        $key = array_search($observer, $this->observers, true);
+        if($key) {
+            unset($this->observers[$key]);
+        }
+    }
+
+    /**
+     * Notifies observers about deletion
+     * 
+     * @return void
+     */
+    public function notify(): void
+    {
+        foreach ($this->observers as $value) {
+            $value->update($this);
+        }
+    }
 
 }

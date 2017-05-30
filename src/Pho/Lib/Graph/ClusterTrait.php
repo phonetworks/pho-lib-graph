@@ -125,7 +125,6 @@ trait ClusterTrait {
     public function remove(ID $node_id): void
     {
         if($this->contains($node_id)) {
-            $this->get($node_id)->destroy();
             unset($this->nodes[(string) $node_id]);
             unset($this->node_ids[array_search((string)$node_id, $this->node_ids)]);
             $this->onRemove($node_id);
@@ -205,6 +204,19 @@ trait ClusterTrait {
    protected function clusterToArray(): array
    {
     return ["members"=>$this->node_ids];
+   }
+
+   /**
+    * \SplObserver method that observes nodes and crosses them off of the 
+    * nodes list when they are destroyed.
+    *
+    * @param \SplSubject $node
+    *
+    * @return void
+    */
+   protected function observeNodeDeletion(\SplSubject $node): void
+   {
+       $this->remove($node->id());
    }
 
 }

@@ -20,7 +20,7 @@ namespace Pho\Lib\Graph;
  * 
  * @author Emre Sokullu <emre@phonetworks.org>
  */
-class Graph implements GraphInterface, \Serializable {
+class Graph implements GraphInterface, \SplObserver, \Serializable {
 
     use SerializableTrait;
     use ClusterTrait;
@@ -32,5 +32,10 @@ class Graph implements GraphInterface, \Serializable {
     {
         return ID::root();
     }
+
+    public function update(\SplSubject $node): void
+   {
+       $this->observeNodeDeletion($node);
+   }
     
 }
