@@ -167,4 +167,21 @@ class SimpleTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(4, $this->graph->count()); // only the new sub_graph, not its members because of overwrite.
 
     }
+
+    public function testNodeJoin() {
+        $node1 =new Node($this->graph);
+        $subgraph = new SubGraph($this->graph);
+        $node2 = new Node($this->graph);
+        $node3 = new Node($this->graph);
+        $this->assertCount(0, $subgraph->members());
+        $this->assertCount(4, $this->graph->members());
+        $node2->join($subgraph);
+        $this->assertCount(1, $subgraph->members());
+        $new_subgraph  = new SubGraph($subgraph);
+        $this->assertCount(2, $subgraph->members());
+        $node3->join($new_subgraph); // !! node3 also joins subgraph with this
+        $this->assertCount(1, $new_subgraph->members());
+        $this->assertCount(3, $subgraph->members());
+        $this->assertCount(5, $this->graph->members());
+    }
 }

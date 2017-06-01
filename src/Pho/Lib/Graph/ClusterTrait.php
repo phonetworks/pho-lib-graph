@@ -46,7 +46,9 @@ trait ClusterTrait {
         $this->node_ids[] = (string) $node->id();
         $this->nodes[(string) $node->id()] = $node;
         if($this instanceof SubGraph) {
-            $this->context()->add($node);
+            try {
+                $this->context()->add($node);
+            } catch(Exceptions\NodeAlreadyMemberException $e) { /* ignore, that's fine */ }
         }
         $this->onAdd($node);
         return $node;

@@ -156,4 +156,17 @@ class AdjacentNode implements NodeInterface, EntityInterface {
         $this->instance->changeContext($context);
     }
 
+    /**
+     * {@inheritdoc}
+     */
+    public function join(GraphInterface $graph): void
+    {
+        try {
+            $this->instance->join($graph);
+        }
+        catch(Exceptions\NodeAlreadyMemberException $e) {
+            throw $e;
+        }
+    }
+
 }
