@@ -175,11 +175,13 @@ class SimpleTest extends \PHPUnit\Framework\TestCase
         $node3 = new Node($this->graph);
         $this->assertCount(0, $subgraph->members());
         $this->assertCount(4, $this->graph->members());
-        $node2->join($subgraph);
+        //$node2->join($subgraph);
+        $subgraph->add($node2);
         $this->assertCount(1, $subgraph->members());
         $new_subgraph  = new SubGraph($subgraph);
         $this->assertCount(2, $subgraph->members());
-        $node3->join($new_subgraph); // !! node3 also joins subgraph with this
+        //$node3->join($new_subgraph); // !! node3 also joins subgraph with this
+        $new_subgraph->add($node3); // !! node3 also joins subgraph with this
         $this->assertCount(1, $new_subgraph->members());
         $this->assertCount(3, $subgraph->members());
         $this->assertCount(5, $this->graph->members());
