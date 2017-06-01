@@ -157,10 +157,11 @@ NodeInterface extends EntityInterface, and adds two things:
 1. A reference to its context (a GraphInterface object) where it was created. So this is either a Graph or a SubGraph.
 2. It holds edges accessible via **edges()** call.
 
-| Method       | Parameter(s)  | Description                                              | Returns        |
-| ------------ | ------------- | -------------------------------------------------------- | -------------- |
-| edges        |               | Retrieves the EdgeList object that interfaces its edges. | EdgeList       |
-| context      |               | Retrieves its context                                    | GraphInterface |
+| Method       | Parameter(s)          | Description                                              | Returns        |
+| ------------ | --------------------- | -------------------------------------------------------- | -------------- |
+| edges        |                       | Retrieves the EdgeList object that interfaces its edges. | EdgeList       |
+| context      |                       | Retrieves its context                                    | GraphInterface |
+| join         | GraphInterface $graph | Adds the node to the given graph                         | void           |
 
 ### EdgeInterface
 
