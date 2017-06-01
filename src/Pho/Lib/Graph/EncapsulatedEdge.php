@@ -156,7 +156,7 @@ class EncapsulatedEdge {
     public function toArray(): array
     {
         return array(
-            "id" => $this->id,
+            "id" => (string) $this->id,
             "classes" => $this->classes
         );
     }
