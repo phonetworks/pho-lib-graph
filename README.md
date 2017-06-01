@@ -218,6 +218,39 @@ Lib-Graph comes with "protected" methods that you can override to extend the fun
 * **hydratedContext()**: called when ```context()``` can't find the context. Enables you to access ```$context_id``` to fetch it from external sources. The return value is **GraphInterface**.
 * **hydratedEdge(string $edge_id)**: called to retrieve an edge object from external sources. The return value must be an **EdgeInterface**
 
+## Internals
+
+Pho-Lib-Graph makes heavy use of Observer Design Pattern, which you should note and be aware of while using the library. The library implements PHP's default [\SplObserver](http://php.net/manual/en/class.splobserver.php) and [\SplSubject](http://php.net/manual/en/class.splsubject.php) interfaces as follows;
+
+* All classes implementing **EntityInterface** (e.g. **Node**, **Edge** and **SubGraph**) observe **AttributeBag** so that an update to the attributes are reflected to the entity.
+
+* All classes implementing **GraphInterface** and use **ClusterTrait** (e.g. **Graph**, **SubGraph**) observe objects implementing **NodeInterface** (e.g. **Node** and **SubGraph**) so that a node removal is handled. Please note **SubGraph**, when destroyed, not only notifies its context (and its parents) about deletion but also destroys its members as well.
+
+* **Edge** observes **TailNode** and its children classes so that when the tail is deleted, the edge is also deleted, and if the edge's predicate is _binding_, the head node gets also deleted.
+
+To sum up; the observers can be classified as follows, with observers in rows vertically and subjects in columns horizontally:
+
+|              | AttributeBag<sup>1</sup> | Node & SubGraph<sup>2</sup>  | TailNode<sup>3</sup> \[\*\]
+| ------------ | -----------------------  | ---------------------------- | -------------------------
+| Edge         | Y                        | N                            | Y
+| Graph        | N                        | Y                            | N
+| Node         | Y                        | N                            | N
+| SubGraph     | Y                        | Y                            | N
+
+1. For changes in attributebag so that they may be persisted.
+2. For deletion and notifying the GraphInterface so that members list is updated.
+3. For deletion and notifying the Edge so that the edge and possibly head node are also deleted.
+
+\[\*\] Please note TailNode extends Node, hence it will also notify all classes that Node notifies -- although in a separate context, for a different function.
+
+## FAQ
+
+**1. What is the difference between an edge and a predicate?**
+Predicate determines the characteristics of an edge. All edges must have a predicate, albeit defining the predicate explicitly is optional and if not defined, edges will be formed with a generic predicate. 
+
+**2. What is a binding predicate?**
+If a predicate is binding, should the edge's tail node is deleted, not only the edge itself gets stripped off, but the head node must be removed as well.
+
 
 ## License
 
