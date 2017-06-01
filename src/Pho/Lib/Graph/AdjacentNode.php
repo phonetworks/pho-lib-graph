@@ -159,7 +159,7 @@ class AdjacentNode implements NodeInterface, EntityInterface {
     /**
      * {@inheritdoc}
      */
-    public function join(GraphInterface $graph): void
+    /*public function join(GraphInterface $graph): void
     {
         try {
             $this->instance->join($graph);
@@ -167,6 +167,6 @@ class AdjacentNode implements NodeInterface, EntityInterface {
         catch(Exceptions\NodeAlreadyMemberException $e) {
             throw $e;
         }
-    }
+    }*/
 
 }

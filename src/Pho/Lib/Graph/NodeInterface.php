@@ -78,7 +78,7 @@ interface NodeInterface {
     *
     * @throws NodeAlreadyMemberException if the node has already joined the given graph
     */
-   public function join(GraphInterface $graph): void;
+   //public function join(GraphInterface $graph): void;
 
 
 }
