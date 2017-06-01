@@ -136,6 +136,8 @@ interface GraphInterface {
      * @param array $node_ids An array of NodeInterface IDs in string format.
      * 
      * @return void
+     * 
+     * @throws NodeAlreadyMemberException if the node has already joined the given graph
      */
     public function loadNodesFromIDArray(array $node_ids): void;
 

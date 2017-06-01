@@ -63,4 +63,22 @@ interface NodeInterface {
    public function changeContext(GraphInterface $context): void;
 
 
+   /**
+    * Adds the node to the given graph
+    *
+    * This is a replica of {graph}->add
+    *
+    * Do not confuse this with changeContext. This method does not
+    * modify the context of the object, it only adds the node to
+    * a graph as a member.
+    *
+    * @param GraphInterface $graph
+    *
+    * @return void
+    *
+    * @throws NodeAlreadyMemberException if the node has already joined the given graph
+    */
+   public function join(GraphInterface $graph): void;
+
+
 }

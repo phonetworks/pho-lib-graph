@@ -40,6 +40,9 @@ trait ClusterTrait {
      */
     public function add(NodeInterface $node): NodeInterface
     {
+        if($this->contains($node->id())) {
+            throw new Exceptions\NodeAlreadyMemberException($node, $this);
+        }
         $this->node_ids[] = (string) $node->id();
         $this->nodes[(string) $node->id()] = $node;
         if($this instanceof SubGraph) {

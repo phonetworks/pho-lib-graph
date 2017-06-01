@@ -206,4 +206,15 @@ class Node implements EntityInterface, NodeInterface, \SplObserver,  \SplSubject
         }
     }
 
+    /**
+     * {@inheritdoc}
+     */
+    public function join(GraphInterface $graph): void
+    {
+        if($graph->contains($this->id())) {
+            throw new Exceptions\NodeAlreadyMemberException($this, $graph);
+        }
+        $graph->add($this);
+    }
+
 }
