@@ -108,11 +108,15 @@ class EncapsulatedEdge {
 
     public static function fromArray(array $array): EncapsulatedEdge
     {
-        if(!isset($array["id"])||!isset($array["classes"])||!$array["id"] instanceof ID||!is_array($array["classes"])) {
+        if(!isset($array["id"])
+            || !isset($array["classes"])
+            || (!$array["id"] instanceof ID && !is_string($array["id"])) /* added fault-tolerance with is_string check */
+            || !is_array($array["classes"])
+        ) {
             throw new Exceptions\InvalidEncapsulatedEdgeException($array);
         }
         $encapsulated =  new EncapsulatedEdge();
-        $encapsulated->id = $array["id"];
+        $encapsulated->id = is_string($array["id"]) ? ID::fromString($array["id"]) : $array["id"];
         $encapsulated->classes = $array["classes"];
         return $encapsulated;
     }
