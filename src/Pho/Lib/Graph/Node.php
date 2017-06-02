@@ -77,6 +77,7 @@ class Node implements EntityInterface, NodeInterface, \SplObserver,  \SplSubject
         $context->add($this)->context = $context;
         $this->context_id = (string) $context->id();
         $this->populateGraphObservers($context);
+        Logger::info("A node with id \"%s\" and label \"%s\" constructed", $this->id(), $this->label());
     }
 
     /**
