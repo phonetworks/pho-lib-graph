@@ -250,10 +250,13 @@ To sum up; the observers can be classified as follows, with observers in rows ve
 ## FAQ
 
 **1. What is the difference between an edge and a predicate?**
-Predicate determines the characteristics of an edge. All edges must have a predicate, albeit defining the predicate explicitly is optional and if not defined, edges will be formed with a generic predicate. 
+Predicate determines the characteristics of an edge. All edges must have a predicate, albeit defining the predicate explicitly is optional. If predicate is not defined, edges will be formed with a generic predicate. 
 
 **2. What is a binding predicate?**
 If a predicate is binding, should the edge's tail node is deleted, not only the edge itself gets stripped off, but the head node must be removed as well.
+
+**3. What is an orphan edge?**
+An edge that does not have its head node (this edgelists for neither tail node nor head node are formed) is called an orphan edge. These are incomplete structures and programmers are not advised to use them. You can connect an orphan edge to its head with the ```connect(NodeInterface $node)``` method.
 
 
 ## License
