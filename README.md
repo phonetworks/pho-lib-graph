@@ -161,7 +161,7 @@ NodeInterface extends EntityInterface, and adds two things:
 | ------------ | --------------------- | -------------------------------------------------------- | -------------- |
 | edges        |                       | Retrieves the EdgeList object that interfaces its edges. | EdgeList       |
 | context      |                       | Retrieves its context                                    | GraphInterface |
-| join         | GraphInterface $graph | Adds the node to the given graph                         | void           |
+<!--| join         | GraphInterface $graph | Adds the node to the given graph                         | void           |-->
 
 ### EdgeInterface
 
