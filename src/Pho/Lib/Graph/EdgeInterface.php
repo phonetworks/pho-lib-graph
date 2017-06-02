@@ -75,5 +75,14 @@ interface EdgeInterface {
     */
    public function orphan(): bool;
 
+   /**
+    * Connects the edge with a head node.
+    *
+    * @param NodeInterface $head Head node.
+    *
+    * @return void
+    */
+   public function connect(NodeInterface $head): void;
+
 
 }

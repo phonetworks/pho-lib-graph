@@ -91,6 +91,8 @@ echo $is_ceo_of->id();
 > binding, which means, once the edge is deleted, the head nodes will also need to be deleted.) Plus, similarly to nodes, they
 > can hold attributes.
 
+You do have the option to skip the head node and just pass a tail node, but it is not advised. An edge with no head node becomes **orphan** and its status can be checked via ```$edge->orphan()```. You can connect an orphan edge to a head node by calling ```$edge->connect($head_node)``` where $edge is an edge that implements **EdgeInterface** and $head_node is a node that implements **NodeInterface**.
+
 It's important to note that when a NodeInterface object (such as Node or SubGraph) is created within a context (in other words, a GraphInterface object), its reference is added to the context and its parent contexts --if available-- automatically. To illustrate from the example below:
 
 ```php
@@ -165,14 +167,15 @@ NodeInterface extends EntityInterface, and adds two things:
 
 ### EdgeInterface
 
-| Method       | Parameter(s)  | Description                                              | Returns            |
-| ------------ | ------------- | -------------------------------------------------------- | ------------------ |
-| tail         |               | Retrieves the tail node of the edge.                     | TailNode [\*]      |
-| tailID       |               | Retrieves the tail node's ID.                            | ID                 |
-| head         |               | Retrieves the head node of the edge.                     | HeadNode [\*]      |
-| headID       |               | Retrieves the head node's ID                             | ID                 |
-| predicate    |               | Retrieves the predicate                                  | PredicateInterface |
-| orphan       |               | Checks if the edge fails to possess a tail or a head     | bool               |
+| Method       | Parameter(s)        | Description                                              | Returns            |
+| ------------ | ------------------- | -------------------------------------------------------- | ------------------ |
+| tail         |                     | Retrieves the tail node of the edge.                     | TailNode [\*]      |
+| tailID       |                     | Retrieves the tail node's ID.                            | ID                 |
+| head         |                     | Retrieves the head node of the edge.                     | HeadNode [\*]      |
+| headID       |                     | Retrieves the head node's ID                             | ID                 |
+| predicate    |                     | Retrieves the predicate                                  | PredicateInterface |
+| connect      | NodeInterface $head | Connects the edge to a head node.                        | void               |
+| orphan       |                     | Checks if the edge fails to possess a tail or a head     | bool               |
 
 > [\*] TailNode and HeadNode objects behave the same way with NodeInterface objects. You can query them all identically.
 

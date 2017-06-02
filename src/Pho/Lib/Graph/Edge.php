@@ -58,7 +58,7 @@ class Edge implements EntityInterface, EdgeInterface, \SplObserver, \Serializabl
      *
      * @var string
      */
-    protected $head_id;
+    protected $head_id = "";
 
     /**
      * Predicate.
@@ -74,17 +74,6 @@ class Edge implements EntityInterface, EdgeInterface, \SplObserver, \Serializabl
      */
     protected $predicate_label;
 
-    /**
-     * {@inheritdoc}
-     */
-    public function toArray(): array
-    {
-        $array = $this->entityToArray();
-        $array["tail"] = $this->tail_id;
-        $array["head"] = $this->head_id;
-        $array["predicate"] = $this->predicate_label;
-        return $array;
-    }
 
 
     /**
@@ -94,20 +83,25 @@ class Edge implements EntityInterface, EdgeInterface, \SplObserver, \Serializabl
      * @param PredicateInterface $predicate
      * @param NodeInterface $head
      */
-    public function __construct(NodeInterface $tail, NodeInterface $head, ?PredicateInterface $predicate = null) 
+    public function __construct(NodeInterface $tail, ?NodeInterface $head = null, ?PredicateInterface $predicate = null) 
     {
         $this->onEntityLoad();
 
-        $this->head = new HeadNode();
-        $this->head->set($head);
-        $this->head_id = (string) $head->id();
+        if(!is_null($head)) {
+            $this->head = new HeadNode();
+            $this->head->set($head);
+            $this->head_id = (string) $head->id();
+        }
 
         $this->tail = new TailNode();
         $this->tail->set($tail);
         $this->tail_id = (string) $tail->id();
 
-        $this->head->edges()->addIncoming($this);
-        $this->tail->edges()->addOutgoing($this);
+        if(!is_null($head)) {
+            $this->head->edges()->addIncoming($this);
+            $this->tail->edges()->addOutgoing($this);
+        }
+        
 
         if(!is_null($predicate)) {
             $this->predicate = $predicate;
@@ -127,11 +121,28 @@ class Edge implements EntityInterface, EdgeInterface, \SplObserver, \Serializabl
         $this->predicate_label = (string) $this->predicate;
     }
 
+
+    /**
+     * {@inheritdoc}
+     */
+    public function connect(NodeInterface $head): void
+    {
+        $this->head = new HeadNode();
+        $this->head->set($head);
+        $this->head_id = (string) $head->id();
+        $this->head()->edges()->addIncoming($this);
+        $this->tail()->edges()->addOutgoing($this);
+    }
+
     /**
      * {@inheritdoc}
      */
    public function head(): NodeInterface
    {
+       if($this->orphan()) {
+        throw new Exceptions\OrphanEdgeException($this);
+       }
+
     if(isset($this->head))
         return $this->head;
     else
@@ -143,6 +154,9 @@ class Edge implements EntityInterface, EdgeInterface, \SplObserver, \Serializabl
      */
    public function headID(): ID
    {
+       if($this->orphan()) {
+        throw new Exceptions\OrphanEdgeException($this);
+       }
         return ID::fromString($this->head_id);
    }
 
@@ -221,9 +235,7 @@ class Edge implements EntityInterface, EdgeInterface, \SplObserver, \Serializabl
      */
    public function orphan(): bool
    {
-       // not implemented
-       // edges set at construction.
-       return false;
+       return empty($this->head_id);
    }
 
    /**
@@ -256,4 +268,19 @@ class Edge implements EntityInterface, EdgeInterface, \SplObserver, \Serializabl
         $this->destroy();
    }
     
+
+    /**
+     * {@inheritdoc}
+     */
+    public function toArray(): array
+    {
+        $array = $this->entityToArray();
+        $array["tail"] = $this->tail_id;
+        $array["head"] = $this->head_id;
+        $array["predicate"] = $this->predicate_label;
+        return $array;
+    }
+
+
+
 }
