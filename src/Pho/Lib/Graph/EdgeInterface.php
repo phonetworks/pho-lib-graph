@@ -84,5 +84,11 @@ interface EdgeInterface {
     */
    public function connect(NodeInterface $head): void;
 
+    /**
+     * Returns the value
+     *
+     * @return EntityInterface
+     */
+    public function return(): EntityInterface;
 
 }

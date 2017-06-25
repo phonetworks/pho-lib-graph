@@ -281,6 +281,19 @@ class Edge implements EntityInterface, EdgeInterface, \SplObserver, \Serializabl
         return $array;
     }
 
-
+    /**
+     * {@inheritdoc}
+     */
+    public function return(): EntityInterface
+    {
+        switch($this->predicate()->role()) {
+            case Predicate::R_CONSUMER:
+                return $this->head()->node();
+            case Predicate::R_REFLECTIVE:
+                return $this->tail()->node();
+            default:
+                return $this;
+        }
+    }
 
 }
