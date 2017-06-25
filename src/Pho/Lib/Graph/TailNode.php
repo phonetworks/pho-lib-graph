@@ -22,7 +22,8 @@ namespace Pho\Lib\Graph;
  * 
  * @author Emre Sokullu <emre@phonetworks.org>
  */
-class TailNode extends AdjacentNode implements \SplSubject {
+class TailNode extends AdjacentNode implements \SplSubject
+{
 
     /**
      * An array of Observer objects. Used for edges that observe this node.
@@ -59,8 +60,9 @@ class TailNode extends AdjacentNode implements \SplSubject {
     public function detach(\SplObserver $observer): void
     {
         $pos = array_search($observer, $this->observers);
-        if($pos!==false)
+        if($pos!==false) {
             unset($this->observers[$pos]);
+        }
     }
 
     /**

@@ -31,7 +31,8 @@ namespace Pho\Lib\Graph;
  * 
  * @author Emre Sokullu <emre@phonetworks.org>
  */
-class Node implements EntityInterface, NodeInterface, \SplObserver,  \SplSubject, \Serializable {
+class Node implements EntityInterface, NodeInterface, \SplObserver,  \SplSubject, \Serializable
+{
 
     use SerializableTrait;
 
@@ -71,7 +72,8 @@ class Node implements EntityInterface, NodeInterface, \SplObserver,  \SplSubject
     /**
      * {@inheritdoc}
      */
-    public function __construct(GraphInterface $context) {
+    public function __construct(GraphInterface $context) 
+    {
         $this->onEntityLoad();
         $this->edge_list = new EdgeList($this);
         $context->add($this)->context = $context;
@@ -102,10 +104,11 @@ class Node implements EntityInterface, NodeInterface, \SplObserver,  \SplSubject
      */
     public function context(): GraphInterface
     {
-        if(isset($this->context))
+        if(isset($this->context)) {
             return $this->context;
-        else
+        } else {
             return $this->hydratedContext();
+        }
     }
 
     /**
@@ -122,53 +125,53 @@ class Node implements EntityInterface, NodeInterface, \SplObserver,  \SplSubject
     }
 
     /**
-    * {@inheritdoc}
-    */
+     * {@inheritdoc}
+     */
     public function changeContext(GraphInterface $context): void
     {
         $this->context = $context;
         $this->context_id = $context->id();
     }
     
-   /**
-    * {@inheritdoc}
-    */
-   public function edges(): EdgeList
-   {
-       return $this->edge_list;
-   }
+    /**
+     * {@inheritdoc}
+     */
+    public function edges(): EdgeList
+    {
+        return $this->edge_list;
+    }
 
-   /**
-    * {@inheritdoc}
-    */
-   public function toArray(): array
-   {
-       $array = $this->entityToArray();
-       $array["edge_list"] = $this->edge_list->toArray();
-       $array["context"] = $this->context_id;
-       return $array;
-   }
+    /**
+     * {@inheritdoc}
+     */
+    public function toArray(): array
+    {
+        $array = $this->entityToArray();
+        $array["edge_list"] = $this->edge_list->toArray();
+        $array["context"] = $this->context_id;
+        return $array;
+    }
 
-   /**
-    * Retrieve Edge objects given its ID.
-    *
-    * Used in serialization.
-    *
-    * @param string $id The Edge ID in string format
-    *
-    * @return EdgeInterface
-    */
-   public function hydratedEdge(string $id): EdgeInterface
-   {
+    /**
+     * Retrieve Edge objects given its ID.
+     *
+     * Used in serialization.
+     *
+     * @param string $id The Edge ID in string format
+     *
+     * @return EdgeInterface
+     */
+    public function hydratedEdge(string $id): EdgeInterface
+    {
 
-   }
+    }
 
-   public function destroy(): void 
-   {
-       $this->notify();
-   }
+    public function destroy(): void 
+    {
+        $this->notify();
+    }
 
-   /**
+    /**
      * Adds a new observer to the object
      * 
      * @param \SplObserver $observer

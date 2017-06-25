@@ -32,7 +32,8 @@ namespace Pho\Lib\Graph;
  * 
  * @author Emre Sokullu <emre@phonetworks.org>
  */
-class EncapsulatedEdge {
+class EncapsulatedEdge
+{
 
     /**
      * @var EdgeInterface
@@ -86,7 +87,8 @@ class EncapsulatedEdge {
      */
     private function findClasses(string $class): array
     {
-        for ($classes[] = $class; $class = get_parent_class ($class); $classes[] = $class); 
+        for ($classes[] = $class; $class = get_parent_class($class); $classes[] = $class) {
+        } 
             return $classes;
     }
     

@@ -18,7 +18,8 @@ namespace Pho\Lib\Graph;
  * 
  * @author Emre Sokullu <emre@phonetworks.org>
  */
-interface GraphInterface {
+interface GraphInterface
+{
 
     /**
      * Returns the ID of the Graph
@@ -108,14 +109,14 @@ interface GraphInterface {
     public function count(): int;
 
     /**
-    * Converts the object to array
-    *
-    * Used for serialization/unserialization. Converts internal 
-    * object properties into a simple format to help with
-    * reconstruction.
-    *
-    * @return array The object in array format.
-    */
+     * Converts the object to array
+     *
+     * Used for serialization/unserialization. Converts internal 
+     * object properties into a simple format to help with
+     * reconstruction.
+     *
+     * @return array The object in array format.
+     */
     public function toArray(): array;
 
 

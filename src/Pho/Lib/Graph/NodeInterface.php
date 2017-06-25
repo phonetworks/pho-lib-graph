@@ -26,7 +26,8 @@ namespace Pho\Lib\Graph;
  * 
  * @author Emre Sokullu <emre@phonetworks.org>
  */
-interface NodeInterface {
+interface NodeInterface
+{
 
     /**
      * Gives access to this node's EdgeList property.
@@ -38,32 +39,32 @@ interface NodeInterface {
      * 
      * @return EdgeList 
      */
-   public function edges(): EdgeList;
+    public function edges(): EdgeList;
 
-   /**
-    * Returns the context that this node is a member of.
-    *
-    * Contexts are GraphInterface objects that contain nodes.
-    *
-    * @return ArrayObject An ArrayObject of contexts in no particular order.
-    */
-   public function context(): GraphInterface;
+    /**
+     * Returns the context that this node is a member of.
+     *
+     * Contexts are GraphInterface objects that contain nodes.
+     *
+     * @return ArrayObject An ArrayObject of contexts in no particular order.
+     */
+    public function context(): GraphInterface;
 
-   /**
-    * Changes the fundamental context of a node.
-    *
-    * Rarely, a node may need its fundamental context to change 
-    * after its construction. This method enables setting a new
-    * context for the node.
-    *
-    * @param GraphInterface $context
-    *
-    * @return void
-    */
-   public function changeContext(GraphInterface $context): void;
+    /**
+     * Changes the fundamental context of a node.
+     *
+     * Rarely, a node may need its fundamental context to change 
+     * after its construction. This method enables setting a new
+     * context for the node.
+     *
+     * @param GraphInterface $context
+     *
+     * @return void
+     */
+    public function changeContext(GraphInterface $context): void;
 
 
-   /**
+    /**
     * Adds the node to the given graph
     *
     * This is a replica of {graph}->add
@@ -78,7 +79,7 @@ interface NodeInterface {
     *
     * @throws NodeAlreadyMemberException if the node has already joined the given graph
     */
-   //public function join(GraphInterface $graph): void;
+    //public function join(GraphInterface $graph): void;
 
 
 }

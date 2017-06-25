@@ -16,7 +16,8 @@ class OrphanEdgeException extends \Exception
      *
      * @param Graph\EdgeInterface $edge
      */
-    public function __construct(Graph\EdgeInterface $edge) {
+    public function __construct(Graph\EdgeInterface $edge) 
+    {
         parent::__construct();
         $this->message = sprintf("Orphan edge %s has no head node.", (string) $edge->id());
     }    

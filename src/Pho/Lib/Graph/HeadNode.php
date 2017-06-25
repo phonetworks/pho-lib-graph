@@ -20,6 +20,7 @@ namespace Pho\Lib\Graph;
  * 
  * @author Emre Sokullu <emre@phonetworks.org>
  */
-class HeadNode extends AdjacentNode {
+class HeadNode extends AdjacentNode
+{
     
 }

@@ -21,9 +21,9 @@ namespace Pho\Lib\Graph;
  * @see ImmutableEdgeList For a list that doesn't accept new values.
  * 
  * @author Emre Sokullu <emre@phonetworks.org>
- * 
  */
-class EdgeList {
+class EdgeList
+{
 
     /**
      * The node thay this edgelist belongs to
@@ -71,7 +71,7 @@ class EdgeList {
      * (if available) but waits for a method to attempt to access.
      * 
      * @param NodeInterface $node The master, the owner of this EdgeList object.
-     * @param array $data Initial data to seed.
+     * @param array         $data Initial data to seed.
      */
     public function __construct(NodeInterface $node, array $data = [])
     {
@@ -88,11 +88,11 @@ class EdgeList {
      */
     public function import(array $data): void
     {
-        if(!$this->isDataSetProperly($data))
+        if(!$this->isDataSetProperly($data)) {
             return;
+        }
 
-        $wakeup = function(array $array): EncapsulatedEdge
-        {
+        $wakeup = function (array $array): EncapsulatedEdge {
             return EncapsulatedEdge::fromArray($array);
         };
 
@@ -129,8 +129,7 @@ class EdgeList {
     public function toArray(): array 
     {
 
-        $to_array = function(EncapsulatedEdge $encapsulated): array
-        {
+        $to_array = function (EncapsulatedEdge $encapsulated): array {
             return $encapsulated->toArray();
         };
 
@@ -159,7 +158,7 @@ class EdgeList {
      * The edge must be already initialized.
      *
      * @param Direction direction
-     * @param EdgeInterface $edge
+     * @param EdgeInterface       $edge
      * 
      * @return void
      */
@@ -209,30 +208,30 @@ class EdgeList {
 
 
     /**
-    * Returns a list of all the edges directed towards
-    * this particular node.
-    *
-    * @see _retrieve Used by this method to fetch objects.
-    *
-    * @param string $class The type of edge (defined in edge class) to return
-    *
-    * @return \ArrayIterator An array of EdgeInterface objects.
-    */
+     * Returns a list of all the edges directed towards
+     * this particular node.
+     *
+     * @see _retrieve Used by this method to fetch objects.
+     *
+     * @param string $class The type of edge (defined in edge class) to return
+     *
+     * @return \ArrayIterator An array of EdgeInterface objects.
+     */
     public function in(string $class=""): \ArrayIterator 
     {
         return $this->_retrieve(Direction::in(), $class);
     }
 
     /**
-    * Returns a list of all the edges originating from
-    * this particular node.
-    *
-    * @see _retrieve Used by this method to fetch objects.
-    *
-    * @param string $class The type of edge (defined in edge class) to return
-    *
-    * @return \ArrayIterator An array of EdgeInterface objects.
-    */
+     * Returns a list of all the edges originating from
+     * this particular node.
+     *
+     * @see _retrieve Used by this method to fetch objects.
+     *
+     * @param string $class The type of edge (defined in edge class) to return
+     *
+     * @return \ArrayIterator An array of EdgeInterface objects.
+     */
     public function out(string $class=""): \ArrayIterator 
     {
         return $this->_retrieve(Direction::out(), $class);
@@ -246,7 +245,7 @@ class EdgeList {
      * @see in A method that uses this function
      *
      * @param Direction $direction Lets you choose to fetch incoming or outgoing edges.
-     * @param string $class The type of edge (defined in edge class) to return
+     * @param string    $class     The type of edge (defined in edge class) to return
      * 
      * @return \ArrayIterator An array of EdgeInterface objects.
      */
@@ -254,16 +253,15 @@ class EdgeList {
     {
         $d = (string) $direction;
 
-        $hydrate = function(EncapsulatedEdge $encapsulated): EdgeInterface
-        {
-            if(!$encapsulated->hydrated())
+        $hydrate = function (EncapsulatedEdge $encapsulated): EdgeInterface {
+            if(!$encapsulated->hydrated()) {
                 return $this->master->hydratedEdge($encapsulated->id());
-            else
+            } else {
                 return $encapsulated->edge();
+            }
         };
 
-        $filter_classes = function(EncapsulatedEdge $encapsulated) use($class): bool
-        {
+        $filter_classes = function (EncapsulatedEdge $encapsulated) use ($class): bool {
             return in_array($class, $encapsulated->classes());
         };
 
@@ -276,13 +274,13 @@ class EdgeList {
     }
 
     /**
-    * Returns a list of all the edges (both in and out) pertaining to
-    * this particular node.
-    *
-    * @param string $class The type of edge (defined in edge class) to return
-    *
-    * @return \ArrayIterator An array of EdgeInterface objects.
-    */
+     * Returns a list of all the edges (both in and out) pertaining to
+     * this particular node.
+     *
+     * @param string $class The type of edge (defined in edge class) to return
+     *
+     * @return \ArrayIterator An array of EdgeInterface objects.
+     */
     public function all(string $class=""): \ArrayIterator
     {
         return new \ArrayIterator(
@@ -297,8 +295,8 @@ class EdgeList {
      * Retrieves a list of edges from the list's owner node to the given 
      * target node.
      *
-     * @param string $class The type of edge (defined in edge class) to return
-     * @param NodeInterface  $node Target (head) node.
+     * @param string        $class The type of edge (defined in edge class) to return
+     * @param NodeInterface $node  Target (head) node.
      *
      * @return \ArrayIterator An array of edge objects to. Returns an empty array if there is no such connections.
      */
@@ -311,8 +309,8 @@ class EdgeList {
      * Retrieves a list of edges to the list's owner node from the given 
      * source node.
      *
-     * @param string $class The type of edge (defined in edge class) to return
-     * @param NodeInterface  $node Source (tail) node.
+     * @param string        $class The type of edge (defined in edge class) to return
+     * @param NodeInterface $node  Source (tail) node.
      *
      * @return \ArrayIterator An array of edge objects from. Returns an empty array if there is no such connections.
      */
@@ -325,8 +323,8 @@ class EdgeList {
      * Retrieves a list of edges between the list's owner node and the given 
      * node.
      *
-     * @param string $class The type of edge (defined in edge class) to return
-     * @param NodeInterface  $node The other node.
+     * @param string        $class The type of edge (defined in edge class) to return
+     * @param NodeInterface $node  The other node.
      *
      * @return \ArrayIterator An array of edge objects in between. Returns an empty array if there is no such connections.
      */
@@ -347,8 +345,8 @@ class EdgeList {
      * @see to A method that uses this function
      *
      * @param Direction $direction Lets you choose to fetch incoming or outgoing edges.
-     * @param ID $node_id Directed towards which node.
-     * @param string $class The type of edge (defined in edge class) to return.
+     * @param ID        $node_id   Directed towards which node.
+     * @param string    $class     The type of edge (defined in edge class) to return.
      * 
      * @return \ArrayIterator An array of EdgeInterface objects.
      */
@@ -357,21 +355,21 @@ class EdgeList {
         $key = $direction->equals(Direction::in()) ? "from" : "to";
         $direction = (string) $direction;
 
-        $hydrate = function(EncapsulatedEdge $encapsulated): EdgeInterface
-        {
-            if(!$encapsulated->hydrated())
+        $hydrate = function (EncapsulatedEdge $encapsulated): EdgeInterface {
+            if(!$encapsulated->hydrated()) {
                 return $this->master->hydratedEdge($encapsulated->id());
-            else
+            } else {
                 return $encapsulated->edge();
+            }
         };
 
-        $filter_classes = function(EncapsulatedEdge $encapsulated) use($class): bool
-        {
+        $filter_classes = function (EncapsulatedEdge $encapsulated) use ($class): bool {
             return in_array($class, $encapsulated->classes());
         };
 
-        if(!isset($this->$key[(string) $node_id])) 
+        if(!isset($this->$key[(string) $node_id])) { 
             return new \ArrayIterator();
+        }
         
         if(empty($class)) {
             return new \ArrayIterator(

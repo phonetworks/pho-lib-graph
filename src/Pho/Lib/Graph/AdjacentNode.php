@@ -26,7 +26,8 @@ namespace Pho\Lib\Graph;
  * 
  * @author Emre Sokullu <emre@phonetworks.org>
  */
-class AdjacentNode implements NodeInterface, EntityInterface {
+class AdjacentNode implements NodeInterface, EntityInterface
+{
 
     private $instance;
 
@@ -35,7 +36,7 @@ class AdjacentNode implements NodeInterface, EntityInterface {
     /**
      * Sets the node instance that this 
      *
-     * @param NodeInterface $node
+     * @param  NodeInterface $node
      * @return void
      */
     public function set(NodeInterface $node): void
@@ -61,7 +62,7 @@ class AdjacentNode implements NodeInterface, EntityInterface {
      * @internal
      *
      * @param string $method
-     * @param array $arguments
+     * @param array  $arguments
      * @return void
      */
     public function __call(string $method, array $arguments) //: mixed 
@@ -85,56 +86,56 @@ class AdjacentNode implements NodeInterface, EntityInterface {
     }
 
     /**
-      * {@inheritdoc}
-      */
+     * {@inheritdoc}
+     */
     public function context(): GraphInterface
     {
         return $this->instance->context();
     }
 
     /**
-      * {@inheritdoc}
-      */
+     * {@inheritdoc}
+     */
     public function id(): ID
     {
         return $this->instance->id();
     }
 
     /**
-      * {@inheritdoc}
-      */
+     * {@inheritdoc}
+     */
     public function isA(string $class_name): bool
     {
         return $this->instance->isA();
     }
 
     /**
-      * {@inheritdoc}
-      */
+     * {@inheritdoc}
+     */
     public function label(): string
     {
         return $this->instance->label();
     }
 
     /**
-      * {@inheritdoc}
-      */
+     * {@inheritdoc}
+     */
     public function attributes(): AttributeBag
     {
         return $this->instance->attributes();
     }
 
     /**
-      * {@inheritdoc}
-      */
+     * {@inheritdoc}
+     */
     public function destroy(): void
     {
         $this->instance->destroy();
     }
 
     /**
-      * {@inheritdoc}
-      */
+     * {@inheritdoc}
+     */
     public function toArray(): array
     {
         return $this->instance->toArray();
@@ -149,8 +150,8 @@ class AdjacentNode implements NodeInterface, EntityInterface {
     }
 
     /**
-      * {@inheritdoc}
-      */
+     * {@inheritdoc}
+     */
     public function changeContext(GraphInterface $context): void
     {
         $this->instance->changeContext($context);

@@ -18,7 +18,8 @@ namespace Pho\Lib\Graph;
  * 
  * @author Emre Sokullu <emre@phonetworks.org>
  */
-interface PredicateInterface {
+interface PredicateInterface
+{
 
     /**
      * Checks if the predicate is binding.

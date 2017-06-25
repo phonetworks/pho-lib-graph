@@ -19,7 +19,8 @@ namespace Pho\Lib\Graph;
  * 
  * @author Emre Sokullu <emre@phonetworks.org>
  */
-trait ClusterTrait {
+trait ClusterTrait
+{
 
     /**
      * Holds nodes in ID => NodeInterface format
@@ -48,7 +49,8 @@ trait ClusterTrait {
         if($this instanceof SubGraph) {
             try {
                 $this->context()->add($node);
-            } catch(Exceptions\NodeAlreadyMemberException $e) { /* ignore, that's fine */ }
+            } catch(Exceptions\NodeAlreadyMemberException $e) { /* ignore, that's fine */ 
+            }
         }
         $this->onAdd($node);
         return $node;
@@ -59,8 +61,9 @@ trait ClusterTrait {
      */
     public function loadNodesFromArray(array $nodes): void
     {
-        foreach($nodes as $node)
+        foreach($nodes as $node) {
             $this->add($node);
+        }
     }
 
     /**
@@ -94,12 +97,14 @@ trait ClusterTrait {
      */
     public function get(ID $node_id): NodeInterface 
     {
-        if(!$this->contains($node_id))
+        if(!$this->contains($node_id)) {
             throw new Exceptions\NodeDoesNotExistException($node_id);
-        if(isset($this->nodes[(string) $node_id]))
+        }
+        if(isset($this->nodes[(string) $node_id])) {
             return $this->nodes[(string) $node_id];
-        else
+        } else {
             return $this->hydratedGet($node_id);
+        }
     }
 
 
@@ -157,12 +162,13 @@ trait ClusterTrait {
      */        
     public function members(): array
     {
-        if(count($this->node_ids)<1)
+        if(count($this->node_ids)<1) {
             return [];
-        else if(count($this->nodes) == count($this->node_ids))
+        } else if(count($this->nodes) == count($this->node_ids)) {
             return $this->nodes;
-        else
+        } else {
             return $this->hydratedMembers();
+        }
     }
 
     /**
@@ -187,41 +193,41 @@ trait ClusterTrait {
     }
 
    
-   /**
-    * {@inheritdoc}
-    */
-   public function toArray(): array
-   {
-       return $this->clusterToArray();
-   }
+    /**
+     * {@inheritdoc}
+     */
+    public function toArray(): array
+    {
+        return $this->clusterToArray();
+    }
 
-   /**
-    * Converts the object to array
-    *
-    * Used for serialization/unserialization. Converts internal 
-    * object properties into a simple format to help with
-    * reconstruction.
-    *
-    * @see toArray for actual implementation of this method by subclasses.
-    *
-    * @return array The object in array format.
-    */  
-   protected function clusterToArray(): array
-   {
-    return ["members"=>$this->node_ids];
-   }
+    /**
+     * Converts the object to array
+     *
+     * Used for serialization/unserialization. Converts internal 
+     * object properties into a simple format to help with
+     * reconstruction.
+     *
+     * @see toArray for actual implementation of this method by subclasses.
+     *
+     * @return array The object in array format.
+     */  
+    protected function clusterToArray(): array
+    {
+        return ["members"=>$this->node_ids];
+    }
 
-   /**
-    * \SplObserver method that observes nodes and crosses them off of the 
-    * nodes list when they are destroyed.
-    *
-    * @param \SplSubject $node
-    *
-    * @return void
-    */
-   protected function observeNodeDeletion(\SplSubject $node): void
-   {
-       $this->remove($node->id());
-   }
+    /**
+     * \SplObserver method that observes nodes and crosses them off of the 
+     * nodes list when they are destroyed.
+     *
+     * @param \SplSubject $node
+     *
+     * @return void
+     */
+    protected function observeNodeDeletion(\SplSubject $node): void
+    {
+        $this->remove($node->id());
+    }
 
 }

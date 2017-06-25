@@ -16,7 +16,8 @@ class InvalidDirectionException extends \Exception
      *
      * @param string $id The maleformed ID in string format
      */
-    public function __construct(string $direction) {
+    public function __construct(string $direction) 
+    {
         parent::__construct();
         $this->message = sprintf("%s is not a valid Direction.", $direction);
     }    

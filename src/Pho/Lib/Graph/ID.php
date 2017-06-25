@@ -29,9 +29,10 @@ namespace Pho\Lib\Graph;
  * You can generate a new ID with ```$id_object = ID::generate()``` and fetch its 
  * string representation with PHP type-casting; ```(string) $id_object```.
  * 
- * @author  Emre Sokullu <emre@phonetworks.org>
+ * @author Emre Sokullu <emre@phonetworks.org>
  */
-class ID  {
+class ID
+{
     
     /**
      * UUIDV4
@@ -51,16 +52,17 @@ class ID  {
      *
      * @param string $id
      */
-    private function __construct(string $id) {
+    private function __construct(string $id) 
+    {
         $this->value = $id;
     }
 
     /**
      * Generates a cryptographically secure random UUID(v4) for internal use.
      *
-     * @link  https://en.wikipedia.org/wiki/Universally_unique_identifier UUIDv4 format
+     * @link https://en.wikipedia.org/wiki/Universally_unique_identifier UUIDv4 format
      *
-     * @return  ID  Random uuid in guid v4 format in ID object format.
+     * @return ID  Random uuid in guid v4 format in ID object format.
      */
     public static function generate(): ID
     {
@@ -109,7 +111,8 @@ class ID  {
      *
      * @return bool
      */
-    public function equals(ID $id) {
+    public function equals(ID $id) 
+    {
         return ($this->value == (string) $id);
     }
 

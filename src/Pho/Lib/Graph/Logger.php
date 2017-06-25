@@ -18,7 +18,8 @@ use Psr\Log\LoggerInterface;
  * 
  * @author Emre Sokullu <emre@phonetworks.org>
  */
-class Logger {
+class Logger
+{
 
     /**
      * @var \Psr\Log\LoggerInterface
@@ -35,8 +36,8 @@ class Logger {
      * 
      * Works like a constructor, but it's not. This is an all static class.
      *
-     * @param LoggerInterface $logger Psr3 compatible logger object
-     * @param int $verbosity 0: silent, 1: warning, 2: info 
+     * @param LoggerInterface $logger    Psr3 compatible logger object
+     * @param int             $verbosity 0: silent, 1: warning, 2: info 
      * 
      * @return void
      */
@@ -59,39 +60,43 @@ class Logger {
     }
 
     /**
-    * Logs warning or more critical messages.
-    *
-    * @param ...$params  If a single parameter is passed, treats as a string, otherwise acts as sprintf
-    *
-    * @return void
-    */
+     * Logs warning or more critical messages.
+     *
+     * @param ...$params  If a single parameter is passed, treats as a string, otherwise acts as sprintf
+     *
+     * @return void
+     */
     public static function warning(...$params): void
     {
-        if(self::$verbosity < 1)
+        if(self::$verbosity < 1) {
             return;
+        }
         $msg = self::processParams($params);
-        if(isset(self::$logger))
+        if(isset(self::$logger)) {
             self::$logger->warning($msg);
-        else
+        } else {
             echo $msg.PHP_EOL;
+        }
     }
 
     /**
-    * Logs informational or debug messages.
-    *
-    * @param ...$params  If a single parameter is passed, treats as a string, otherwise acts as sprintf
-    *
-    * @return void
-    */
+     * Logs informational or debug messages.
+     *
+     * @param ...$params  If a single parameter is passed, treats as a string, otherwise acts as sprintf
+     *
+     * @return void
+     */
     public static function info(...$params): void
     {
-        if(self::$verbosity < 2)
+        if(self::$verbosity < 2) {
             return;
+        }
         $msg = self::processParams($params);
-        if(isset(self::$logger))
+        if(isset(self::$logger)) {
             self::$logger->info($msg);
-        else 
+        } else { 
             echo $msg.PHP_EOL;
+        }
     }
 
     /**
@@ -104,11 +109,11 @@ class Logger {
     private static function processParams(array $message): string
     {
         $msg_type = count($message);
-        if($msg_type==1)
+        if($msg_type==1) {
             return (string) $message[0];
-        else if($msg_type<1)
+        } else if($msg_type<1) {
             return "";
-        else {
+        } else {
             $params = $message;
             $message = array_shift($params);
             return sprintf($message, ...$params);

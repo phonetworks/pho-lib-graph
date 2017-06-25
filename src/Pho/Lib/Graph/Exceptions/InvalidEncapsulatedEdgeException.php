@@ -16,7 +16,8 @@ class InvalidEncapsulatedEdgeException extends \Exception
      *
      * @param array $array The malformed EncapsulatedEdge array.
      */
-    public function __construct(array $array) {
+    public function __construct(array $array) 
+    {
         parent::__construct();
         $this->message = sprintf("An EncapsulatedEdge must have valid 'id' and 'classes' keys. 'id' with \Pho\Lib\Graph\ID and 'classes' with an array of string objects that represent the classes that the edge belongs to. Given: %s", print_r($array, true));
     }    

@@ -18,7 +18,8 @@ namespace Pho\Lib\Graph;
  * 
  * @author Emre Sokullu <emre@phonetworks.org>
  */
-class Predicate implements PredicateInterface {
+class Predicate implements PredicateInterface
+{
 
     /**
      * Default Role.
@@ -75,11 +76,11 @@ class Predicate implements PredicateInterface {
     public function role(): int
     {
         switch($this->role) {
-            case self::R_REFLECTIVE:
-            case self::R_CONSUMER:
-                return $this->role;
-            default:
-                return self::R_DEFAULT;
+        case self::R_REFLECTIVE:
+        case self::R_CONSUMER:
+            return $this->role;
+        default:
+            return self::R_DEFAULT;
         }
     }
 
@@ -92,8 +93,8 @@ class Predicate implements PredicateInterface {
     }
     
      /**
-     * {@inheritdoc}
-     */
+      * {@inheritdoc}
+      */
     public function label(): string
     {
         return strtolower((new \ReflectionClass($this))->getShortName());

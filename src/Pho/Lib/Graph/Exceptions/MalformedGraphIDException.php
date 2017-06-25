@@ -18,7 +18,8 @@ class MalformedGraphIDException extends \Exception
      *
      * @param string $id The maleformed ID in string format
      */
-    public function __construct(string $id) {
+    public function __construct(string $id) 
+    {
         parent::__construct();
         $this->message = sprintf("The ID \"%s\" is malformed and does not comply with the UUID format.", $id);
     }    

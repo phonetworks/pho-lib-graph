@@ -26,9 +26,10 @@ namespace Pho\Lib\Graph;
  * echo $this->attributes()->color; // doesn't print
  * ```
  * 
- * @author  Emre Sokullu <emre@phonetworks.org>
+ * @author Emre Sokullu <emre@phonetworks.org>
  */
-class AttributeBag implements \SplSubject {
+class AttributeBag implements \SplSubject
+{
 
     /**
      * Holds the attributes of a node in an array
@@ -59,7 +60,8 @@ class AttributeBag implements \SplSubject {
      * 
      * @param array $bag Initial bag. Defaults to an empty array.
      */
-    public function __construct(EntityInterface $owner, array $bag = []) {
+    public function __construct(EntityInterface $owner, array $bag = []) 
+    {
         $this->owner = $owner;
         $this->attach($this->owner);
         if(count($bag)>0) {
@@ -151,7 +153,7 @@ class AttributeBag implements \SplSubject {
      * @internal
      * Sets up a key/value pair
      *
-     * @param string $attribute
+     * @param string            $attribute
      * @param string|bool|array $value
      * 
      * @return void

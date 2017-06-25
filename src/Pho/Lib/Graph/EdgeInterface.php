@@ -25,64 +25,65 @@ namespace Pho\Lib\Graph;
  * 
  * @author Emre Sokullu <emre@phonetworks.org>
  */
-interface EdgeInterface {
+interface EdgeInterface
+{
 
-   /**
-    * Returns the node (in its object form) that this edge originates from.
-    *
-    * @return NodeInterface The source node.
-    */
-   public function tail(): NodeInterface;
+    /**
+     * Returns the node (in its object form) that this edge originates from.
+     *
+     * @return NodeInterface The source node.
+     */
+    public function tail(): NodeInterface;
 
-   /**
-    * Returns the ID of the tail node.
-    *
-    * @return ID The tail node ID.
-    */
-   public function tailID(): ID;
+    /**
+     * Returns the ID of the tail node.
+     *
+     * @return ID The tail node ID.
+     */
+    public function tailID(): ID;
 
-   /**
-    * Returns the node (in its object form) that this edge directed towards.
-    *
-    * @return NodeInterface The head node.
-    */
-   public function head(): NodeInterface;
+    /**
+     * Returns the node (in its object form) that this edge directed towards.
+     *
+     * @return NodeInterface The head node.
+     */
+    public function head(): NodeInterface;
 
-   /**
-    * Returns the ID of the head node.
-    *
-    * @return ID The head node ID.
-    */
-   public function headID(): ID;
+    /**
+     * Returns the ID of the head node.
+     *
+     * @return ID The head node ID.
+     */
+    public function headID(): ID;
 
 
-   /**
-    * Returns the edge's predicate.
-    *
-    * Predicates represent the unique characteristics of an edge.
-    *
-    * @return PredicateInterface The predicate.
-    */
-   public function predicate(): PredicateInterface;
+    /**
+     * Returns the edge's predicate.
+     *
+     * Predicates represent the unique characteristics of an edge.
+     *
+     * @return PredicateInterface The predicate.
+     */
+    public function predicate(): PredicateInterface;
 
-   /**
-    * Checks if the Edge has tail and head.
-    *
-    * If it fails to possess any of tail or head nodes, returns
-    * false.
-    *
-    * @return bool
-    */
-   public function orphan(): bool;
+    /**
+     * Checks if the Edge has tail and head.
+     *
+     * If it fails to possess any of tail or head nodes, returns
+     * false.
+     *
+     * @return bool
+     */
+    public function orphan(): bool;
 
-   /**
-    * Connects the edge with a head node.
-    *
-    * @param NodeInterface $head Head node.
-    *
-    * @return void
-    */
-   public function connect(NodeInterface $head): void;
+    /**
+     * Connects the edge with a head node.
+     *
+     * @param NodeInterface $head Head node.
+     *
+     * @return void
+     */
+    public function connect(NodeInterface $head): void;
 
     /**
      * Returns the value

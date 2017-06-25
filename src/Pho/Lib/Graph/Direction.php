@@ -18,9 +18,10 @@ namespace Pho\Lib\Graph;
  * an "In" direction with ```Direction::in()``` and it would
  * still be an instance of the ```Direction::class```
  * 
- * @author  Emre Sokullu <emre@phonetworks.org>
+ * @author Emre Sokullu <emre@phonetworks.org>
  */
-class Direction {
+class Direction
+{
     
     const IN = "in";
     const OUT = "out";
@@ -40,7 +41,8 @@ class Direction {
      * 
      * @param string $value Direction::in() or Direction::out()
      */
-    private function __construct(string $value) {
+    private function __construct(string $value) 
+    {
         $this->value = $value;
     }
 
@@ -49,7 +51,8 @@ class Direction {
      *
      * @return Direction
      */
-    public static function in() {
+    public static function in() 
+    {
         return new Direction(self::IN);
     }
 
@@ -58,7 +61,8 @@ class Direction {
      *
      * @return Direction
      */
-    public static function out() {
+    public static function out() 
+    {
         return new Direction(self::OUT);
     }
 
@@ -73,12 +77,13 @@ class Direction {
      */
     public static function fromString(string $direction): Direction
     {
-        if($direction == self::IN )
+        if($direction == self::IN ) {
             return self::in();
-        else if($direction == self::OUT)
+        } else if($direction == self::OUT) {
             return self::out();
-        else
+        } else {
             throw new Exceptions\InvalidDirectionException($direction);
+        }
     }
 
     /**
@@ -86,7 +91,8 @@ class Direction {
      *
      * @return bool
      */
-    public function equals(Direction $direction) {
+    public function equals(Direction $direction) 
+    {
         return ($this->value == (string) $direction);
     }
 
@@ -97,7 +103,8 @@ class Direction {
      *
      * @return string
      */
-    public function __toString() {
+    public function __toString() 
+    {
         return $this->value;
     }
 

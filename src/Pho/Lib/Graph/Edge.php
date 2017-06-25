@@ -24,7 +24,8 @@ namespace Pho\Lib\Graph;
  * 
  * @author Emre Sokullu <emre@phonetworks.org>
  */
-class Edge implements EntityInterface, EdgeInterface, \SplObserver, \Serializable {
+class Edge implements EntityInterface, EdgeInterface, \SplObserver, \Serializable
+{
     
     use SerializableTrait;
     use EntityTrait {
@@ -79,9 +80,9 @@ class Edge implements EntityInterface, EdgeInterface, \SplObserver, \Serializabl
     /**
      * Constructor.
      *
-     * @param NodeInterface $tail
+     * @param NodeInterface      $tail
      * @param PredicateInterface $predicate
-     * @param NodeInterface $head
+     * @param NodeInterface      $head
      */
     public function __construct(NodeInterface $tail, ?NodeInterface $head = null, ?PredicateInterface $predicate = null) 
     {
@@ -137,30 +138,31 @@ class Edge implements EntityInterface, EdgeInterface, \SplObserver, \Serializabl
     /**
      * {@inheritdoc}
      */
-   public function head(): NodeInterface
-   {
-       if($this->orphan()) {
-        throw new Exceptions\OrphanEdgeException($this);
-       }
+    public function head(): NodeInterface
+    {
+        if($this->orphan()) {
+            throw new Exceptions\OrphanEdgeException($this);
+        }
 
-    if(isset($this->head))
-        return $this->head;
-    else
-        return $this->hydratedHead();
-   }
+        if(isset($this->head)) {
+            return $this->head;
+        } else {
+            return $this->hydratedHead();
+        }
+    }
 
-   /**
+    /**
      * {@inheritdoc}
      */
-   public function headID(): ID
-   {
-       if($this->orphan()) {
-        throw new Exceptions\OrphanEdgeException($this);
-       }
+    public function headID(): ID
+    {
+        if($this->orphan()) {
+            throw new Exceptions\OrphanEdgeException($this);
+        }
         return ID::fromString($this->head_id);
-   }
+    }
 
-   /**
+    /**
      * A protected method that enables higher-level packages
      * to provide persistence for the head() call.
      * 
@@ -168,31 +170,32 @@ class Edge implements EntityInterface, EdgeInterface, \SplObserver, \Serializabl
      *
      * @return NodeInterface
      */
-   protected function hydratedHead(): NodeInterface
-   {
+    protected function hydratedHead(): NodeInterface
+    {
 
-   }
+    }
 
-   /**
+    /**
      * {@inheritdoc}
      */
-   public function tail(): NodeInterface
-   {
-       if(isset($this->tail))
+    public function tail(): NodeInterface
+    {
+        if(isset($this->tail)) {
             return $this->tail;
-        else
+        } else {
             return $this->hydratedTail();
-   }
+        }
+    }
 
-   /**
+    /**
      * {@inheritdoc}
      */
-   public function tailID(): ID
-   {
+    public function tailID(): ID
+    {
         return ID::fromString($this->tail_id);
-   }
+    }
 
-   /**
+    /**
      * A protected method that enables higher-level packages
      * to provide persistence for the tail() call.
      * 
@@ -200,24 +203,25 @@ class Edge implements EntityInterface, EdgeInterface, \SplObserver, \Serializabl
      *
      * @return NodeInterface
      */
-   protected function hydratedTail(): NodeInterface
-   {
+    protected function hydratedTail(): NodeInterface
+    {
 
-   }
+    }
 
 
-   /**
+    /**
      * {@inheritdoc}
      */
-   public function predicate(): PredicateInterface
-   {
-       if(isset($this->predicate))
+    public function predicate(): PredicateInterface
+    {
+        if(isset($this->predicate)) {
             return $this->predicate;
-        else
+        } else {
             return $this->hydratedPredicate();
-   }
+        }
+    }
 
-   /**
+    /**
      * A protected method that enables higher-level packages
      * to provide persistence for the predicate() call.
      * 
@@ -225,48 +229,48 @@ class Edge implements EntityInterface, EdgeInterface, \SplObserver, \Serializabl
      *
      * @return PredicateInterface
      */
-   protected function hydratedPredicate(): PredicateInterface
-   {
+    protected function hydratedPredicate(): PredicateInterface
+    {
 
-   }
+    }
 
-   /**
+    /**
      * {@inheritdoc}
      */
-   public function orphan(): bool
-   {
-       return empty($this->head_id);
-   }
+    public function orphan(): bool
+    {
+        return empty($this->head_id);
+    }
 
-   /**
-    * Observed entities use this method to update the edge.
-    *
-    * @param \SplSubject $subject Updater.
-    *
-    * @return void
-    */
-   public function update(\SplSubject $subject): void
-   {
-       $this->onEntityUpdate($subject);
-       if($subject instanceof AttributeBag) {
-           $this->observeAttributeBagUpdate($subject);
-       }
-   }
+    /**
+     * Observed entities use this method to update the edge.
+     *
+     * @param \SplSubject $subject Updater.
+     *
+     * @return void
+     */
+    public function update(\SplSubject $subject): void
+    {
+        $this->onEntityUpdate($subject);
+        if($subject instanceof AttributeBag) {
+            $this->observeAttributeBagUpdate($subject);
+        }
+    }
 
-   /**
-    * Tail Nodes use this method to update about deletion
-    *
-    * @param \SplSubject $subject Updater.
-    *
-    * @return void
-    */
-   protected function observeTailNodeUpdate(\SplSubject $subject): void
-   {
+    /**
+     * Tail Nodes use this method to update about deletion
+     *
+     * @param \SplSubject $subject Updater.
+     *
+     * @return void
+     */
+    protected function observeTailNodeUpdate(\SplSubject $subject): void
+    {
         if($this->predicate()->binding()) {
             $this->head()->destroy();
         }
         $this->destroy();
-   }
+    }
     
 
     /**
@@ -287,12 +291,12 @@ class Edge implements EntityInterface, EdgeInterface, \SplObserver, \Serializabl
     public function return(): EntityInterface
     {
         switch($this->predicate()->role()) {
-            case Predicate::R_CONSUMER:
-                return $this->head()->node();
-            case Predicate::R_REFLECTIVE:
-                return $this->tail()->node();
-            default:
-                return $this;
+        case Predicate::R_CONSUMER:
+            return $this->head()->node();
+        case Predicate::R_REFLECTIVE:
+            return $this->tail()->node();
+        default:
+            return $this;
         }
     }
 

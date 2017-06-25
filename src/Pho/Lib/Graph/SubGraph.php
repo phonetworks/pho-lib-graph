@@ -19,7 +19,8 @@ namespace Pho\Lib\Graph;
  * 
  * @author Emre Sokullu <emre@phonetworks.org>
  */
-class SubGraph extends Node implements GraphInterface {
+class SubGraph extends Node implements GraphInterface
+{
 
     use ClusterTrait;
 
