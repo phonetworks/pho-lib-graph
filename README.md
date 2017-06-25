@@ -167,17 +167,31 @@ NodeInterface extends EntityInterface, and adds two things:
 
 ### EdgeInterface
 
-| Method       | Parameter(s)        | Description                                              | Returns            |
-| ------------ | ------------------- | -------------------------------------------------------- | ------------------ |
-| tail         |                     | Retrieves the tail node of the edge.                     | TailNode [\*]      |
-| tailID       |                     | Retrieves the tail node's ID.                            | ID                 |
-| head         |                     | Retrieves the head node of the edge.                     | HeadNode [\*]      |
-| headID       |                     | Retrieves the head node's ID                             | ID                 |
-| predicate    |                     | Retrieves the predicate                                  | PredicateInterface |
-| connect      | NodeInterface $head | Connects the edge to a head node.                        | void               |
-| orphan       |                     | Checks if the edge fails to possess a tail or a head     | bool               |
+| Method       | Parameter(s)        | Description                                              | Returns               |
+| ------------ | ------------------- | -------------------------------------------------------- | --------------------- |
+| tail         |                     | Retrieves the tail node of the edge.                     | TailNode [\*]         |
+| tailID       |                     | Retrieves the tail node's ID.                            | ID                    |
+| head         |                     | Retrieves the head node of the edge.                     | HeadNode [\*]         |
+| headID       |                     | Retrieves the head node's ID                             | ID                    |
+| predicate    |                     | Retrieves the predicate                                  | PredicateInterface    |
+| connect      | NodeInterface $head | Connects the edge to a head node.                        | void                  |
+| orphan       |                     | Checks if the edge fails to possess a tail or a head     | bool                  |
+| return       |                     | The return value of this edge                            | EntityInterface[\*\*] |
 
 > [\*] TailNode and HeadNode objects behave the same way with NodeInterface objects. You can query them all identically.
+> [\*\*] Depending on its predicate role (which can be retrieved by ```$edge->predicate()->role()```, 
+> an edge may return itself, its head node, or its tail.
+
+### PredicateInterface
+
+| Method  | Parameter(s) | Description                                              | Returns               |
+| ------- | -------------| -------------------------------------------------------- | --------------------- |
+| role    |              | The role of the edge; Reflective, Consumer or Default    | int [\*]              |
+| binding |              | Whether the edge is binding [\*\*]                       | bool                  |
+| label   |              | The class name, in lower case.                           | string                |
+
+> [\*] Possible values are 0, 1 or 2. In Predicate class constant form. 0: R_DEFAULT, 1: R_REFLECTIVE, 2: R_CONSUMER
+> [\*\*] Which means once it's deleted, the head node will be too.
 
 ### EdgeList
 
