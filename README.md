@@ -133,7 +133,7 @@ GraphInterface forms the basis of both Graph and SubGraph objects.
 | loadNodesFromArray   | array $nodes            | Array of NodeInteface objects | void                   |
 | loadNodesFromIDArray | array $node_ids         | Array of node IDs in string   | void                   |
 
-[\*] You won't need to use this function since graph adding is handled automatically at object construction.
+> [\*] You won't need to use this function since graph adding is handled automatically at object construction.
 
 ### EntityInterface
 
@@ -179,6 +179,7 @@ NodeInterface extends EntityInterface, and adds two things:
 | return       |                     | The return value of this edge                            | EntityInterface[\*\*] |
 
 > [\*] TailNode and HeadNode objects behave the same way with NodeInterface objects. You can query them all identically.
+
 > [\*\*] Depending on its predicate role (which can be retrieved by ```$edge->predicate()->role()```, 
 > an edge may return itself, its head node, or its tail.
 
@@ -191,6 +192,7 @@ NodeInterface extends EntityInterface, and adds two things:
 | label   |              | The class name, in lower case.                           | string                |
 
 > [\*] Possible values are 0, 1 or 2. In Predicate class constant form. 0: R_DEFAULT, 1: R_REFLECTIVE, 2: R_CONSUMER
+
 > [\*\*] Which means once it's deleted, the head node will be too.
 
 ### EdgeList
