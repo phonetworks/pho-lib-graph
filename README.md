@@ -120,7 +120,7 @@ Below is an API reference for most of the Pho LibGraph classes:
 
 GraphInterface forms the basis of both Graph and SubGraph objects.
 
-| Method               | Param(s)            | Description                   | Returns                |
+| Method               | Parameter(s)            | Description                   | Returns                |
 | -------------------- | ----------------------- | ----------------------------- | ---------------------- |
 | id                   |                         | Always returns "." as ID obj. | ID                     |
 | add [\*]             | NodeInterface $node     | Adds a new node               | void                   |
@@ -142,7 +142,7 @@ EntityInterface constitutes the basis of both Node and Edge objects. Most import
 * Each entity has an auto-generated ID.
 * They hold customizable attributes accessible via **attributes()** call.
 
-| Method        | Param(s)            | Description                    | Returns              |
+| Method        | Parameter(s)            | Description                    | Returns              |
 | ------------- | ----------------------- | ------------------------------ | -------------------- |
 | id            |                         | Retrieves its ID               | ID                   |
 | label         |                         | Returns the class name         | string               |
@@ -159,7 +159,7 @@ NodeInterface extends EntityInterface, and adds two things:
 1. A reference to its context (a GraphInterface object) where it was created. So this is either a Graph or a SubGraph.
 2. It holds edges accessible via **edges()** call.
 
-| Method        | Param(s)          | Description                                                        | Returns        |
+| Method        | Param(s)              | Description                                                        | Returns        |
 | ------------- | --------------------- | ------------------------------------------------------------------ | -------------- |
 | edges         |                       | Retrieves the EdgeList object that interfaces its edges.           | EdgeList       |
 | context       |                       | Retrieves its context                                              | GraphInterface |
@@ -168,7 +168,7 @@ NodeInterface extends EntityInterface, and adds two things:
 
 ### EdgeInterface
 
-| Method       | Param(s)        | Description                                              | Returns            |
+| Method       | Parameter(s)        | Description                                              | Returns            |
 | ------------ | ------------------- | -------------------------------------------------------- | ------------------ |
 | tail         |                     | Retrieves the tail node of the edge.                     | TailNode [\*]      |
 | tailID       |                     | Retrieves the tail node's ID.                            | ID                 |
@@ -182,7 +182,7 @@ NodeInterface extends EntityInterface, and adds two things:
 
  ### PredicateInterface
  
- | Method  | Param(s) | Description                                              | Returns               |
+ | Method  | Parameter(s) | Description                                              | Returns               |
  | ------- | -------------| -------------------------------------------------------- | --------------------- |
  | binding |              | Whether the edge is binding [\*\*]                       | bool                  |
  | label   |              | The class name, in lower case.                           | string                |
@@ -202,7 +202,7 @@ You add a new edge via **addIncoming(EdgeInterface $edge)** and **addOutgoing(Ed
 
 You can list edges via:
 
-| Method   | Param(s)                  | Description                                               | Returns                          |
+| Method   | Parameter(s)                  | Description                                               | Returns                          |
 | -------- | ----------------------------- | --------------------------------------------------------- | -------------------------------- |
 | in       | string $class=""              | Lists incoming edges.                                     | \\ArrayIterator\<EdgeInterface\> |
 | out      | string $class=""              | Lists outgoing edges                                      | \\ArrayIterator\<EdgeInterface\> |
