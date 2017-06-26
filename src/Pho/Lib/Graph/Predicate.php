@@ -20,39 +20,6 @@ namespace Pho\Lib\Graph;
  */
 class Predicate implements PredicateInterface
 {
-
-    /**
-     * Default Role.
-     * 
-     * The edge returns itself.
-     */
-    const R_DEFAULT = 0;
-
-    /**
-     * Reflective Role
-     * 
-     * The edge returns the tail node.
-     */
-    const R_REFLECTIVE = 1;
-
-    /**
-     * Consume Role
-     * 
-     * The edge returns the head node.
-     */
-    const R_CONSUMER = 2;
-
-    /**
-     * The role of the edge.
-     *
-     * Determines the edge's return value.
-     * Can be R_CONSUMER, R_REFLECTIVE or falls back
-     * to the default value (0) which returns the edge itself.
-     * 
-     * @var int
-     */
-    protected $role = self::R_DEFAULT;
-
     /**
      * Holds the binding value.
      * 
@@ -68,20 +35,6 @@ class Predicate implements PredicateInterface
     public function binding(): bool
     {
         return $this->binding; 
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function role(): int
-    {
-        switch($this->role) {
-        case self::R_REFLECTIVE:
-        case self::R_CONSUMER:
-            return $this->role;
-        default:
-            return self::R_DEFAULT;
-        }
     }
 
     /**

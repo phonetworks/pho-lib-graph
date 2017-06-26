@@ -33,16 +33,7 @@ interface PredicateInterface
      */
     public function binding(): bool;
 
-    /**
-     * Determines the edge's return value
-     *
-     * * Reflective: returns the tail node.
-     * * Consumer: returns the head node.
-     * * Default: returns the edge itself
-     * 
-     * @return int
-     */
-    public function role(): int;
+    
 
     /**
      * Returns the full class name
