@@ -104,11 +104,11 @@ class Edge implements EntityInterface, EdgeInterface, \SplObserver, \Serializabl
         }
         
 
-        $this->_resolvePredicate($predicate, Predicate::class);
+        $this->predicate = $this->_resolvePredicate($predicate, Predicate::class);
         $this->predicate_label = (string) $this->predicate;
     }
 
-    protected function _resolvePredicate(?PredicateInterface $predicate, string $fallback): void
+    protected function _resolvePredicate(?PredicateInterface $predicate, string $fallback): PredicateInterface
     {
         $is_a_predicate = function(string $class_name): bool
         {
@@ -119,19 +119,18 @@ class Edge implements EntityInterface, EdgeInterface, \SplObserver, \Serializabl
         };
 
         if(!is_null($predicate)) {
-            $this->predicate = $predicate;
-            return;
+            return $predicate;
         }
         else {
             $predicate_class = get_class($this)."Predicate";
             if($is_a_predicate($predicate_class)) {
-                $this->predicate = new $predicate_class;
+                return new $predicate_class;
             }
             else if($is_a_predicate($fallback)) {
-                $this->predicate = new $fallback;
+                return new $fallback;
             }
             else {
-                $this->predicate = new Predicate();
+                return new Predicate();
             }
         }
     }
