@@ -184,7 +184,6 @@ NodeInterface extends EntityInterface, and adds two things:
  
  | Method  | Parameter(s) | Description                                              | Returns               |
  | ------- | -------------| -------------------------------------------------------- | --------------------- |
- | role    |              | The role of the edge; Reflective, Consumer or Default    | int [\*]              |
  | binding |              | Whether the edge is binding [\*\*]                       | bool                  |
  | label   |              | The class name, in lower case.                           | string                |
  
