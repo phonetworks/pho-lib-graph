@@ -160,6 +160,14 @@ class AdjacentNode implements NodeInterface, EntityInterface
     /**
      * {@inheritdoc}
      */
+    public function inDestruction(): bool
+    {
+        $this->instance->inDestruction();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     /*public function join(GraphInterface $graph): void
     {
         try {

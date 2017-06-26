@@ -133,7 +133,7 @@ trait EntityTrait
         if($subject instanceof AttributeBag && $this instanceof NodeInterface) {
             $this->observeAttributeBagUpdate($subject);
         }
-        else if($subject instanceof NodeInterface && $this instanceof GraphInterface) {
+        else if($subject instanceof NodeInterface && $subject->inDestruction() && $this instanceof GraphInterface) {
             $this->observeNodeDeletion($subject);
         }
     }

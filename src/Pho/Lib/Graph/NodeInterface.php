@@ -81,5 +81,14 @@ interface NodeInterface
     */
     //public function join(GraphInterface $graph): void;
 
+    /**
+     * Determines whether the node is in self-destruction process.
+     * 
+     * Used by observers.
+     * 
+     * @return bool Yes or no.
+     */
+    public function inDestruction(): bool;
+
 
 }

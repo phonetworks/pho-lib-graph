@@ -58,6 +58,13 @@ class Node implements EntityInterface, NodeInterface, \SplObserver,  \SplSubject
     protected $context_id;
 
     /**
+     * A flag that states that the destruction process has begun.
+     *
+     * @var boolean
+     */
+    protected $_in_destruction = false;
+
+    /**
      * The observers of this object. 
      * Normally just the owner.
      *
@@ -166,9 +173,21 @@ class Node implements EntityInterface, NodeInterface, \SplObserver,  \SplSubject
 
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function destroy(): void 
     {
+        $this->_in_destruction = true;
         $this->notify();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function inDestruction(): bool
+    {
+        return $this->_in_destruction;
     }
 
     /**
