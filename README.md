@@ -133,7 +133,7 @@ GraphInterface forms the basis of both Graph and SubGraph objects.
 | loadNodesFromArray   | array $nodes            | Array of NodeInteface objects | void                   |
 | loadNodesFromIDArray | array $node_ids         | Array of node IDs in string   | void                   |
 
-[\*] You won't need to use this function since graph adding is handled automatically at object construction.
+> [\*] You won't need to use this function since graph adding is handled automatically at object construction.
 
 ### EntityInterface
 
@@ -159,10 +159,11 @@ NodeInterface extends EntityInterface, and adds two things:
 1. A reference to its context (a GraphInterface object) where it was created. So this is either a Graph or a SubGraph.
 2. It holds edges accessible via **edges()** call.
 
-| Method       | Parameter(s)          | Description                                              | Returns        |
-| ------------ | --------------------- | -------------------------------------------------------- | -------------- |
-| edges        |                       | Retrieves the EdgeList object that interfaces its edges. | EdgeList       |
-| context      |                       | Retrieves its context                                    | GraphInterface |
+| Method        | Parameter(s)          | Description                                                        | Returns        |
+| ------------- | --------------------- | ------------------------------------------------------------------ | -------------- |
+| edges         |                       | Retrieves the EdgeList object that interfaces its edges.           | EdgeList       |
+| context       |                       | Retrieves its context                                              | GraphInterface |
+| inDestruction |                       | Reserved to use by observers to understand the state of the node.  | bool           |
 <!--| join         | GraphInterface $graph | Adds the node to the given graph                         | void           |-->
 
 ### EdgeInterface
@@ -178,6 +179,18 @@ NodeInterface extends EntityInterface, and adds two things:
 | orphan       |                     | Checks if the edge fails to possess a tail or a head     | bool               |
 
 > [\*] TailNode and HeadNode objects behave the same way with NodeInterface objects. You can query them all identically.
+
+ ### PredicateInterface
+ 
+ | Method  | Parameter(s) | Description                                              | Returns               |
+ | ------- | -------------| -------------------------------------------------------- | --------------------- |
+ | role    |              | The role of the edge; Reflective, Consumer or Default    | int [\*]              |
+ | binding |              | Whether the edge is binding [\*\*]                       | bool                  |
+ | label   |              | The class name, in lower case.                           | string                |
+ 
+ > [\*] Possible values are 0, 1 or 2. In Predicate class constant form. 0: R_DEFAULT, 1: R_REFLECTIVE, 2: R_CONSUMER
+
+ > [\*\*] Which means once it's deleted, the head node will be too.
 
 ### EdgeList
 
