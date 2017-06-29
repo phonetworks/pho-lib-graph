@@ -102,8 +102,6 @@ class Edge implements EntityInterface, EdgeInterface, \SplObserver, \Serializabl
             $this->head->edges()->addIncoming($this);
             $this->tail->edges()->addOutgoing($this);
         }
-        
-
         $this->predicate = $this->_resolvePredicate($predicate, Predicate::class);
         $this->predicate_label = (string) $this->predicate;
     }

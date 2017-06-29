@@ -155,7 +155,7 @@ class Node implements EntityInterface, NodeInterface, \SplObserver,  \SplSubject
     {
         $array = $this->entityToArray();
         $array["edge_list"] = $this->edge_list->toArray();
-        $array["context"] = $this->context_id;
+        $array["context"] = (string) $this->context_id;
         return $array;
     }
 
