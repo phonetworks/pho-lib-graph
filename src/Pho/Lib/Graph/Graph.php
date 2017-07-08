@@ -24,7 +24,7 @@ class Graph implements GraphInterface, \SplObserver, \Serializable
 {
 
     use SerializableTrait;
-    use ClusterTrait;
+    use GraphTrait;
 
     /**
      * {@inheritdoc}

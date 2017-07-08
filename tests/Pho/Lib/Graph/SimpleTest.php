@@ -186,4 +186,13 @@ class SimpleTest extends \PHPUnit\Framework\TestCase
         $this->assertCount(3, $subgraph->members());
         $this->assertCount(5, $this->graph->members());
     }
+
+    public function testEntityType() {
+        $node =new Node($this->graph);
+        $subgraph = new SubGraph($this->graph);
+        $edge = new Edge($node, $subgraph);
+        $this->assertEquals("node", $node->entityType());
+        $this->assertEquals("node", $subgraph->entityType());
+        $this->assertEquals("edge", $edge->entityType());
+    }
 }

@@ -22,7 +22,7 @@ namespace Pho\Lib\Graph;
 class SubGraph extends Node implements GraphInterface
 {
 
-    use ClusterTrait;
+    use GraphTrait;
 
     /**
      * {@inheritdoc}
@@ -41,6 +41,19 @@ class SubGraph extends Node implements GraphInterface
     public function toArray(): array
     {
         return array_merge(parent::toArray(), $this->clusterToArray());
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function update(\SplSubject $subject): void
+    {
+        if($subject instanceof NodeInterface && $subject->inDeletion()) {
+            $this->observeNodeDeletion($subject);
+        }
+        else {
+            parent::update($subject);
+        }
     }
 
 }

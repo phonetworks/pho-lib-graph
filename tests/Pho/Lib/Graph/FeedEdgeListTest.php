@@ -291,7 +291,7 @@ class FeedEdgeListTest extends \PHPUnit\Framework\TestCase
         $this->assertCount(2, $this->node2->edges()->to($this->node1->id()));
     }
 
-    private function recreateNode(NodeInterface $node, ?array $list = null) {
+    private function recreateNode(NodeInterface $node, /*?array*/ $list = null) {
         $node1_mock = \Mockery::mock($node)->shouldAllowMockingProtectedMethods();
         $node1_mock->shouldReceive("hydratedEdge")->andReturnUsing(function($id) {
             $random_edge = new Edge(new Node($this->graph), new Node($this->graph));

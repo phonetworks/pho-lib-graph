@@ -160,9 +160,9 @@ class AdjacentNode implements NodeInterface, EntityInterface
     /**
      * {@inheritdoc}
      */
-    public function inDestruction(): bool
+    public function inDeletion(): bool
     {
-        $this->instance->inDestruction();
+        $this->instance->inDeletion();
     }
 
     /**

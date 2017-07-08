@@ -131,11 +131,28 @@ trait EntityTrait
     public function update(\SplSubject $subject): void
     {
         if($subject instanceof AttributeBag && $this instanceof NodeInterface) {
+            $this->emit(sprintf("%s.modified", $this->entityType()));
             $this->observeAttributeBagUpdate($subject);
         }
-        else if($subject instanceof NodeInterface && $subject->inDestruction() && $this instanceof GraphInterface) {
-            $this->observeNodeDeletion($subject);
-        }
+    }
+
+    /**
+     * Retrieves the entity type 
+     *
+     * Current allowed values are "node" or "edge"
+     * Can be extended for more types.
+     * If the type is unknown, it returns "entity"
+     * 
+     * @return string "node", "edge" or "entity".
+     */
+    public function entityType(): string
+    {
+        if($this instanceof NodeInterface)
+            return "node";
+        else if($this instanceof EdgeInterface)
+            return "edge";
+        else 
+            return "entity";
     }
 
 

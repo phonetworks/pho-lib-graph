@@ -97,6 +97,7 @@ class Edge implements EntityInterface, EdgeInterface, \SplObserver, \Serializabl
         $this->tail = new TailNode();
         $this->tail->set($tail);
         $this->tail_id = (string) $tail->id();
+        $this->tail->emit("edge.created", $this);
 
         if(!is_null($head)) {
             $this->head->edges()->addIncoming($this);
@@ -138,6 +139,7 @@ class Edge implements EntityInterface, EdgeInterface, \SplObserver, \Serializabl
      */
     public function connect(NodeInterface $head): void
     {
+        $this->tail->emit("edge.connected", $this);
         $this->head = new HeadNode();
         $this->head->set($head);
         $this->head_id = (string) $head->id();
@@ -157,7 +159,7 @@ class Edge implements EntityInterface, EdgeInterface, \SplObserver, \Serializabl
         if(isset($this->head)) {
             return $this->head;
         } else {
-            return $this->hydratedHead();
+            return $this->hyHead();
         }
     }
 
@@ -180,7 +182,7 @@ class Edge implements EntityInterface, EdgeInterface, \SplObserver, \Serializabl
      *
      * @return NodeInterface
      */
-    protected function hydratedHead(): NodeInterface
+    protected function hyHead(): NodeInterface
     {
 
     }
@@ -193,7 +195,7 @@ class Edge implements EntityInterface, EdgeInterface, \SplObserver, \Serializabl
         if(isset($this->tail)) {
             return $this->tail;
         } else {
-            return $this->hydratedTail();
+            return $this->hyTail();
         }
     }
 
@@ -213,7 +215,7 @@ class Edge implements EntityInterface, EdgeInterface, \SplObserver, \Serializabl
      *
      * @return NodeInterface
      */
-    protected function hydratedTail(): NodeInterface
+    protected function hyTail(): NodeInterface
     {
 
     }
@@ -227,7 +229,7 @@ class Edge implements EntityInterface, EdgeInterface, \SplObserver, \Serializabl
         if(isset($this->predicate)) {
             return $this->predicate;
         } else {
-            return $this->hydratedPredicate();
+            return $this->hyPredicate();
         }
     }
 
@@ -239,7 +241,7 @@ class Edge implements EntityInterface, EdgeInterface, \SplObserver, \Serializabl
      *
      * @return PredicateInterface
      */
-    protected function hydratedPredicate(): PredicateInterface
+    protected function hyPredicate(): PredicateInterface
     {
 
     }
@@ -274,7 +276,7 @@ class Edge implements EntityInterface, EdgeInterface, \SplObserver, \Serializabl
      *
      * @return void
      */
-    protected function observeTailNodeUpdate(\SplSubject $subject): void
+    protected function observeTailUpdate(\SplSubject $subject): void
     {
         if($this->predicate()->binding()) {
             $this->head()->destroy();

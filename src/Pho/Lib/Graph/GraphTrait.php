@@ -12,14 +12,14 @@
 namespace Pho\Lib\Graph;
 
 /**
- * Cluster is an important trait of graphs.
+ * The fundamental traits of graphs and subgraphs
  * 
  * @see Graph For full implementation.
  * @see SubGraph For partial implementation.
  * 
  * @author Emre Sokullu <emre@phonetworks.org>
  */
-trait ClusterTrait
+trait GraphTrait
 {
 
     /**
@@ -52,7 +52,8 @@ trait ClusterTrait
             } catch(Exceptions\NodeAlreadyMemberException $e) { /* ignore, that's fine */ 
             }
         }
-        $this->onAdd($node);
+        $this->emit("node.added", [$node]);
+        $this->emit("graph.modified", $this);
         return $node;
     }
 
@@ -78,21 +79,6 @@ trait ClusterTrait
     }
 
     /**
-     * A protected method that enables higher-level packages
-     * to extend the functionality of the add() call.
-     * 
-     * @see add() 
-     *
-     * @param NodeInterface $node
-     * 
-     * @return void
-     */
-    protected function onAdd(NodeInterface $node): void
-    {
-
-    }
-
-    /**
      * {@inheritdoc}
      */
     public function get(ID $node_id): NodeInterface 
@@ -103,7 +89,7 @@ trait ClusterTrait
         if(isset($this->nodes[(string) $node_id])) {
             return $this->nodes[(string) $node_id];
         } else {
-            return $this->hydratedGet($node_id);
+            return $this->_get($node_id);
         }
     }
 
@@ -116,7 +102,7 @@ trait ClusterTrait
      *
      * @return NodeInterface
      */
-    protected function hydratedGet(ID $node_id): NodeInterface
+    protected function _get(ID $node_id): NodeInterface
     {
 
     }
@@ -137,23 +123,13 @@ trait ClusterTrait
         if($this->contains($node_id)) {
             unset($this->nodes[(string) $node_id]);
             unset($this->node_ids[array_search((string)$node_id, $this->node_ids)]);
-            $this->onRemove($node_id);
+            if($this instanceof SubGraph) {
+                try {
+                    $this->context()->remove($node_id);
+                } catch(\Exception $e) { /* ignore, that's fine */ }
+            }
+            $this->emit("graph.modified", $this);
         }
-    }
-
-    /**
-     * A protected method that enables higher-level packages
-     * to extend the functionality of the remove() call.
-     * 
-     * @see remove() 
-     *
-     * @param ID $node_id
-     * 
-     * @return void
-     */
-    protected function onRemove(ID $node_id): void
-    {
-
     }
 
 
@@ -167,7 +143,7 @@ trait ClusterTrait
         } else if(count($this->nodes) == count($this->node_ids)) {
             return $this->nodes;
         } else {
-            return $this->hydratedMembers();
+            return $this->_members();
         }
     }
 
@@ -187,7 +163,7 @@ trait ClusterTrait
      *
      * @return array
      */
-    protected function hydratedMembers(): array
+    protected function _members(): array
     {
 
     }
@@ -198,7 +174,7 @@ trait ClusterTrait
      */
     public function toArray(): array
     {
-        return $this->clusterToArray();
+        return $this->graphToArray();
     }
 
     /**
@@ -212,7 +188,7 @@ trait ClusterTrait
      *
      * @return array The object in array format.
      */  
-    protected function clusterToArray(): array
+    protected function graphToArray(): array
     {
         return ["members"=>$this->node_ids];
     }

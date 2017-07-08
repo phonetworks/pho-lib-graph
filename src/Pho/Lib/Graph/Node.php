@@ -11,6 +11,8 @@
 
 namespace Pho\Lib\Graph;
 
+use Sabre\Event;
+
 /**
  * Atomic graph entity, Node
  * 
@@ -31,10 +33,14 @@ namespace Pho\Lib\Graph;
  * 
  * @author Emre Sokullu <emre@phonetworks.org>
  */
-class Node implements EntityInterface, NodeInterface, \SplObserver,  \SplSubject, \Serializable
+class Node implements EntityInterface, NodeInterface, \SplObserver,  \SplSubject, \Serializable, Event\EmitterInterface
 {
 
     use SerializableTrait;
+    use EntityTrait {
+        EntityTrait::__construct as onEntityLoad;
+    }
+    use Event\EmitterTrait;
 
     /**
      * Internal variable that keeps track of edges in and out.
@@ -62,7 +68,7 @@ class Node implements EntityInterface, NodeInterface, \SplObserver,  \SplSubject
      *
      * @var boolean
      */
-    protected $_in_destruction = false;
+    protected $in_deletion = false;
 
     /**
      * The observers of this object. 
@@ -71,10 +77,6 @@ class Node implements EntityInterface, NodeInterface, \SplObserver,  \SplSubject
      * @var array
      */
     protected $observers = array();
-
-    use EntityTrait {
-        EntityTrait::__construct as onEntityLoad;
-    }
 
     /**
      * {@inheritdoc}
@@ -85,7 +87,7 @@ class Node implements EntityInterface, NodeInterface, \SplObserver,  \SplSubject
         $this->edge_list = new EdgeList($this);
         $context->add($this)->context = $context;
         $this->context_id = (string) $context->id();
-        $this->populateGraphObservers($context);
+        $this->attachGraphObservers($context);
         Logger::info("A node with id \"%s\" and label \"%s\" constructed", $this->id(), $this->label());
     }
 
@@ -97,7 +99,7 @@ class Node implements EntityInterface, NodeInterface, \SplObserver,  \SplSubject
      * 
      * @return void
      */
-    private function populateGraphObservers(GraphInterface $context): void
+    private function attachGraphObservers(GraphInterface $context): void
     {
         while($context instanceof SubGraph) {
             $this->attach($context);
@@ -114,7 +116,7 @@ class Node implements EntityInterface, NodeInterface, \SplObserver,  \SplSubject
         if(isset($this->context)) {
             return $this->context;
         } else {
-            return $this->hydratedContext();
+            return $this->hyContext();
         }
     }
 
@@ -126,7 +128,7 @@ class Node implements EntityInterface, NodeInterface, \SplObserver,  \SplSubject
      *
      * @return GraphInterface
      */
-    protected function hydratedContext(): GraphInterface
+    protected function hyContext(): GraphInterface
     {
 
     }
@@ -136,8 +138,11 @@ class Node implements EntityInterface, NodeInterface, \SplObserver,  \SplSubject
      */
     public function changeContext(GraphInterface $context): void
     {
+        $this->emit("node.modified");
+        $this->context->remove($this);
         $this->context = $context;
         $this->context_id = $context->id();
+        $this->context->add($this);
     }
     
     /**
@@ -163,12 +168,14 @@ class Node implements EntityInterface, NodeInterface, \SplObserver,  \SplSubject
      * Retrieve Edge objects given its ID.
      *
      * Used in serialization.
+     * 
+     * @see edge 
      *
      * @param string $id The Edge ID in string format
      *
      * @return EdgeInterface
      */
-    public function hydratedEdge(string $id): EdgeInterface
+    public function hyEdge(string $id): EdgeInterface
     {
 
     }
@@ -178,16 +185,17 @@ class Node implements EntityInterface, NodeInterface, \SplObserver,  \SplSubject
      */
     public function destroy(): void 
     {
-        $this->_in_destruction = true;
+        $this->emit("node.deleting");
+        $this->in_deletion = true;
         $this->notify();
     }
 
     /**
      * {@inheritdoc}
      */
-    public function inDestruction(): bool
+    public function inDeletion(): bool
     {
-        return $this->_in_destruction;
+        return $this->in_deletion;
     }
 
     /**
@@ -228,16 +236,5 @@ class Node implements EntityInterface, NodeInterface, \SplObserver,  \SplSubject
             $value->update($this);
         }
     }
-
-    /**
-     * {@inheritdoc}
-     */
-    /*public function join(GraphInterface $graph): void
-    {
-        if($graph->contains($this->id())) {
-            throw new Exceptions\NodeAlreadyMemberException($this, $graph);
-        }
-        $graph->add($this);
-    }*/
 
 }
