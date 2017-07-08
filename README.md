@@ -1,8 +1,6 @@
 # pho-lib-graph [![Build Status](https://travis-ci.org/phonetworks/pho-lib-graph.svg?branch=master)](https://travis-ci.org/phonetworks/pho-lib-graph) [![Code Climate](https://img.shields.io/codeclimate/github/phonetworks/pho-lib-graph.svg)](https://codeclimate.com/github/phonetworks/pho-lib-cli)
 
-A general purpose [graph](http://en.wikipedia.org/wiki/Graph_theory) library written in PHP (5.3+)
-
-![Graph](https://github.com/phonetworks/pho-lib-graph/raw/master/.github/socialgraph.gif "A Social Graph example")
+A general purpose [graph](http://en.wikipedia.org/wiki/Graph_theory) library written in PHP 7+
 
 ## Getting Started
 
@@ -19,6 +17,9 @@ Once you install, you can play with the library using the example application pr
 A graph consists of edges and nodes. In Pho architecture, the core components edges and nodes are organized as subclasses of [Entity](https://github.com/phonetworks/pho-lib-graph/blob/master/src/Pho/Lib/Graph/EntityInterface.php) for the common themes they share (such as an identifier, label etc). [Graph](https://github.com/phonetworks/pho-lib-graph/blob/master/src/Pho/Lib/Graph/GraphInterface.php) is positioned completely different, and [SubGraph](https://github.com/phonetworks/pho-lib-graph/blob/master/src/Pho/Lib/Graph/SubGraph.php) stands uniquely as a subclass of [Node](https://github.com/phonetworks/pho-lib-graph/blob/master/src/Pho/Lib/Graph/NodeInterface.php) that also shows [Graph traits](https://github.com/phonetworks/pho-lib-graph/blob/master/src/Pho/Lib/Graph/ClusterTrait.php) at the same time.
 
 ![Architecture](https://github.com/phonetworks/pho-lib-graph/raw/master/.github/lib-graph-components.png "Pho LibGraph Architecture")
+
+> Pho is written in PHP 7. All files in pho-lib-graph (with the single exception of the EdgeList.php) are 
+> in strict mode enabled by default.
 
 ## Documentation
 
