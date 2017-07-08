@@ -25,60 +25,7 @@ namespace Pho\Lib\Graph;
 class TailNode extends AdjacentNode implements \SplSubject
 {
 
-    /**
-     * An array of Observer objects. Used for edges that observe this node.
-     *
-     * @var array
-     */
-    private $observers = [];
-
-    /**
-     * Attaches an observer to this subject.
-     * 
-     * In Pho context, edges observe tail nodes to see
-     * if they get deleted. 
-     * 
-     * @param \SplObserver $observer
-     * 
-     * @return void
-     */
-    public function attach(\SplObserver $observer): void
-    {
-        $this->observers[] = $observer;
-    }
-
-    /**
-     * Detaches an observer fromto this subject.
-     * 
-     * In Pho context, edges observe tail nodes to see
-     * if they get deleted. 
-     * 
-     * @param \SplObserver $observer
-     * 
-     * @return void
-     */
-    public function detach(\SplObserver $observer): void
-    {
-        $pos = array_search($observer, $this->observers);
-        if($pos!==false) {
-            unset($this->observers[$pos]);
-        }
-    }
-
-    /**
-     * Notifies the observer.
-     * 
-     * In Pho context, edges observe tail nodes to see
-     * if they get deleted. 
-     * 
-     * @return void
-     */
-    public function notify(): void
-    {
-        foreach($this->observers as $observer) {
-            $observer->update($this);
-        }
-    }
+    use SplSubjectTrait;
 
     /**
      * {@inheritdoc}

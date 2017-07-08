@@ -20,11 +20,25 @@ namespace Pho\Lib\Graph;
  * 
  * @author Emre Sokullu <emre@phonetworks.org>
  */
-class Graph implements GraphInterface, \SplObserver, \Serializable
+class Graph implements 
+    GraphInterface, 
+    \SplObserver, 
+    \Serializable
 {
 
     use SerializableTrait;
-    use GraphTrait;
+    use GraphTrait {
+        GraphTrait::add as __add;
+    }
+
+    public function add(NodeInterface $node): NodeInterface
+    {
+        $node  = $this->__add($node);
+        $this->emit("node.added", [$node]);
+        $this->emit("graph.modified", $this);
+        return $node;
+    }
+
 
     /**
      * {@inheritdoc}

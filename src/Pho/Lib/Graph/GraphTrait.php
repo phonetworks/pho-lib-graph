@@ -46,14 +46,6 @@ trait GraphTrait
         }
         $this->node_ids[] = (string) $node->id();
         $this->nodes[(string) $node->id()] = $node;
-        if($this instanceof SubGraph) {
-            try {
-                $this->context()->add($node);
-            } catch(Exceptions\NodeAlreadyMemberException $e) { /* ignore, that's fine */ 
-            }
-        }
-        $this->emit("node.added", [$node]);
-        $this->emit("graph.modified", $this);
         return $node;
     }
 
@@ -89,7 +81,7 @@ trait GraphTrait
         if(isset($this->nodes[(string) $node_id])) {
             return $this->nodes[(string) $node_id];
         } else {
-            return $this->_get($node_id);
+            return $this->hyGet($node_id);
         }
     }
 
@@ -102,7 +94,7 @@ trait GraphTrait
      *
      * @return NodeInterface
      */
-    protected function _get(ID $node_id): NodeInterface
+    protected function hyGet(ID $node_id): NodeInterface
     {
 
     }
@@ -143,7 +135,7 @@ trait GraphTrait
         } else if(count($this->nodes) == count($this->node_ids)) {
             return $this->nodes;
         } else {
-            return $this->_members();
+            return $this->hyMembers();
         }
     }
 
@@ -163,7 +155,7 @@ trait GraphTrait
      *
      * @return array
      */
-    protected function _members(): array
+    protected function hyMembers(): array
     {
 
     }

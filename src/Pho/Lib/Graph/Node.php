@@ -33,10 +33,17 @@ use Sabre\Event;
  * 
  * @author Emre Sokullu <emre@phonetworks.org>
  */
-class Node implements EntityInterface, NodeInterface, \SplObserver,  \SplSubject, \Serializable, Event\EmitterInterface
+class Node implements 
+    EntityInterface, 
+    NodeInterface, 
+    \SplObserver,  
+    \SplSubject, 
+    \Serializable, 
+    Event\EmitterInterface
 {
 
     use SerializableTrait;
+    use SplSubjectTrait;
     use EntityTrait {
         EntityTrait::__construct as onEntityLoad;
     }
@@ -69,14 +76,6 @@ class Node implements EntityInterface, NodeInterface, \SplObserver,  \SplSubject
      * @var boolean
      */
     protected $in_deletion = false;
-
-    /**
-     * The observers of this object. 
-     * Normally just the owner.
-     *
-     * @var array
-     */
-    protected $observers = array();
 
     /**
      * {@inheritdoc}
@@ -196,45 +195,6 @@ class Node implements EntityInterface, NodeInterface, \SplObserver,  \SplSubject
     public function inDeletion(): bool
     {
         return $this->in_deletion;
-    }
-
-    /**
-     * Adds a new observer to the object
-     * 
-     * @param \SplObserver $observer
-     * 
-     * @return void
-     */
-    public function attach(\SplObserver $observer): void 
-    {
-        $this->observers[] = $observer;
-    }
-    
-    /**
-     * Removes an observer from the object
-     * 
-     * @param \SplObserver $observer
-     * 
-     * @return void
-     */
-    public function detach(\SplObserver $observer): void 
-    {
-        $key = array_search($observer, $this->observers, true);
-        if($key) {
-            unset($this->observers[$key]);
-        }
-    }
-
-    /**
-     * Notifies observers about deletion
-     * 
-     * @return void
-     */
-    public function notify(): void
-    {
-        foreach ($this->observers as $value) {
-            $value->update($this);
-        }
     }
 
 }

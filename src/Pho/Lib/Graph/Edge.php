@@ -24,7 +24,11 @@ namespace Pho\Lib\Graph;
  * 
  * @author Emre Sokullu <emre@phonetworks.org>
  */
-class Edge implements EntityInterface, EdgeInterface, \SplObserver, \Serializable
+class Edge implements 
+    EntityInterface, 
+    EdgeInterface, 
+    \SplObserver, 
+    \Serializable
 {
     
     use SerializableTrait;
