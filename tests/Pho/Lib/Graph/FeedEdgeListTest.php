@@ -11,13 +11,13 @@
 
 namespace Pho\Lib\Graph;
 
-class FeedEdgeListTest extends \PHPUnit\Framework\TestCase 
+class FeedEdgeListTest extends TestCase 
 {
-    private $graph, $node1, $node2, $edge;
+    private $node1, $node2, $edge;
     private $edge_store;
 
     public function setUp() {
-        $this->graph = new Graph();
+        parent::setUp();
         $this->node1 = new Node($this->graph);
         $this->node2 = new Node($this->graph);
         $this->edge = new Edge($this->node1, $this->node2);
@@ -27,7 +27,7 @@ class FeedEdgeListTest extends \PHPUnit\Framework\TestCase
     }
 
     public function tearDown() {
-        unset($this->graph);
+        parent::tearDown();
         unset($this->node1);
         unset($this->node2);
         unset($this->edge);
@@ -291,9 +291,9 @@ class FeedEdgeListTest extends \PHPUnit\Framework\TestCase
         $this->assertCount(2, $this->node2->edges()->to($this->node1->id()));
     }
 
-    private function recreateNode(NodeInterface $node, ?array $list = null) {
+    private function recreateNode(NodeInterface $node, /*?array*/ $list = null) {
         $node1_mock = \Mockery::mock($node)->shouldAllowMockingProtectedMethods();
-        $node1_mock->shouldReceive("hydratedEdge")->andReturnUsing(function($id) {
+        $node1_mock->shouldReceive("hyEdge")->andReturnUsing(function($id) {
             $random_edge = new Edge(new Node($this->graph), new Node($this->graph));
             $edge = \Mockery::mock($random_edge);
             $edge->shouldReceive("id")->andReturn(ID::fromString($id));

@@ -26,7 +26,9 @@ namespace Pho\Lib\Graph;
  * 
  * @author Emre Sokullu <emre@phonetworks.org>
  */
-class AdjacentNode implements NodeInterface, EntityInterface
+class AdjacentNode implements 
+    NodeInterface, 
+    EntityInterface
 {
 
     private $instance;
@@ -160,22 +162,14 @@ class AdjacentNode implements NodeInterface, EntityInterface
     /**
      * {@inheritdoc}
      */
-    public function inDestruction(): bool
+    public function inDeletion(): bool
     {
-        $this->instance->inDestruction();
+        $this->instance->inDeletion();
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    /*public function join(GraphInterface $graph): void
+    public function emit(string $signal, array $params = [], ?callable $continueCallBack = null): bool
     {
-        try {
-            $this->instance->join($graph);
-        }
-        catch(Exceptions\NodeAlreadyMemberException $e) {
-            throw $e;
-        }
-    }*/
+        return $this->instance->emit($signal, $params);
+    }
 
 }

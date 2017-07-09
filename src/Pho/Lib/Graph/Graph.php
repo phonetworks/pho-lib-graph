@@ -11,6 +11,8 @@
 
 namespace Pho\Lib\Graph;
 
+use Sabre\Event;
+
 /**
  * Graph contains nodes
  * 
@@ -20,11 +22,27 @@ namespace Pho\Lib\Graph;
  * 
  * @author Emre Sokullu <emre@phonetworks.org>
  */
-class Graph implements GraphInterface, \SplObserver, \Serializable
+class Graph implements 
+    GraphInterface, 
+    \SplObserver, 
+    \Serializable, 
+    Event\EmitterInterface
 {
 
     use SerializableTrait;
-    use ClusterTrait;
+    use Event\EmitterTrait;
+    use GraphTrait {
+        GraphTrait::add as __add;
+    }
+
+    public function add(NodeInterface $node): NodeInterface
+    {
+        $node  = $this->__add($node);
+        $this->emit("node.added", [$node]);
+        $this->emit("modified");
+        return $node;
+    }
+
 
     /**
      * {@inheritdoc}

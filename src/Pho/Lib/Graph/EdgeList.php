@@ -255,7 +255,7 @@ class EdgeList
 
         $hydrate = function (EncapsulatedEdge $encapsulated): EdgeInterface {
             if(!$encapsulated->hydrated()) {
-                return $this->master->hydratedEdge($encapsulated->id());
+                return $this->master->hyEdge($encapsulated->id());
             } else {
                 return $encapsulated->edge();
             }
@@ -357,7 +357,7 @@ class EdgeList
 
         $hydrate = function (EncapsulatedEdge $encapsulated): EdgeInterface {
             if(!$encapsulated->hydrated()) {
-                return $this->master->hydratedEdge($encapsulated->id());
+                return $this->master->hyEdge($encapsulated->id());
             } else {
                 return $encapsulated->edge();
             }
@@ -383,6 +383,5 @@ class EdgeList
         }
 
     }
-
 
 }

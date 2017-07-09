@@ -11,6 +11,8 @@
 
 namespace Pho\Lib\Graph;
 
+use Sabre\Event;
+
 /**
  * Atomic graph entity, Node
  * 
@@ -31,10 +33,22 @@ namespace Pho\Lib\Graph;
  * 
  * @author Emre Sokullu <emre@phonetworks.org>
  */
-class Node implements EntityInterface, NodeInterface, \SplObserver,  \SplSubject, \Serializable
+class Node implements 
+    EntityInterface, 
+    NodeInterface, 
+    \SplObserver,  
+    \SplSubject, 
+    \Serializable, 
+    Event\EmitterInterface
 {
 
     use SerializableTrait;
+    use SplSubjectTrait;
+    use EntityTrait {
+        EntityTrait::__construct as onEntityLoad;
+        EntityTrait::destroy as __destroy;
+    }
+    use Event\EmitterTrait;
 
     /**
      * Internal variable that keeps track of edges in and out.
@@ -62,19 +76,7 @@ class Node implements EntityInterface, NodeInterface, \SplObserver,  \SplSubject
      *
      * @var boolean
      */
-    protected $_in_destruction = false;
-
-    /**
-     * The observers of this object. 
-     * Normally just the owner.
-     *
-     * @var array
-     */
-    protected $observers = array();
-
-    use EntityTrait {
-        EntityTrait::__construct as onEntityLoad;
-    }
+    protected $in_deletion = false;
 
     /**
      * {@inheritdoc}
@@ -85,7 +87,7 @@ class Node implements EntityInterface, NodeInterface, \SplObserver,  \SplSubject
         $this->edge_list = new EdgeList($this);
         $context->add($this)->context = $context;
         $this->context_id = (string) $context->id();
-        $this->populateGraphObservers($context);
+        $this->attachGraphObservers($context);
         Logger::info("A node with id \"%s\" and label \"%s\" constructed", $this->id(), $this->label());
     }
 
@@ -97,7 +99,7 @@ class Node implements EntityInterface, NodeInterface, \SplObserver,  \SplSubject
      * 
      * @return void
      */
-    private function populateGraphObservers(GraphInterface $context): void
+    private function attachGraphObservers(GraphInterface $context): void
     {
         while($context instanceof SubGraph) {
             $this->attach($context);
@@ -114,7 +116,7 @@ class Node implements EntityInterface, NodeInterface, \SplObserver,  \SplSubject
         if(isset($this->context)) {
             return $this->context;
         } else {
-            return $this->hydratedContext();
+            return $this->hyContext();
         }
     }
 
@@ -126,7 +128,7 @@ class Node implements EntityInterface, NodeInterface, \SplObserver,  \SplSubject
      *
      * @return GraphInterface
      */
-    protected function hydratedContext(): GraphInterface
+    protected function hyContext(): GraphInterface
     {
 
     }
@@ -136,8 +138,11 @@ class Node implements EntityInterface, NodeInterface, \SplObserver,  \SplSubject
      */
     public function changeContext(GraphInterface $context): void
     {
+        $this->emit("modified");
+        $this->context->remove($this->id());
         $this->context = $context;
         $this->context_id = $context->id();
+        $this->context->add($this);
     }
     
     /**
@@ -163,12 +168,14 @@ class Node implements EntityInterface, NodeInterface, \SplObserver,  \SplSubject
      * Retrieve Edge objects given its ID.
      *
      * Used in serialization.
+     * 
+     * @see edge 
      *
      * @param string $id The Edge ID in string format
      *
      * @return EdgeInterface
      */
-    public function hydratedEdge(string $id): EdgeInterface
+    public function hyEdge(string $id): EdgeInterface
     {
 
     }
@@ -178,66 +185,17 @@ class Node implements EntityInterface, NodeInterface, \SplObserver,  \SplSubject
      */
     public function destroy(): void 
     {
-        $this->_in_destruction = true;
+        $this->__destroy();
+        $this->in_deletion = true;
         $this->notify();
     }
 
     /**
      * {@inheritdoc}
      */
-    public function inDestruction(): bool
+    public function inDeletion(): bool
     {
-        return $this->_in_destruction;
+        return $this->in_deletion;
     }
-
-    /**
-     * Adds a new observer to the object
-     * 
-     * @param \SplObserver $observer
-     * 
-     * @return void
-     */
-    public function attach(\SplObserver $observer): void 
-    {
-        $this->observers[] = $observer;
-    }
-    
-    /**
-     * Removes an observer from the object
-     * 
-     * @param \SplObserver $observer
-     * 
-     * @return void
-     */
-    public function detach(\SplObserver $observer): void 
-    {
-        $key = array_search($observer, $this->observers, true);
-        if($key) {
-            unset($this->observers[$key]);
-        }
-    }
-
-    /**
-     * Notifies observers about deletion
-     * 
-     * @return void
-     */
-    public function notify(): void
-    {
-        foreach ($this->observers as $value) {
-            $value->update($this);
-        }
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    /*public function join(GraphInterface $graph): void
-    {
-        if($graph->contains($this->id())) {
-            throw new Exceptions\NodeAlreadyMemberException($this, $graph);
-        }
-        $graph->add($this);
-    }*/
 
 }

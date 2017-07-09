@@ -11,6 +11,8 @@
 
 namespace Pho\Lib\Graph;
 
+use Sabre\Event;
+
 /**
  * Atomic graph entity, Edge
  * 
@@ -24,13 +26,18 @@ namespace Pho\Lib\Graph;
  * 
  * @author Emre Sokullu <emre@phonetworks.org>
  */
-class Edge implements EntityInterface, EdgeInterface, \SplObserver, \Serializable
+class Edge implements 
+    EntityInterface, 
+    EdgeInterface, 
+    \SplObserver, 
+    \Serializable,
+    Event\EmitterInterface
 {
     
     use SerializableTrait;
+    use Event\EmitterTrait;
     use EntityTrait {
-        EntityTrait::__construct as onEntityLoad;
-        EntityTrait::update as onEntityUpdate;
+        EntityTrait::__construct as ____construct;
     }
 
     /**
@@ -86,7 +93,7 @@ class Edge implements EntityInterface, EdgeInterface, \SplObserver, \Serializabl
      */
     public function __construct(NodeInterface $tail, ?NodeInterface $head = null, ?PredicateInterface $predicate = null) 
     {
-        $this->onEntityLoad();
+        $this->____construct();
 
         if(!is_null($head)) {
             $this->head = new HeadNode();
@@ -97,6 +104,7 @@ class Edge implements EntityInterface, EdgeInterface, \SplObserver, \Serializabl
         $this->tail = new TailNode();
         $this->tail->set($tail);
         $this->tail_id = (string) $tail->id();
+        $this->tail->emit("edge.created", [$this]);
 
         if(!is_null($head)) {
             $this->head->edges()->addIncoming($this);
@@ -138,6 +146,7 @@ class Edge implements EntityInterface, EdgeInterface, \SplObserver, \Serializabl
      */
     public function connect(NodeInterface $head): void
     {
+        $this->tail->emit("edge.connected", [$this]);
         $this->head = new HeadNode();
         $this->head->set($head);
         $this->head_id = (string) $head->id();
@@ -157,7 +166,7 @@ class Edge implements EntityInterface, EdgeInterface, \SplObserver, \Serializabl
         if(isset($this->head)) {
             return $this->head;
         } else {
-            return $this->hydratedHead();
+            return $this->hyHead();
         }
     }
 
@@ -180,7 +189,7 @@ class Edge implements EntityInterface, EdgeInterface, \SplObserver, \Serializabl
      *
      * @return NodeInterface
      */
-    protected function hydratedHead(): NodeInterface
+    protected function hyHead(): NodeInterface
     {
 
     }
@@ -193,7 +202,7 @@ class Edge implements EntityInterface, EdgeInterface, \SplObserver, \Serializabl
         if(isset($this->tail)) {
             return $this->tail;
         } else {
-            return $this->hydratedTail();
+            return $this->hyTail();
         }
     }
 
@@ -213,7 +222,7 @@ class Edge implements EntityInterface, EdgeInterface, \SplObserver, \Serializabl
      *
      * @return NodeInterface
      */
-    protected function hydratedTail(): NodeInterface
+    protected function hyTail(): NodeInterface
     {
 
     }
@@ -227,7 +236,7 @@ class Edge implements EntityInterface, EdgeInterface, \SplObserver, \Serializabl
         if(isset($this->predicate)) {
             return $this->predicate;
         } else {
-            return $this->hydratedPredicate();
+            return $this->hyPredicate();
         }
     }
 
@@ -239,7 +248,7 @@ class Edge implements EntityInterface, EdgeInterface, \SplObserver, \Serializabl
      *
      * @return PredicateInterface
      */
-    protected function hydratedPredicate(): PredicateInterface
+    protected function hyPredicate(): PredicateInterface
     {
 
     }
@@ -253,28 +262,13 @@ class Edge implements EntityInterface, EdgeInterface, \SplObserver, \Serializabl
     }
 
     /**
-     * Observed entities use this method to update the edge.
-     *
-     * @param \SplSubject $subject Updater.
-     *
-     * @return void
-     */
-    public function update(\SplSubject $subject): void
-    {
-        $this->onEntityUpdate($subject);
-        if($subject instanceof AttributeBag) {
-            $this->observeAttributeBagUpdate($subject);
-        }
-    }
-
-    /**
      * Tail Nodes use this method to update about deletion
      *
      * @param \SplSubject $subject Updater.
      *
      * @return void
      */
-    protected function observeTailNodeUpdate(\SplSubject $subject): void
+    protected function observeTailUpdate(\SplSubject $subject): void
     {
         if($this->predicate()->binding()) {
             $this->head()->destroy();

@@ -11,17 +11,8 @@
 
 namespace Pho\Lib\Graph;
 
-class ObserverPatternTest extends \PHPUnit\Framework\TestCase 
+class ObserverPatternTest extends TestCase 
 {
-    private $graph;
-
-    public function setUp() {
-        $this->graph = new Graph();
-    }
-
-    public function tearDown() {
-        unset($this->graph);
-    }
 
     /**
      * In this test we create a new anonymous class that extends Node.

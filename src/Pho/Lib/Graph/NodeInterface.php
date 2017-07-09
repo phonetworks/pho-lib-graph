@@ -88,7 +88,7 @@ interface NodeInterface
      * 
      * @return bool Yes or no.
      */
-    public function inDestruction(): bool;
+    public function inDeletion(): bool;
 
 
 }

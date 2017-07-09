@@ -31,6 +31,8 @@ namespace Pho\Lib\Graph;
 class AttributeBag implements \SplSubject
 {
 
+    use SplSubjectTrait;
+
     /**
      * Holds the attributes of a node in an array
      *
@@ -46,14 +48,6 @@ class AttributeBag implements \SplSubject
     private $owner;
 
     /**
-     * The observers of this object. 
-     * Normally just the owner.
-     *
-     * @var array
-     */
-    private $observers = array();
-
-    /**
      * Constructor.
      *
      * Parameter optional.
@@ -66,45 +60,6 @@ class AttributeBag implements \SplSubject
         $this->attach($this->owner);
         if(count($bag)>0) {
             $this->bag = $bag;
-        }
-    }
-
-    /**
-     * Adds a new observer to the object
-     * 
-     * @param \SplObserver $observer
-     * 
-     * @return void
-     */
-    public function attach(\SplObserver $observer): void 
-    {
-        $this->observers[] = $observer;
-    }
-    
-    /**
-     * Removes an observer from the object
-     * 
-     * @param \SplObserver $observer
-     * 
-     * @return void
-     */
-    public function detach(\SplObserver $observer): void 
-    {
-        $key = array_search($observer, $this->observers, true);
-        if($key) {
-            unset($this->observers[$key]);
-        }
-    }
-
-    /**
-     * Notifies observers about a change
-     * 
-     * @return void
-     */
-    public function notify(): void
-    {
-        foreach ($this->observers as $value) {
-            $value->update($this);
         }
     }
 
