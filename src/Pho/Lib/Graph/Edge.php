@@ -11,6 +11,8 @@
 
 namespace Pho\Lib\Graph;
 
+use Sabre\Event;
+
 /**
  * Atomic graph entity, Edge
  * 
@@ -28,13 +30,14 @@ class Edge implements
     EntityInterface, 
     EdgeInterface, 
     \SplObserver, 
-    \Serializable
+    \Serializable,
+    Event\EmitterInterface
 {
     
     use SerializableTrait;
+    use Event\EmitterTrait;
     use EntityTrait {
-        EntityTrait::__construct as onEntityLoad;
-        EntityTrait::update as onEntityUpdate;
+        EntityTrait::__construct as ____construct;
     }
 
     /**
@@ -90,7 +93,7 @@ class Edge implements
      */
     public function __construct(NodeInterface $tail, ?NodeInterface $head = null, ?PredicateInterface $predicate = null) 
     {
-        $this->onEntityLoad();
+        $this->____construct();
 
         if(!is_null($head)) {
             $this->head = new HeadNode();
@@ -101,7 +104,7 @@ class Edge implements
         $this->tail = new TailNode();
         $this->tail->set($tail);
         $this->tail_id = (string) $tail->id();
-        $this->tail->emit("edge.created", $this);
+        $this->tail->emit("edge.created", [$this]);
 
         if(!is_null($head)) {
             $this->head->edges()->addIncoming($this);
@@ -143,7 +146,7 @@ class Edge implements
      */
     public function connect(NodeInterface $head): void
     {
-        $this->tail->emit("edge.connected", $this);
+        $this->tail->emit("edge.connected", [$this]);
         $this->head = new HeadNode();
         $this->head->set($head);
         $this->head_id = (string) $head->id();
@@ -256,21 +259,6 @@ class Edge implements
     public function orphan(): bool
     {
         return empty($this->head_id);
-    }
-
-    /**
-     * Observed entities use this method to update the edge.
-     *
-     * @param \SplSubject $subject Updater.
-     *
-     * @return void
-     */
-    public function update(\SplSubject $subject): void
-    {
-        $this->onEntityUpdate($subject);
-        if($subject instanceof AttributeBag) {
-            $this->observeAttributeBagUpdate($subject);
-        }
     }
 
     /**

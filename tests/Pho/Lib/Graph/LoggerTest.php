@@ -11,18 +11,16 @@
 
 namespace Pho\Lib\Graph;
 
-class LoggerTest extends \PHPUnit\Framework\TestCase 
+class LoggerTest extends TestCase 
 {
-    private $graph;
-
     public function setUp() {
-        $this->graph = new Graph();
+        parent::setUp();
         Logger::setVerbosity(2);
     }
 
     public function tearDown() {
         Logger::setVerbosity(0);
-        unset($this->graph);
+        parent::tearDown();
     }
 
     public function testLog() {

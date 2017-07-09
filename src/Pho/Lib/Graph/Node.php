@@ -137,8 +137,8 @@ class Node implements
      */
     public function changeContext(GraphInterface $context): void
     {
-        $this->emit("node.modified");
-        $this->context->remove($this);
+        $this->emit("modified");
+        $this->context->remove($this->id());
         $this->context = $context;
         $this->context_id = $context->id();
         $this->context->add($this);
@@ -184,7 +184,7 @@ class Node implements
      */
     public function destroy(): void 
     {
-        $this->emit("node.deleting");
+        $this->emit("deleting");
         $this->in_deletion = true;
         $this->notify();
     }

@@ -11,19 +11,8 @@
 
 namespace Pho\Lib\Graph;
 
-class OrphanEdgeTest extends \PHPUnit\Framework\TestCase 
+class OrphanEdgeTest extends TestCase 
 {
-    private $graph;
-
-    public function setUp() {
-        $this->graph = new Graph();
-    }
-
-    public function tearDown() {
-        unset($this->graph);
-    }
-
-
     public function testOrphanEdge() {
         $node1 = new Node($this->graph);
         $node2 = new Node($this->graph);

@@ -11,18 +11,8 @@
 
 namespace Pho\Lib\Graph;
 
-class SimpleTest extends \PHPUnit\Framework\TestCase 
+class SimpleTest extends TestCase 
 {
-    private $graph;
-
-    public function setUp() {
-        $this->graph = new Graph();
-    }
-
-    public function tearDown() {
-        unset($this->graph);
-    }
-
     public function testGraphAddGet() {
         $node = new Node($this->graph);
         $node_expected_to_be_identical = $this->graph->get($node->id());
@@ -153,6 +143,26 @@ class SimpleTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($subgraph->id(), $node->context()->id());
     }
 
+    public function testChangeContextRecursive() 
+    {
+        $subgraph1 = new SubGraph($this->graph);
+        $subgraph2 = new SubGraph($this->graph);
+        $subsubgraph1 = new SubGraph($subgraph1);
+        $subsubgraph2 = new SubGraph($subgraph1);
+        $node = new Node($subsubgraph2);
+        $this->assertEquals($subsubgraph2->id(), $node->context()->id());
+        $this->assertFalse($subsubgraph1->contains($node->id()));
+        $this->assertFalse($subgraph2->contains($node->id()));
+        $this->assertTrue($subgraph1->contains($node->id()));
+        $this->assertTrue($this->graph->contains($node->id()));
+        $node->changeContext($subgraph2);
+        $this->assertTrue($this->graph->contains($node->id()));
+        $this->assertFalse($subgraph1->contains($node->id()));
+        $this->assertTrue($subgraph2->contains($node->id()));
+        $this->assertFalse($subsubgraph2->contains($node->id()));
+        $this->assertEquals($subgraph2->id(), $node->context()->id());
+    }
+
     public function testClusterLoadNodesFromIDArray()
     {
         $node1 =new Node($this->graph);
@@ -163,7 +173,7 @@ class SimpleTest extends \PHPUnit\Framework\TestCase
 
         $new_subgraph  = new SubGraph($this->graph);
         $new_subgraph->loadNodesFromIDArray($subgraph->toArray()["members"]);
-        $this->assertEquals(1, $new_subgraph->count()); // count(), not members() because we don't want hydratedMembers yet.
+        $this->assertEquals(1, $new_subgraph->count()); // count(), not members() because we don't want Members yet.
         $this->assertEquals(4, $this->graph->count()); // only the new sub_graph, not its members because of overwrite.
 
     }
@@ -191,8 +201,8 @@ class SimpleTest extends \PHPUnit\Framework\TestCase
         $node =new Node($this->graph);
         $subgraph = new SubGraph($this->graph);
         $edge = new Edge($node, $subgraph);
-        $this->assertEquals("node", $node->entityType());
-        $this->assertEquals("node", $subgraph->entityType());
-        $this->assertEquals("edge", $edge->entityType());
+        $this->assertEquals("node", $node->type());
+        $this->assertEquals("node", $subgraph->type());
+        $this->assertEquals("edge", $edge->type());
     }
 }

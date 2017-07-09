@@ -120,7 +120,7 @@ trait GraphTrait
                     $this->context()->remove($node_id);
                 } catch(\Exception $e) { /* ignore, that's fine */ }
             }
-            $this->emit("graph.modified", $this);
+            $this->emit("modified");
         }
     }
 

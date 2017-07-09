@@ -11,6 +11,8 @@
 
 namespace Pho\Lib\Graph;
 
+use Sabre\Event;
+
 /**
  * Graph contains nodes
  * 
@@ -23,10 +25,12 @@ namespace Pho\Lib\Graph;
 class Graph implements 
     GraphInterface, 
     \SplObserver, 
-    \Serializable
+    \Serializable, 
+    Event\EmitterInterface
 {
 
     use SerializableTrait;
+    use Event\EmitterTrait;
     use GraphTrait {
         GraphTrait::add as __add;
     }
@@ -35,7 +39,7 @@ class Graph implements
     {
         $node  = $this->__add($node);
         $this->emit("node.added", [$node]);
-        $this->emit("graph.modified", $this);
+        $this->emit("modified");
         return $node;
     }
 

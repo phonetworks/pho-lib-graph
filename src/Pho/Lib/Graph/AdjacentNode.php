@@ -167,4 +167,9 @@ class AdjacentNode implements
         $this->instance->inDeletion();
     }
 
+    public function emit(string $signal, array $params = []): void
+    {
+        $this->instance->emit($signal, $params);
+    }
+
 }

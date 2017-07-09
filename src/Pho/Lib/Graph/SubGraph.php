@@ -56,7 +56,7 @@ class SubGraph extends Node implements GraphInterface
      */
     public function toArray(): array
     {
-        return array_merge(parent::toArray(), $this->clusterToArray());
+        return array_merge(parent::toArray(), $this->graphToArray());
     }
 
     /**

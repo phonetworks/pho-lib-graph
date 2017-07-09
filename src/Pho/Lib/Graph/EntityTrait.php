@@ -130,8 +130,7 @@ trait EntityTrait
      */
     public function update(\SplSubject $subject): void
     {
-        if($subject instanceof AttributeBag && $this instanceof NodeInterface) {
-            $this->emit(sprintf("%s.modified", $this->entityType()));
+        if($subject instanceof AttributeBag /*&& $this instanceof NodeInterface*/) {
             $this->observeAttributeBagUpdate($subject);
         }
     }
@@ -145,7 +144,7 @@ trait EntityTrait
      * 
      * @return string "node", "edge" or "entity".
      */
-    public function entityType(): string
+    public function type(): string
     {
         if($this instanceof NodeInterface)
             return "node";
@@ -165,8 +164,7 @@ trait EntityTrait
      */
     protected function observeAttributeBagUpdate(\SplSubject $subject): void
     {
-        
+        $this->emit("modified");
     }
-
 
 }
