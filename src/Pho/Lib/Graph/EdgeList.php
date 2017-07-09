@@ -167,9 +167,7 @@ class EdgeList
         if($direction->equals(Direction::in())) {
             $this->addIncoming($edge);
         }
-        else {
-            $this->addOutgoing($edge);
-        }
+        $this->addOutgoing($edge);
     }
 
 
@@ -254,11 +252,9 @@ class EdgeList
         $d = (string) $direction;
 
         $hydrate = function (EncapsulatedEdge $encapsulated): EdgeInterface {
-            if(!$encapsulated->hydrated()) {
+            if(!$encapsulated->hydrated())
                 return $this->master->hyEdge($encapsulated->id());
-            } else {
-                return $encapsulated->edge();
-            }
+            return $encapsulated->edge();
         };
 
         $filter_classes = function (EncapsulatedEdge $encapsulated) use ($class): bool {
@@ -266,11 +262,16 @@ class EdgeList
         };
 
         if(empty($class)) {
-            return new \ArrayIterator(array_map($hydrate, $this->$d));
+            return new \ArrayIterator(
+                array_map($hydrate, $this->$d)
+            );
         }
-        else {
-            return new \ArrayIterator(array_map($hydrate, array_filter($this->$d, $filter_classes)));
-        }
+
+        return new \ArrayIterator(
+            array_map($hydrate, 
+                array_filter($this->$d, $filter_classes)
+            )
+        );
     }
 
     /**
@@ -356,11 +357,9 @@ class EdgeList
         $direction = (string) $direction;
 
         $hydrate = function (EncapsulatedEdge $encapsulated): EdgeInterface {
-            if(!$encapsulated->hydrated()) {
+            if(!$encapsulated->hydrated())
                 return $this->master->hyEdge($encapsulated->id());
-            } else {
-                return $encapsulated->edge();
-            }
+            return $encapsulated->edge();
         };
 
         $filter_classes = function (EncapsulatedEdge $encapsulated) use ($class): bool {
@@ -376,12 +375,10 @@ class EdgeList
                 array_map($hydrate, $this->$key[(string) $node_id])
             );
         }
-        else {
-            return new \ArrayIterator(
-                array_map($hydrate, array_filter($this->$key[(string) $node_id], $filter_classes))
-            );
-        }
-
+        
+        return new \ArrayIterator(
+            array_map($hydrate, array_filter($this->$key[(string) $node_id], $filter_classes))
+        );
     }
 
 }
