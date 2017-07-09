@@ -128,6 +128,6 @@ interface EntityInterface
      * 
      * @return bool
      */
-    public function emit(string $signal, array $params = [], /*?callable*/ $continueCallBack = null): bool;
+    public function emit(string $signal, array $params = [], ?callable $continueCallBack = null): bool;
 
 }
