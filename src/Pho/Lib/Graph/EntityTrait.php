@@ -95,7 +95,7 @@ trait EntityTrait
      */    
     public function destroy(): void
     {
-
+        $this->emit("deleting");
     }
 
     /**

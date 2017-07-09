@@ -219,21 +219,41 @@ Lib-Graph comes with "protected" methods that you can override to extend the fun
 
 #### For Graph and SubGraph:
 
-* **onAdd(NodeInterface $node)**: called at the end of ```add(NodeInterface $node)``` function. The return value is **void**.
-* **onRemove(ID $node_id)**: called at the end of ```remove(ID $node_id)``` function. The return value is **void**.
-* **hydratedGet(ID $node_id)**: called when ```get(ID $node_id)``` can't find the object in ```$nodes```. Enables you to access ```$node_ids``` to fetch the object from external sources. The return value is **NodeInterface**.
-* **hydratedMembers()**: called when ```members()``` can't find any objects in ```$nodes```. Enables you to access ```$node_ids``` to fetch the objects from external sources. The return value is **array** (of NodeInterface objects).
+* **hyGet(ID $node_id)**: called when ```get(ID $node_id)``` can't find the object in ```$nodes```. Enables you to access ```$node_ids``` to fetch the object from external sources. The return value is **NodeInterface**.
+* **hyMembers()**: called when ```members()``` can't find any objects in ```$nodes```. Enables you to access ```$node_ids``` to fetch the objects from external sources. The return value is **array** (of NodeInterface objects).
 
 #### For Edge:
 
-* **hydratedHead()**: called when ```head()``` can't find the head node. Enables you to access ```$head_id``` to fetch it from external sources. The return value is **NodeInterface**.
-* **hydratedTail()**: called when ```tail()``` can't find the tail node. Enables you to access ```$tail_id``` to fetch it from external sources. The return value is **NodeInterface**.
-* **hydratedPredicate()**: called when ```predicate()``` can't find the predicate object. Enables you to access ```$predicate_label``` to recreate it or fetch from external sources. The return value is **PredicateInterface**.
+* **hyHead()**: called when ```head()``` can't find the head node. Enables you to access ```$head_id``` to fetch it from external sources. The return value is **NodeInterface**.
+* **hyTail()**: called when ```tail()``` can't find the tail node. Enables you to access ```$tail_id``` to fetch it from external sources. The return value is **NodeInterface**.
+* **hyPredicate()**: called when ```predicate()``` can't find the predicate object. Enables you to access ```$predicate_label``` to recreate it or fetch from external sources. The return value is **PredicateInterface**.
 
 #### For Node and SubGraph:
 
-* **hydratedContext()**: called when ```context()``` can't find the context. Enables you to access ```$context_id``` to fetch it from external sources. The return value is **GraphInterface**.
-* **hydratedEdge(string $edge_id)**: called to retrieve an edge object from external sources. The return value must be an **EdgeInterface**
+* **hyContext()**: called when ```context()``` can't find the context. Enables you to access ```$context_id``` to fetch it from external sources. The return value is **GraphInterface**.
+* **hyEdge(string $edge_id)**: called to retrieve an edge object from external sources. The return value must be an **EdgeInterface**
+
+## Signals (aka Events)
+
+#### Graph
+* **node.added**: when a new node is added to the graph.
+* **modified**: when the graph is modified with a node addition or removal.
+
+#### Edge
+* **modified**: when the edge is modified either by connecting or by its attribute bag.
+* **deleting**: when the edge is being deleted.
+
+#### SubGraph
+* **modified**: when the subgraph is modified by its attribute bag.
+* **edge.created**: when there is a new edge originating from this subgraph.
+* **edge.connected**: when the orphan edge of this subgraph is connected to a head.
+* **deleting**: when the subgraph is being deleted.
+
+#### Node
+* **modified**: when the node is modified by its attribute bag.
+* **edge.created**: when there is a new edge originating from this node.
+* **edge.connected**: when the orphan edge of this node is connected to a head.
+* **deleting**: when the node is being deleted.
 
 ## Internals
 

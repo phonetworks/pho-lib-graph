@@ -118,6 +118,16 @@ interface EntityInterface
      */
     public function update(\SplSubject $subject): void;
 
-
+    /**
+     * Broadcasts a signal
+     *
+     * Enables an event-driven architecture.
+     * 
+     * @param string $signal
+     * @param array $params
+     * 
+     * @return bool
+     */
+    public function emit(string $signal, array $params = [], ?callable $continueCallBack = null): bool;
 
 }

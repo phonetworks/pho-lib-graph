@@ -46,6 +46,7 @@ class Node implements
     use SplSubjectTrait;
     use EntityTrait {
         EntityTrait::__construct as onEntityLoad;
+        EntityTrait::destroy as __destroy;
     }
     use Event\EmitterTrait;
 
@@ -184,7 +185,7 @@ class Node implements
      */
     public function destroy(): void 
     {
-        $this->emit("deleting");
+        $this->__destroy();
         $this->in_deletion = true;
         $this->notify();
     }
