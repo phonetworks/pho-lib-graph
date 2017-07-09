@@ -13,7 +13,7 @@ To get the diff between two versions, go to https://github.com/phonetworks/pho-l
 * Introduced SplSubjectTrait to amass common \SplSubject functions and variables. 
 * SplSubjectTrait in use by AttributeBag,
 * hydrated methods renamed with the new prefix; "hy"
-* Duplicate trait functions now use the "__" prefix as recommended by https://github.com/phonetworks/commons-php
+* Duplicate trait functions now use the "\_\_" prefix as recommended by https://github.com/phonetworks/commons-php
 * New "type()" function in EntityTrait
 * Signals emitted: "modified" in Graph, Edge, and Node.
 * ClusterTrait renamed as GraphTrait
