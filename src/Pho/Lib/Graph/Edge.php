@@ -28,6 +28,7 @@ use Sabre\Event;
  */
 class Edge implements 
     EntityInterface, 
+    EntityWorkerInterface,
     EdgeInterface, 
     \SplObserver, 
     \Serializable,

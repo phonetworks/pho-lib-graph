@@ -35,7 +35,9 @@ use Sabre\Event;
  */
 class Node implements 
     EntityInterface, 
+    EntityWorkerInterface,
     NodeInterface, 
+    NodeWorkerInterface,
     \SplObserver,  
     \SplSubject, 
     \Serializable, 

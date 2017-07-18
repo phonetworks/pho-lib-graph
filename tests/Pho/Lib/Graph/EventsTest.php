@@ -36,7 +36,9 @@ class EventsTest extends TestCase
                 $ref++;
         });
         $node2 = new Node($this->graph);
+        $this->assertEquals(0, $ref);
         $edge = new Edge($node1, $node2);
+        //eval(\Psy\sh());
         $this->assertEquals(1, $ref);
     } // Edge.php
 
