@@ -18,8 +18,9 @@ A graph consists of edges and nodes. In Pho architecture, the core components ed
 
 ![Architecture](https://github.com/phonetworks/pho-lib-graph/raw/master/.github/lib-graph-components.png "Pho LibGraph Architecture")
 
-> Pho is written in PHP 7. All files in pho-lib-graph (with the single exception of the EdgeList.php) are 
-> in strict mode enabled by default.
+> Graph illustration created with [yEd](https://www.yworks.com/products/yed).
+
+Pho is written in PHP 7. All files in pho-lib-graph (with the single exception of the EdgeList.php) are in strict mode enabled by default.
 
 ## Documentation
 
