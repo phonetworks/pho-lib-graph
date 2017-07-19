@@ -42,6 +42,21 @@ interface NodeWorkerInterface
     public function edges(): EdgeList;
 
     /**
+     * Retrieve Edge objects given its ID.
+     *
+     * Used in serialization. This function must be implemented for a higher level
+     * package with persistence. Otherwise it has no use and no function within
+     * pho-lib-graph.
+     * 
+     * @see edge 
+     *
+     * @param string $id The Edge ID in string format
+     *
+     * @return EdgeInterface
+     */
+    public function edge(string $id): EdgeInterface;
+
+    /**
      * Returns the context that this node is a member of.
      *
      * Contexts are GraphInterface objects that contain nodes.

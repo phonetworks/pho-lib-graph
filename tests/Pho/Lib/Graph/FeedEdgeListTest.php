@@ -258,9 +258,17 @@ class FeedEdgeListTest extends TestCase
     }
 
     public function testSerializeThenAddThenSerializeThenAddAgainForToFromBetween() {
+        $this->doSerializeThenAddThenSerializeThenAddAgainForToFromBetween($this->recreateNode($this->node1));
+    }
+
+    public function testSerializeThenAddThenSerializeThenAddAgainForToFromBetween_withHook() {
+        $this->doSerializeThenAddThenSerializeThenAddAgainForToFromBetween($this->recreateNodeWithHook($this->node1));
+    }
+    
+    private function doSerializeThenAddThenSerializeThenAddAgainForToFromBetween($node1) {
         $get_id = function($value) {return (string) $value->id();};
         $edge_list = $this->node1->edges();
-        $node1 = $this->recreateNode($this->node1);
+        
         $second_edge = new Edge($this->node2, $node1);
         $newer_edge_list = $node1->edges();
         //eval(\Psy\sh());
@@ -293,7 +301,7 @@ class FeedEdgeListTest extends TestCase
 
     private function recreateNode(NodeInterface $node, /*?array*/ $list = null) {
         $node1_mock = \Mockery::mock($node)->shouldAllowMockingProtectedMethods();
-        $node1_mock->shouldReceive("hyEdge")->andReturnUsing(function($id) {
+        $node1_mock->shouldReceive("edge")->andReturnUsing(function($id) {
             $random_edge = new Edge(new Node($this->graph), new Node($this->graph));
             $edge = \Mockery::mock($random_edge);
             $edge->shouldReceive("id")->andReturn(ID::fromString($id));
@@ -301,6 +309,17 @@ class FeedEdgeListTest extends TestCase
         });
         //$node1_mock = $this->recreatedEdgeList($node1_mock, true, (is_null($list) ? $node->edges()->toArray() : $list));
         $node1_mock->shouldReceive("edges")->andReturn(new EdgeList($node1_mock, (!is_null($list) ? $list : $node->edges()->toArray())));
+        return $node1_mock;
+    }
+
+    private function recreateNodeWithHook(NodeInterface $node, /*?array*/ $list = null) {
+        $node1_mock = $node;
+        $node1_mock->hook("edge", function($id) {
+            $random_edge = new Edge(new Node($this->graph), new Node($this->graph));
+            $edge = \Mockery::mock($random_edge);
+            $edge->shouldReceive("id")->andReturn(ID::fromString($id));
+            return $edge;
+        });
         return $node1_mock;
     }
 
