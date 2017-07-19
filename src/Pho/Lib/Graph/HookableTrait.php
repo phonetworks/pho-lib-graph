@@ -8,11 +8,9 @@ trait HookableTrait
 
     protected function hookable() //: mixed
     {
-        $caller = debug_backtrace(1);
-        if(!isset($caller["function"])||!isset($caller["args"]))
-            return;
-        $method = $caller["function"];
-        $args = $caller["args"];
+        $caller = debug_backtrace(false);
+        $method = $caller[1]["function"];
+        $args = $caller[1]["args"];
         if(!isset($this->hooks[$method])) {
             return;
         }
@@ -35,4 +33,6 @@ trait HookableTrait
     {
         unset($this->hooks[$method]);
     }
+
+    public function hooks() { return $this->hooks; }
 }
