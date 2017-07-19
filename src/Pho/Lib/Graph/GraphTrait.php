@@ -22,6 +22,8 @@ namespace Pho\Lib\Graph;
 trait GraphTrait
 {
 
+    use HookableTrait;
+
     /**
      * Holds nodes in ID => NodeInterface format
      *
@@ -80,23 +82,8 @@ trait GraphTrait
         }
         if(isset($this->nodes[(string) $node_id])) {
             return $this->nodes[(string) $node_id];
-        } else {
-            return $this->hyGet($node_id);
         }
-    }
-
-
-    /**
-     * A protected method that enables higher-level packages
-     * to provide persistence for the get() call.
-     * 
-     * @see get() 
-     *
-     * @return NodeInterface
-     */
-    protected function hyGet(ID $node_id): NodeInterface
-    {
-
+        return $this->hookable();
     }
 
     /**
@@ -134,9 +121,8 @@ trait GraphTrait
             return [];
         } else if(count($this->nodes) == count($this->node_ids)) {
             return $this->nodes;
-        } else {
-            return $this->hyMembers();
         }
+        return $this->hookable();
     }
 
     /**
@@ -146,20 +132,6 @@ trait GraphTrait
     {
         return count($this->node_ids);
     }
-
-    /**
-     * A protected method that enables higher-level packages
-     * to provide persistence for the members() call.
-     * 
-     * @see members() 
-     *
-     * @return array
-     */
-    protected function hyMembers(): array
-    {
-
-    }
-
    
     /**
      * {@inheritdoc}

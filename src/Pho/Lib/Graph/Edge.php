@@ -30,6 +30,7 @@ class Edge implements
     EntityInterface, 
     EntityWorkerInterface,
     EdgeInterface, 
+    HookableInterface,
     \SplObserver, 
     \Serializable,
     Event\EmitterInterface
@@ -40,6 +41,7 @@ class Edge implements
     use EntityTrait {
         EntityTrait::__construct as ____construct;
     }
+    use HookableTrait;
 
     /**
      * Tail node. Where this originates from.
@@ -166,9 +168,8 @@ class Edge implements
 
         if(isset($this->head)) {
             return $this->head;
-        } else {
-            return $this->hyHead();
-        }
+        } 
+        return $this->hookable();
     }
 
     /**
@@ -183,28 +184,14 @@ class Edge implements
     }
 
     /**
-     * A protected method that enables higher-level packages
-     * to provide persistence for the head() call.
-     * 
-     * @see head() 
-     *
-     * @return NodeInterface
-     */
-    protected function hyHead(): NodeInterface
-    {
-
-    }
-
-    /**
      * {@inheritdoc}
      */
     public function tail(): NodeInterface
     {
         if(isset($this->tail)) {
             return $this->tail;
-        } else {
-            return $this->hyTail();
-        }
+        } 
+        return $this->hookable();
     }
 
     /**
@@ -216,42 +203,14 @@ class Edge implements
     }
 
     /**
-     * A protected method that enables higher-level packages
-     * to provide persistence for the tail() call.
-     * 
-     * @see tail() 
-     *
-     * @return NodeInterface
-     */
-    protected function hyTail(): NodeInterface
-    {
-
-    }
-
-
-    /**
      * {@inheritdoc}
      */
     public function predicate(): PredicateInterface
     {
         if(isset($this->predicate)) {
             return $this->predicate;
-        } else {
-            return $this->hyPredicate();
-        }
-    }
-
-    /**
-     * A protected method that enables higher-level packages
-     * to provide persistence for the predicate() call.
-     * 
-     * @see predicate() 
-     *
-     * @return PredicateInterface
-     */
-    protected function hyPredicate(): PredicateInterface
-    {
-
+        } 
+        return $this->hookable();
     }
 
     /**

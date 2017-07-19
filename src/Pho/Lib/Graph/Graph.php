@@ -23,7 +23,8 @@ use Sabre\Event;
  * @author Emre Sokullu <emre@phonetworks.org>
  */
 class Graph implements 
-    GraphInterface, 
+    GraphInterface,
+    HookableInterface, 
     \SplObserver, 
     \Serializable, 
     Event\EmitterInterface

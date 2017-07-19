@@ -38,6 +38,7 @@ class Node implements
     EntityWorkerInterface,
     NodeInterface, 
     NodeWorkerInterface,
+    HookableInterface,
     \SplObserver,  
     \SplSubject, 
     \Serializable, 
@@ -50,6 +51,7 @@ class Node implements
         EntityTrait::__construct as onEntityLoad;
         EntityTrait::destroy as __destroy;
     }
+    use HookableTrait;
     use Event\EmitterTrait;
 
     /**
@@ -117,22 +119,8 @@ class Node implements
     {
         if(isset($this->context)) {
             return $this->context;
-        } else {
-            return $this->hyContext();
-        }
-    }
-
-    /**
-     * A protected method that enables higher-level packages
-     * to provide persistence for the context() call.
-     * 
-     * @see context() 
-     *
-     * @return GraphInterface
-     */
-    protected function hyContext(): GraphInterface
-    {
-
+        } 
+        return $this->hookable();
     }
 
     /**
@@ -167,19 +155,11 @@ class Node implements
     }
 
     /**
-     * Retrieve Edge objects given its ID.
-     *
-     * Used in serialization.
-     * 
-     * @see edge 
-     *
-     * @param string $id The Edge ID in string format
-     *
-     * @return EdgeInterface
+     * {@inheritDoc}
      */
-    public function hyEdge(string $id): EdgeInterface
+    public function edge(string $id): EdgeInterface
     {
-
+        return $this->hookable();
     }
 
     /**
