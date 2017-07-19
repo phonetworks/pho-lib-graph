@@ -27,7 +27,7 @@ To get the diff between two versions, go to https://github.com/phonetworks/pho-l
 * Updated travis.yml to work with PHP 7.1
 * Introduced worker interfaces (NodeWorkerInterface and EntityWorkerInterface) to improve the readability of AdjacentNode.php
 
-### 4.2 to 5.0
+### 4.1 to 5.0
 
 * Introduction of "hooks" -- to replace hy\* (hydrating) functions.
 * Making of the new docs/ folder and refactoring of the README.md
