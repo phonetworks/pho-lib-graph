@@ -14,8 +14,7 @@ trait HookableTrait
         if(!isset($this->hooks[$method])) {
             return;
         }
-        $this->hooks[$method]->bindTo($this);
-        return $this->hooks[$method](...$args);
+        return $this->hooks[$method]->call($this, ...$args);
     }
 
     /**
