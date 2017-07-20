@@ -107,7 +107,6 @@ class Edge implements
         $this->tail = new TailNode();
         $this->tail->set($tail);
         $this->tail_id = (string) $tail->id();
-        $this->tail->emit("edge.created", [$this]);
 
         if(!is_null($head)) {
             $this->head->edges()->addIncoming($this);
@@ -115,6 +114,7 @@ class Edge implements
         }
         $this->predicate = $this->resolvePredicate($predicate, Predicate::class);
         $this->predicate_label = (string) $this->predicate;
+        $this->tail->emit("edge.created", [$this]);
     }
 
     protected function resolvePredicate(?PredicateInterface $predicate, string $fallback): PredicateInterface
@@ -149,12 +149,12 @@ class Edge implements
      */
     public function connect(NodeInterface $head): void
     {
-        $this->tail->emit("edge.connected", [$this]);
         $this->head = new HeadNode();
         $this->head->set($head);
         $this->head_id = (string) $head->id();
         $this->head()->edges()->addIncoming($this);
         $this->tail()->edges()->addOutgoing($this);
+        $this->tail->emit("edge.connected", [$this]);
     }
 
     /**
