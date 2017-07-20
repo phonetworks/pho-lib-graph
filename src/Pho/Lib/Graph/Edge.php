@@ -127,7 +127,7 @@ class Edge implements
             return $reflector->implementsInterface(PredicateInterface::class);
         };
 
-        if(!is_null($predicate)) {
+        if(!is_null($predicate) && $is_a_predicate(get_class($predicate)) ) {
             return $predicate;
         }
         else {
