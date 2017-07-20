@@ -113,11 +113,11 @@ class Edge implements
             $this->head->edges()->addIncoming($this);
             $this->tail->edges()->addOutgoing($this);
         }
-        $this->predicate = $this->_resolvePredicate($predicate, Predicate::class);
+        $this->predicate = $this->resolvePredicate($predicate, Predicate::class);
         $this->predicate_label = (string) $this->predicate;
     }
 
-    protected function _resolvePredicate(?PredicateInterface $predicate, string $fallback): PredicateInterface
+    protected function resolvePredicate(?PredicateInterface $predicate, string $fallback): PredicateInterface
     {
         $is_a_predicate = function(string $class_name): bool
         {
