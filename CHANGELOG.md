@@ -1,8 +1,10 @@
-## CHANGELOG
+# CHANGELOG
 
-This changelog references the relevant changes (bug and security fixes) done in 4.0 minor versions.
+This changelog references the relevant changes (bug and security fixes) introduced with version 4.0 and beyond.
 
 To get the diff for a specific change, go to https://github.com/phonetworks/pho-lib-graph/commit/XXX where XXX is the change hash.
+
+## 3.6 tp 4.0
 
 To get the diff between two versions, go to https://github.com/phonetworks/pho-lib-graph/compare/v4.0.0...v3.6.1
 
@@ -22,12 +24,12 @@ To get the diff between two versions, go to https://github.com/phonetworks/pho-l
 * In Node.php populateGraphObservers() renamed as attachGraphObservers()
 * Added new unit tests.
 
-### 4.0 to 4.1
+## 4.0 to 4.1
 
 * Updated travis.yml to work with PHP 7.1
 * Introduced worker interfaces (NodeWorkerInterface and EntityWorkerInterface) to improve the readability of AdjacentNode.php
 
-### 4.1 to 5.0
+## 4.1 to 5.0
 
 * Introduction of "hooks" -- to replace hy\* (hydrating) functions.
 * Making of the new docs/ folder and refactoring of the README.md
