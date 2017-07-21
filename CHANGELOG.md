@@ -33,3 +33,7 @@ To get the diff between two versions, go to https://github.com/phonetworks/pho-l
 
 * Introduction of "hooks" -- to replace hy\* (hydrating) functions.
 * Making of the new docs/ folder and refactoring of the README.md
+
+## 5.0 to 5.1
+
+* AbstractEdge Helper method renamed (\_resolvePredicate is now resolvePredicate)
