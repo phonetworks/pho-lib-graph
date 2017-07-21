@@ -4,7 +4,7 @@ This changelog references the relevant changes (bug and security fixes) introduc
 
 To get the diff for a specific change, go to https://github.com/phonetworks/pho-lib-graph/commit/XXX where XXX is the change hash.
 
-## 3.6 tp 4.0
+## 3.6 to 4.0
 
 To get the diff between two versions, go to https://github.com/phonetworks/pho-lib-graph/compare/v4.0.0...v3.6.1
 
