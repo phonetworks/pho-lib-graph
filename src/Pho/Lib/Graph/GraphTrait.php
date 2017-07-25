@@ -48,6 +48,7 @@ trait GraphTrait
         }
         $this->node_ids[] = (string) $node->id();
         $this->nodes[(string) $node->id()] = $node;
+        $this->emit("modified");
         return $node;
     }
 
