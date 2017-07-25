@@ -128,11 +128,11 @@ class Node implements
      */
     public function changeContext(GraphInterface $context): void
     {
-        $this->emit("modified");
         $this->context->remove($this->id());
         $this->context = $context;
         $this->context_id = $context->id();
         $this->context->add($this);
+        $this->emit("modified");
     }
     
     /**
