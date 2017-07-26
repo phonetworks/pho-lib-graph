@@ -165,6 +165,7 @@ class EdgeList
             $edge_encapsulated = EncapsulatedEdge::fromEdge($edge);
             $this->from[(string) $edge->tail()->id()][(string) $edge->id()] = $edge_encapsulated;
             $this->in[(string) $edge->id()] = $edge_encapsulated;
+            $this->master->emit("modified");
     }
 
     /**
@@ -181,6 +182,7 @@ class EdgeList
             $edge_encapsulated = EncapsulatedEdge::fromEdge($edge);
             $this->to[(string) $edge->head()->id()][(string) $edge->id()] = $edge_encapsulated;
             $this->out[(string) $edge->id()] = $edge_encapsulated;
+            $this->master->emit("modified");
     }
 
 
