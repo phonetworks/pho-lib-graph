@@ -28,6 +28,24 @@ class EventsTest extends TestCase
         $this->assertEquals(1, $num_ref);
     }
 
+    public function testNodeQuietSet() {
+        $num_ref = 0;
+        $node = new Node($this->graph);
+        $node->on("modified", function() use (&$num_ref) {
+                $num_ref++;
+        });
+        $this->assertEquals(0, $num_ref);
+        $node->attributes()->key1 = "value";
+        $this->assertEquals(1, $num_ref);
+        $this->assertEquals("value", $node->attributes()->key1);
+        $node->attributes()->quietSet("key2", "value");
+        $this->assertEquals(1, $num_ref);
+        $this->assertEquals("value", $node->attributes()->key2);
+        $node->attributes()->key3 = "value";
+        $this->assertEquals(2, $num_ref);
+        $this->assertEquals("value", $node->attributes()->key3);
+    }
+
     public function testEdgeCreated() { 
         $ref = 0;
         $node1 = new Node($this->graph);

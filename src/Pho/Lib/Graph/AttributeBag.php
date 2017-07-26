@@ -108,6 +108,8 @@ class AttributeBag implements \SplSubject
      * @internal
      * Sets up a key/value pair
      *
+     * @see silent() for a silent version of this.
+     * 
      * @param string            $attribute
      * @param string|bool|array $value
      * 
@@ -117,6 +119,21 @@ class AttributeBag implements \SplSubject
     {
         $this->bag[$attribute] = $value;
         $this->notify();
+    }
+
+    /**
+     * Silent setter
+     * 
+     * Sets a value without notifying the master object.
+     * 
+     * @param string            $attribute
+     * @param string|bool|array $value
+     * 
+     * @return void
+     */
+    public function quietSet(string $attribute, /*string|bool|array*/ $value): void
+    {
+        $this->bag[$attribute] = $value;
     }
 
     /**
