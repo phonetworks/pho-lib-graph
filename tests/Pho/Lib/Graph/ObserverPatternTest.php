@@ -23,9 +23,12 @@ class ObserverPatternTest extends TestCase
     public function testNodeAttributeSet() {
         $node = new class($this->graph) extends Node {
             public $node_updated = false;
-            protected function observeAttributeBagUpdate(\SplSubject $subject): void
+            public function __construct($graph)
                 {
-                    $this->node_updated = true;
+                    parent::__construct($graph);
+                    $this->on("modified", function() {
+                        $this->node_updated = true;
+                    });
                 }
         };
         $node->attributes()->attribute = "value";
