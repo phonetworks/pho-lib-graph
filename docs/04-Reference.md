@@ -44,10 +44,12 @@ EntityInterface constitutes the basis of both Node and Edge objects. Most import
 NodeInterface extends EntityInterface, and adds two things:
 1. A reference to its context (a GraphInterface object) where it was created. So this is either a Graph or a SubGraph.
 2. It holds edges accessible via **edges()** call.
+3. It holds attributes accessible via **attributes()** call.
 
 | Method        | Param(s)              | Description                                                        | Returns        |
 | ------------- | --------------------- | ------------------------------------------------------------------ | -------------- |
 | edges         |                       | Retrieves the EdgeList object that interfaces its edges.           | EdgeList       |
+| attributes    |                       | Retrieves the AttributeBag object                                  | AttributeBag    |
 | context       |                       | Retrieves its context                                              | GraphInterface |
 | inDestruction |                       | Reserved to use by observers to understand the state of the node.  | bool           |
 <!--| join         | GraphInterface $graph | Adds the node to the given graph                         | void           |-->
@@ -96,3 +98,25 @@ You can list edges via:
 | to       | ID $node_id, string $class="" | Lists edges from this node to the node in question        | \\ArrayIterator\<EdgeInterface\> |
 | from     | ID $node_id, string $class="" | Lists edges to this node from the node in question        | \\ArrayIterator\<EdgeInterface\> |
 | between  | ID $node_id, string $class="" | Lists edges in between this node and the node in question | \\ArrayIterator\<EdgeInterface\> |
+
+
+## AttributeBag
+
+Holds entity (node and edge) attributes. It works similarly to stdObject in the sense, you set a value simply by:
+
+```php
+$node->attributes()->key = "value";
+```
+
+Standard methods like ```isset()``` and ```unset()``` also works as expected:
+
+```php
+$node->attributes()->key = "value";
+if(isset($node->attributes()->key)) 
+    echo $node->attributes()->key; // prints "value"
+unset($node->attributes()->key); // it is unset now.
+```
+
+The difference (from stdObject) is that it also notifies its master object with changes, emitting the "modified" signal.
+
+In order to set a value without triggering a "modified" signal, one may use the ```quietSet(string $key, mixed $value): void``` method.
