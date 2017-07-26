@@ -150,27 +150,6 @@ class EdgeList
 
         return $array;
     }
-    
-
-    /**
-     * Adds a new edge to the list.
-     * 
-     * The edge must be already initialized.
-     *
-     * @param Direction direction
-     * @param EdgeInterface       $edge
-     * 
-     * @return void
-     */
-    public function add(Direction $direction, EdgeInterface $edge): void 
-    {   
-        if($direction->equals(Direction::in())) {
-            $this->addIncoming($edge);
-        }
-        $this->addOutgoing($edge);
-    }
-
-
 
     /**
      * Adds an incoming edge to the list.
@@ -209,7 +188,7 @@ class EdgeList
      * Returns a list of all the edges directed towards
      * this particular node.
      *
-     * @see _retrieve Used by this method to fetch objects.
+     * @see retrieve Used by this method to fetch objects.
      *
      * @param string $class The type of edge (defined in edge class) to return
      *
@@ -217,14 +196,14 @@ class EdgeList
      */
     public function in(string $class=""): \ArrayIterator 
     {
-        return $this->_retrieve(Direction::in(), $class);
+        return $this->retrieve(Direction::in(), $class);
     }
 
     /**
      * Returns a list of all the edges originating from
      * this particular node.
      *
-     * @see _retrieve Used by this method to fetch objects.
+     * @see retrieve Used by this method to fetch objects.
      *
      * @param string $class The type of edge (defined in edge class) to return
      *
@@ -232,7 +211,7 @@ class EdgeList
      */
     public function out(string $class=""): \ArrayIterator 
     {
-        return $this->_retrieve(Direction::out(), $class);
+        return $this->retrieve(Direction::out(), $class);
     }
 
 
@@ -247,7 +226,7 @@ class EdgeList
      * 
      * @return \ArrayIterator An array of EdgeInterface objects.
      */
-    protected function _retrieve(Direction $direction, string $class): \ArrayIterator
+    protected function retrieve(Direction $direction, string $class): \ArrayIterator
     {
         $d = (string) $direction;
 
@@ -303,7 +282,7 @@ class EdgeList
      */
     public function to(ID $node_id, string $class=""): \ArrayIterator 
     {
-        return $this->_retrieveDirected(Direction::out(), $node_id, $class);
+        return $this->retrieveDirected(Direction::out(), $node_id, $class);
     }
 
     /**
@@ -317,7 +296,7 @@ class EdgeList
      */
     public function from(ID $node_id, string $class=""): \ArrayIterator
     {
-        return $this->_retrieveDirected(Direction::in(), $node_id, $class);
+        return $this->retrieveDirected(Direction::in(), $node_id, $class);
     }
 
     /**
@@ -351,7 +330,7 @@ class EdgeList
      * 
      * @return \ArrayIterator An array of EdgeInterface objects.
      */
-    protected function _retrieveDirected(Direction $direction, ID $node_id, string $class): \ArrayIterator
+    protected function retrieveDirected(Direction $direction, ID $node_id, string $class): \ArrayIterator
     {
         $key = $direction->equals(Direction::in()) ? "from" : "to";
         $direction = (string) $direction;
