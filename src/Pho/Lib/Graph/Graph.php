@@ -32,18 +32,7 @@ class Graph implements
 
     use SerializableTrait;
     use Event\EmitterTrait;
-    use GraphTrait {
-        GraphTrait::add as __add;
-    }
-
-    public function add(NodeInterface $node): NodeInterface
-    {
-        $node  = $this->__add($node);
-        $this->emit("node.added", [$node]);
-        $this->emit("modified");
-        return $node;
-    }
-
+    use GraphTrait;
 
     /**
      * {@inheritdoc}
