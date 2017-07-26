@@ -131,7 +131,7 @@ trait EntityTrait
     public function update(\SplSubject $subject): void
     {
         if($subject instanceof AttributeBag /*&& $this instanceof NodeInterface*/) {
-            $this->observeAttributeBagUpdate($subject);
+            $this->emit("modified");
         }
     }
 
@@ -152,19 +152,6 @@ trait EntityTrait
             return "edge";
         else 
             return "entity";
-    }
-
-
-    /**
-     * Attribute Bags use this method to update about setters
-     *
-     * @param \SplSubject $subject Updater.
-     *
-     * @return void
-     */
-    protected function observeAttributeBagUpdate(\SplSubject $subject): void
-    {
-        $this->emit("modified");
     }
 
 }
