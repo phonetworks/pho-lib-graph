@@ -38,14 +38,14 @@ class AttributeBag implements \SplSubject
      *
      * @var array
      */
-    private $bag = [];
+    protected $bag = [];
 
     /**
      * The entity (node or graph) that this bag belongs to.
      *
      * @var EntityInterface
      */
-    private $owner;
+    protected $owner;
 
     /**
      * Constructor.
