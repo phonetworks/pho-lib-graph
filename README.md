@@ -27,6 +27,9 @@ If a predicate is binding, should the edge's tail node is deleted, not only the 
 **3. What is an orphan edge?**
 An edge that does not have its head node (this edgelists for neither tail node nor head node are formed) is called an orphan edge. These are incomplete structures and programmers are not advised to use them. You can connect an orphan edge to its head with the ```connect(NodeInterface $node)``` method.
 
+**4. What is a multiplicable predicate?**
+An edge with multiplicable predicate may be created multiple times between a particular pair of head and tail nodes.
+
 
 ## License
 
