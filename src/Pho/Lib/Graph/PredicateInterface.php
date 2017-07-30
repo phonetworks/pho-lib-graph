@@ -14,6 +14,8 @@ namespace Pho\Lib\Graph;
 /**
  * Interface for the Predicate class.
  * 
+ * @todo directed()
+ * 
  * @see Predicate
  * 
  * @author Emre Sokullu <emre@phonetworks.org>
@@ -33,7 +35,16 @@ interface PredicateInterface
      */
     public function binding(): bool;
 
-    
+    /**
+     * Checks if the predicate is multiplicable.
+     *
+     * If a predicate is multiplicable, its edge may be
+     * created multiple times between a particular tail
+     * and a particular head.
+     * 
+     * @return bool
+     */
+    public function multiplicable(): bool;
 
     /**
      * Returns the full class name

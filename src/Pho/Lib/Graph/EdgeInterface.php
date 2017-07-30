@@ -82,6 +82,9 @@ interface EdgeInterface
      * @param NodeInterface $head Head node.
      *
      * @return void
+     * 
+     * @throws Exceptions\DuplicateEdgeException when it's not a multiplicable edge and there's an attempt to create multiple edges between a particular pair of head and tail nodes.
+     * @throws Exceptions\EdgeAlreadyConnected when it's already connected to a node.
      */
     public function connect(NodeInterface $head): void;
 

@@ -277,8 +277,8 @@ class EdgeList
      * Retrieves a list of edges from the list's owner node to the given 
      * target node.
      *
+     * @param ID $node_id   Target (head) node.
      * @param string        $class The type of edge (defined in edge class) to return
-     * @param NodeInterface $node  Target (head) node.
      *
      * @return \ArrayIterator An array of edge objects to. Returns an empty array if there is no such connections.
      */
@@ -291,8 +291,8 @@ class EdgeList
      * Retrieves a list of edges to the list's owner node from the given 
      * source node.
      *
+     * @param ID $node_id   Source (tail) node.
      * @param string        $class The type of edge (defined in edge class) to return
-     * @param NodeInterface $node  Source (tail) node.
      *
      * @return \ArrayIterator An array of edge objects from. Returns an empty array if there is no such connections.
      */
@@ -305,8 +305,8 @@ class EdgeList
      * Retrieves a list of edges between the list's owner node and the given 
      * node.
      *
+     * @param ID $node_id      The other node.
      * @param string        $class The type of edge (defined in edge class) to return
-     * @param NodeInterface $node  The other node.
      *
      * @return \ArrayIterator An array of edge objects in between. Returns an empty array if there is no such connections.
      */

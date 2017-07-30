@@ -90,12 +90,23 @@ class Edge implements
     /**
      * Constructor.
      *
-     * @param NodeInterface      $tail
-     * @param PredicateInterface $predicate
-     * @param NodeInterface      $head
+     * @param NodeInterface      $tail The node where this edge originates from.
+     * @param ?NodeInterface      $head The node where this edge is targeted at. Default: null.
+     * @param ?PredicateInterface $predicate The predicate of this edge. Default: null.
+     * 
+     * @throws Exceptions\DuplicateEdgeException when it's not a multiplicable edge and there's an attempt to create multiple edges between a particular pair of head and tail nodes.
      */
     public function __construct(NodeInterface $tail, ?NodeInterface $head = null, ?PredicateInterface $predicate = null) 
     {
+        $this->predicate = $this->resolvePredicate($predicate, Predicate::class);
+
+        if( !$this->predicate->multiplicable() 
+            && !is_null($head) 
+            && $tail->edges()->to($head->id(), get_class($this))->count() != 0
+        ) {
+            throw new Exceptions\DuplicateEdgeException($tail, $head, get_class($this));
+        }
+
         $this->____construct();
 
         if(!is_null($head)) {
@@ -112,11 +123,22 @@ class Edge implements
             $this->head->edges()->addIncoming($this);
             $this->tail->edges()->addOutgoing($this);
         }
-        $this->predicate = $this->resolvePredicate($predicate, Predicate::class);
+        
         $this->predicate_label = (string) $this->predicate;
         $this->tail->emit("edge.created", [$this]);
     }
 
+    /**
+     * Resolves the predicate of this class.
+     * 
+     * The predicate may be given. Or it may be resolved by the name of this class. Or it may be given
+     * a fallback. As a last resort, it may use the Predicate class available in pho-lib-graph.
+     *
+     * @param PredicateInterface|null $predicate Predicate may be given.
+     * @param string $fallback or the fallback class may be given, asking the method find something more specific if available.
+     * 
+     * @return PredicateInterface A predicate object.
+     */
     protected function resolvePredicate(?PredicateInterface $predicate, string $fallback): PredicateInterface
     {
         $is_a_predicate = function(string $class_name): bool
@@ -149,6 +171,12 @@ class Edge implements
      */
     public function connect(NodeInterface $head): void
     {
+        if(!$this->orphan()) {
+            throw new Exceptions\EdgeAlreadyConnectedException($this, $this->head->node());
+        }
+        if( $this->tail->node()->edges()->to($head->id(), get_class($this))->count() != 0 ) {
+            throw new Exceptions\DuplicateEdgeException($this->tail->node(), $head, get_class($this));
+        }
         $this->head = new HeadNode();
         $this->head->set($head);
         $this->head_id = (string) $head->id();

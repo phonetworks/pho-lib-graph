@@ -23,11 +23,25 @@ class Predicate implements PredicateInterface
     /**
      * Holds the binding value.
      * 
-     * In this generic implementation, we set it false.
+     * In this generic implementation, it is set false.
+     * An edge with a binding predicate would have its 
+     * head deleted when the edge itself is destroyed.
      *
      * @var boolean
      */
     protected $binding = false;
+
+    /**
+     * Holds the multiplicable value.
+     * 
+     * In this generic implementation, it is set false.
+     * An edge with a multiplicable predicate can be
+     * created multiple times from a particular tail
+     * to a particular head.
+     *
+     * @var boolean
+     */
+    protected $multiplicable = true;
 
     /**
      * {@inheritdoc}
@@ -35,6 +49,14 @@ class Predicate implements PredicateInterface
     public function binding(): bool
     {
         return $this->binding; 
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function multiplicable(): bool
+    {
+        return $this->multiplicable; 
     }
 
     /**
