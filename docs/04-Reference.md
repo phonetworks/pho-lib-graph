@@ -70,10 +70,11 @@ NodeInterface extends EntityInterface, and adds two things:
 
  ## PredicateInterface
  
- | Method  | Parameter(s) | Description                                              | Returns               |
- | ------- | -------------| -------------------------------------------------------- | --------------------- |
- | binding |              | Whether the edge is binding [\*\*]                       | bool                  |
- | label   |              | The class name, in lower case.                           | string                |
+ | Method        | Parameter(s) | Description                                                          | Returns             |
+ | ------------- | -------------| -------------------------------------------------------------------- | ------------------- |
+ | binding       |              | Whether the edge is binding [\*\*]                                   | bool                |
+ | multiplicable |              | Whether multiple edges (of same type) may be found between two nodes | bool                |
+ | label         |              | The class name, in lower case.                                       | string              |
  
  > [\*] Possible values are 0, 1 or 2. In Predicate class constant form. 0: R_DEFAULT, 1: R_REFLECTIVE, 2: R_CONSUMER
 
