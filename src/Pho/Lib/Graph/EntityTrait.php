@@ -154,4 +154,16 @@ trait EntityTrait
             return "entity";
     }
 
+    /**
+     * Turns the object into string
+     *
+     * Returns its ID in string format
+     * 
+     * @return string The ID
+     */
+    public function __toString(): string
+    {
+        return (string) $this->id();
+    }
+
 }
