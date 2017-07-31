@@ -37,3 +37,15 @@ To get the diff between two versions, go to https://github.com/phonetworks/pho-l
 ## 5.0 to 5.1
 
 * AbstractEdge Helper method renamed (\_resolvePredicate is now resolvePredicate)
+
+## 5.1 to 5.2
+
+* Major code cleanup in EdgeList
+
+## 5.2 to 5.3
+
+* AttributeBag quietSet method.
+
+## 5.3 to 5.4
+
+* multiplicable predicates
