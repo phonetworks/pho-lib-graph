@@ -33,7 +33,7 @@ EntityInterface constitutes the basis of both Node and Edge objects. Most import
 | id            |                         | Retrieves its ID               | ID                   |
 | label         |                         | Returns the class name         | string               |
 | isA           | string $class_name      | Validates object class         | bool                 |
-| attributes    | ID $node_id             | Returns the attributes class   | AttributeBag         |
+| attributes    |                         | Returns the attributes class   | AttributeBag         |
 | *destroy*[\*] |                         | Readies object for destruction | void                 |
 | toArray       |                         | Lists member ref.s in ID form  | array                |
 
@@ -46,13 +46,11 @@ NodeInterface extends EntityInterface, and adds two things:
 2. It holds edges accessible via **edges()** call.
 3. It holds attributes accessible via **attributes()** call.
 
-| Method        | Param(s)              | Description                                                        | Returns        |
+| Method        | Param(s)              | Description                                                        | Returns        | 
 | ------------- | --------------------- | ------------------------------------------------------------------ | -------------- |
 | edges         |                       | Retrieves the EdgeList object that interfaces its edges.           | EdgeList       |
-| attributes    |                       | Retrieves the AttributeBag object                                  | AttributeBag    |
-| context       |                       | Retrieves its context                                              | GraphInterface |
-| inDestruction |                       | Reserved to use by observers to understand the state of the node.  | bool           |
-<!--| join         | GraphInterface $graph | Adds the node to the given graph                         | void           |-->
+| context       |                       | Retrieves its context                                              | GraphInterface | 
+| inDestruction |                       | Reserved to use by observers to understand the state of the node.  | bool           |        
 
 ## EdgeInterface
 
