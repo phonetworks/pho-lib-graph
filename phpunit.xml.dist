@@ -9,7 +9,7 @@
 
     <testsuites>
         <testsuite name="Pho Lib Graph Test Suite">
-            <directory>./tests/</directory>=
+            <directory>./tests/</directory>
         </testsuite>
     </testsuites>
 
