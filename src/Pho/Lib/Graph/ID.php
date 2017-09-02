@@ -126,13 +126,13 @@ class ID
      * 
      * @return ID The ID in object format
      * 
-     * @throws Exceptions\MalformedGraphIDException thrown when the given ID is not a valid UUIDv4
+     * @throws Exceptions\MalformedIDException thrown when the given ID is not a valid UUIDv4
      */
     public static function fromString(string $id): ID
     {
         $uuid_format = '/^[0-9A-F]{32}$/i';
         if(!preg_match($uuid_format, $id)) {
-            throw new Exceptions\MalformedGraphIDException($id);
+            throw new Exceptions\MalformedIDException($id);
         }
         return new ID($id);
     }

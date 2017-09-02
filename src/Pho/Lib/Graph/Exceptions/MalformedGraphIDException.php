@@ -5,13 +5,13 @@ namespace Pho\Lib\Graph\Exceptions;
 use Pho\Lib\Graph;
 
 /**
- * Thrown when the given ID is not a valid UUIDv4.
+ * Thrown when the given ID is not a valid Pho ID.
  * 
  * @see https://en.wikipedia.org/wiki/Universally_unique_identifier For more information about the UUID format.
  * 
  * @author Emre Sokullu <emre@phonetworks.org>
  */
-class MalformedGraphIDException extends \Exception
+class MalformedIDException extends \Exception
 {
     /**
      * Constructor.
