@@ -91,6 +91,7 @@ class ID
      * Fetches entity header.
      * 
      * Entity headers will be as follows:
+     * 
      * * 0: Graph
      * * 1: Unidentified Node
      * * 2: SubGraph Node

@@ -143,4 +143,11 @@ interface GraphInterface
     public function loadNodesFromIDArray(array $node_ids): void;
 
 
+    /**
+     * Whether the graph should emit node addition right away.
+     *
+     * @return bool
+     */
+    public function canEmitNodeAddSignals(): bool;
+
 }
