@@ -127,12 +127,13 @@ class ID
             return 1;
         }
         elseif($entity instanceof Edge) {
+            // order is important
             if($entity instanceof \Pho\Framework\ObjectOut\Mention)
                 return 10;
-            elseif($entity instanceof \Pho\Framework\ActorOut\Subscribe)
-                return 9;
             elseif($entity instanceof \Pho\Framework\ActorOut\Write)
                 return 8;
+            elseif($entity instanceof \Pho\Framework\ActorOut\Subscribe)
+                return 9;
             elseif($entity instanceof \Pho\Framework\ActorOut\Read)
                 return 7;
             return 6;
