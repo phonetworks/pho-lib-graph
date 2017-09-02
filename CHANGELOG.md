@@ -53,3 +53,7 @@ To get the diff between two versions, go to https://github.com/phonetworks/pho-l
 ## 5.4 to 6.0
 
 * New ID format, replacing UUIDv4 with a similar format with more entropy (15 bytes) and an entity-type definition header of 1 byte.
+
+## 6.0 to 6.1
+
+* MalformedGraphIDException renamed as MalformedIDException
