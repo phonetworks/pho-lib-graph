@@ -54,7 +54,7 @@ trait EntityTrait
      */
     public function __construct()
     {
-        $this->id = ID::generate();
+        $this->id = ID::generate($this);
         $this->attributes = new AttributeBag($this);
     }
 
