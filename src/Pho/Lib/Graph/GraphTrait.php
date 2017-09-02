@@ -48,9 +48,18 @@ trait GraphTrait
         }
         $this->node_ids[] = (string) $node->id();
         $this->nodes[(string) $node->id()] = $node;
-        $this->emit("node.added", [$node]);
+        if($this->canEmitNodeAddSignals()) // sometimes this is not the preferred way
+            $this->emit("node.added", [$node]);
         $this->emit("modified");
         return $node;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function canEmitNodeAddSignals(): bool
+    {
+        return $this->context()->canEmitNodeAddSignals();
     }
 
     /**

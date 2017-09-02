@@ -77,8 +77,9 @@ class ID
     public static function generate(EntityInterface $entity): ID
     {
         return new ID(
-            sprintf("%s%s", 
+            sprintf("%x%x%s", 
                 self::header($entity), 
+                rand(0,15),
                 bin2hex(
                     random_bytes(15)
                 )
@@ -90,31 +91,52 @@ class ID
      * Fetches entity header.
      * 
      * Entity headers will be as follows:
-     * * 00: Graph
-     * * 01-7f: Node
-     * * 80-ff: Edge
-     * 
-     * Within Nodes:
-     * * 01-2a: Subgraph (43)
-     * * 2b-56: Actor (86)
-     * * 57-7f: Object (128)
+     * * 0: Graph
+     * * 1: Unidentified Node
+     * * 2: SubGraph Node
+     * * 3: Framework\Graph Node
+     * * 4: Actor Node
+     * * 5: Object Node
+     * * 6: Unidentified Edge
+     * * 7: Read Edge
+     * * 8: Write Edge
+     * * 9: Subscribe Edge
+     * * 10: Mention Edge
+     * * 11: Unidentified
      * 
      * This method may be overriden by packages at higher levels.
      * The purpose of headers is to enable easy/fast classification
      * of entitities by looking up the first byte of the UUID.
      * 
      * @param EntityInterface $entity
-     * @return string
+     * 
+     * @return int 1-11 depending on entity type
      */
-    protected static function header(EntityInterface $entity): string
+    protected static function header(EntityInterface $entity): int
     {
-        if($entity instanceof Edge)
-            return "80";
-        elseif($entity instanceof SubGraph)
-            return "01";
-        // Node. Example
-        //0: graph, 1-43 subgraph, 43-86-128 node (actor, object), 128-256 edge 
-        return "2b";
+        if($entity instanceof Node) {
+            if($entity instanceof \Pho\Framework\Object)
+                return 5;
+            elseif($entity instanceof \Pho\Framework\Actor)
+                return 4;
+            elseif($entity instanceof \Pho\Framework\Graph)
+                return 3;
+            elseif($entity instanceof SubGraph)
+                return 2;
+            return 1;
+        }
+        elseif($entity instanceof Edge) {
+            if($entity instanceof \Pho\Framework\ObjectOut\Mention)
+                return 10;
+            elseif($entity instanceof \Pho\Framework\ActorOut\Subscribe)
+                return 9;
+            elseif($entity instanceof \Pho\Framework\ActorOut\Write)
+                return 8;
+            elseif($entity instanceof \Pho\Framework\ActorOut\Read)
+                return 7;
+            return 6;
+        }
+        return 11;
     }
 
     /**

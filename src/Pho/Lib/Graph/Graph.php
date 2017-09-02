@@ -35,6 +35,23 @@ class Graph implements
     use GraphTrait;
 
     /**
+     * Whether the graph and its subgraphs emit node addition.
+     *
+     * @var boolean
+     */
+    protected $emit_node_add_signal = true;
+
+    /**
+     * Constructor.
+     *
+     * @param bool $defer_signals
+     */
+    public function __construct(bool $emit_node_add_signal = true)
+    {
+        $this->emit_node_add_signal  = $emit_node_add_signal; 
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function id(): ID
@@ -47,4 +64,12 @@ class Graph implements
         $this->observeNodeDeletion($node);
     }
     
+    /**
+     * {@inheritDoc}
+     */
+    public function canEmitNodeAddSignals(): bool
+    {
+        return (bool) $this->emit_node_add_signal;
+    }
+
 }
