@@ -103,7 +103,8 @@ class SimpleTest extends TestCase
     }
 
     public function testID() {
-        $id1 = ID::generate();
+        $node = new Node($this->graph);
+        $id1 = ID::generate($node);
         $id2 = ID::fromString((string)$id1);
         $this->assertEquals($id1, $id2);
     }

@@ -64,14 +64,33 @@ class ID
      *
      * @return ID  Random uuid in guid v4 format in ID object format.
      */
-    public static function generate(): ID
+    public static function generate(EntityInterface $entity): ID
     {
+        /*
         $data = random_bytes(16);
         $data[6] = chr(ord($data[6]) & 0x0f | 0x40); // set version to 0100
         $data[8] = chr(ord($data[8]) & 0x3f | 0x80); // set bits 6-7 to 10
         return new ID(vsprintf('%s%s-%s-%s-%s-%s%s%s', str_split(bin2hex($data), 4)));
+        */
+        return new ID(
+            sprintf("%s%s", 
+                self::header($entity), 
+                bin2hex(
+                    random_bytes(15)
+                )
+            )
+        );
     }
 
+    protected static function header(EntityInterface $entity): string
+    {
+        if($entity instanceof Edge)
+            return "80";
+        elseif($entity instanceof SubGraph)
+            return "01";
+        // Node //0: graph, 1-43 subgraph, 43-86-128 node (actor, object), 128-256 edge 
+        return "2b";
+    }
 
     /**
      * Loads a UUIDv4 with the given string
@@ -86,7 +105,8 @@ class ID
      */
     public static function fromString(string $id): ID
     {
-        $uuid_format = '/^[0-9A-F]{8}-[0-9A-F]{4}-4[0-9A-F]{3}-[89AB][0-9A-F]{3}-[0-9A-F]{12}$/i';
+        //$uuid_format = '/^[0-9A-F]{8}-[0-9A-F]{4}-4[0-9A-F]{3}-[89AB][0-9A-F]{3}-[0-9A-F]{12}$/i';
+        $uuid_format = '/^[0-9A-F]{32}$/i';
         if(!preg_match($uuid_format, $id)) {
             throw new Exceptions\MalformedGraphIDException($id);
         }
@@ -103,7 +123,9 @@ class ID
      */
     public static function root(): ID
     {
-        return new ID(".");
+        //return new ID(".");
+        // for($i=0;$i<32;$i++) echo 0;
+        return new ID("00000000000000000000000000000000");
     }
 
     /**
