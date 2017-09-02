@@ -14,20 +14,25 @@ namespace Pho\Lib\Graph;
 /**
  * Immutable, cryptographically secure identifier
  * 
- * Pho IDs are immutable and come in the format of cryptographically secure 
- * {@link https://en.wikipedia.org/wiki/Universally_unique_identifier UUIDv4}
+ * Pho IDs are immutable and come in the format of cryptographically secure,
+ * similarly to 
+ * {@link https://en.wikipedia.org/wiki/Universally_unique_identifier UUIDv4},
+ * though not the same.
  * 
  * Pho IDs are used to define all graph entities, e.g nodes and edges.
+ * It is 16 bytes (128 bits) long similar to UUID, but the first byte is
+ * reserved to determine entity type, while the UUID variants are omitted.
+ * Hence, Pho ID provides 15 bytes of randomness.
  * 
- * The only ID that doesn't conform with the UUID format is the Graph ID
- * which is by default set to be a period (.) and it may be called as 
- * ```ID::root()```
+ * The Graph ID defaults to nil (00000000000000000000000000000000), or 32 chars
+ * of 0. It may may be called with ```ID::root()```
  * 
  * Even at scale of billions of nodes and edges, the chances of collision 
  * is identical to zero.
  * 
- * You can generate a new ID with ```$id_object = ID::generate()``` and fetch its 
- * string representation with PHP type-casting; ```(string) $id_object```.
+ * You can generate a new ID with ```$id_object = ID::generate($entity)```, 
+ * where $entity is any Pho entity, and fetch its  string representation with 
+ * PHP type-casting; ```(string) $id_object```.
  * 
  * @author Emre Sokullu <emre@phonetworks.org>
  */
@@ -35,7 +40,7 @@ class ID
 {
     
     /**
-     * UUIDV4
+     * Pho ID in string.
      *
      * @var string
      */
@@ -58,20 +63,19 @@ class ID
     }
 
     /**
-     * Generates a cryptographically secure random UUID(v4) for internal use.
+     * Generates a cryptographically secure random ID for internal use.
      *
+     * Pho ID does not conform to UUID standards. It is similar to UUID v4, 
+     * however it does not use the same variants at same locations. Instead,
+     * the first byte is reserved for entity type, and the remaining 15 is 
+     * used for randomness.
+     * 
      * @link https://en.wikipedia.org/wiki/Universally_unique_identifier UUIDv4 format
      *
-     * @return ID  Random uuid in guid v4 format in ID object format.
+     * @return ID  Random ID in object format.
      */
     public static function generate(EntityInterface $entity): ID
     {
-        /*
-        $data = random_bytes(16);
-        $data[6] = chr(ord($data[6]) & 0x0f | 0x40); // set version to 0100
-        $data[8] = chr(ord($data[8]) & 0x3f | 0x80); // set bits 6-7 to 10
-        return new ID(vsprintf('%s%s-%s-%s-%s-%s%s%s', str_split(bin2hex($data), 4)));
-        */
         return new ID(
             sprintf("%s%s", 
                 self::header($entity), 
@@ -82,30 +86,50 @@ class ID
         );
     }
 
+    /**
+     * Fetches entity header.
+     * 
+     * Entity headers will be as follows:
+     * * 00: Graph
+     * * 01-7f: Node
+     * * 80-ff: Edge
+     * 
+     * Within Nodes:
+     * * 01-2a: Subgraph (43)
+     * * 2b-56: Actor (86)
+     * * 57-7f: Object (128)
+     * 
+     * This method may be overriden by packages at higher levels.
+     * The purpose of headers is to enable easy/fast classification
+     * of entitities by looking up the first byte of the UUID.
+     * 
+     * @param EntityInterface $entity
+     * @return string
+     */
     protected static function header(EntityInterface $entity): string
     {
         if($entity instanceof Edge)
             return "80";
         elseif($entity instanceof SubGraph)
             return "01";
-        // Node //0: graph, 1-43 subgraph, 43-86-128 node (actor, object), 128-256 edge 
+        // Node. Example
+        //0: graph, 1-43 subgraph, 43-86-128 node (actor, object), 128-256 edge 
         return "2b";
     }
 
     /**
-     * Loads a UUIDv4 with the given string
+     * Loads a Pho ID with the given string
      * 
      * Checks the validity of the string and throws an exception if it is not valid.
      *
-     * @param string $id Must be in UUIDv4 format.
+     * @param string $id Must consist of 32 hexadecimal characters.
      * 
-     * @return void Given UUIDv4 in ID object format.
+     * @return ID The ID in object format
      * 
-     * @throws Exceptions\InvalidGraphIDException thrown when the given ID is not a valid UUIDv4
+     * @throws Exceptions\MalformedGraphIDException thrown when the given ID is not a valid UUIDv4
      */
     public static function fromString(string $id): ID
     {
-        //$uuid_format = '/^[0-9A-F]{8}-[0-9A-F]{4}-4[0-9A-F]{3}-[89AB][0-9A-F]{3}-[0-9A-F]{12}$/i';
         $uuid_format = '/^[0-9A-F]{32}$/i';
         if(!preg_match($uuid_format, $id)) {
             throw new Exceptions\MalformedGraphIDException($id);
@@ -123,8 +147,6 @@ class ID
      */
     public static function root(): ID
     {
-        //return new ID(".");
-        // for($i=0;$i<32;$i++) echo 0;
         return new ID("00000000000000000000000000000000");
     }
 
