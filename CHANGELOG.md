@@ -57,3 +57,7 @@ To get the diff between two versions, go to https://github.com/phonetworks/pho-l
 ## 6.0 to 6.1
 
 * MalformedGraphIDException renamed as MalformedIDException
+
+## 6.1 to 6.2
+
+* ID randomness changed from 15 bytes to 15 bytes and 8 bits.
