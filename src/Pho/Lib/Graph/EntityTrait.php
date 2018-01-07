@@ -112,8 +112,9 @@ trait EntityTrait
     protected function entityToArray(): array
     {
         return [
-           "id" => (string) $this->id,
-            "attributes" => $this->attributes->toArray()
+                "id" => (string) $this->id,
+                "label" => $this->label(),
+                "attributes" => $this->attributes->toArray()
         ];
     }
 
