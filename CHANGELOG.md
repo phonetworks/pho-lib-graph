@@ -61,3 +61,8 @@ To get the diff between two versions, go to https://github.com/phonetworks/pho-l
 ## 6.1 to 6.2
 
 * ID randomness changed from 15 bytes to 15 bytes and 8 bits.
+
+
+## 6.3 to 6.4
+
+* added ```delete``` method to EdgeList.
