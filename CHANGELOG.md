@@ -62,6 +62,9 @@ To get the diff between two versions, go to https://github.com/phonetworks/pho-l
 
 * ID randomness changed from 15 bytes to 15 bytes and 8 bits.
 
+## 6.2 to 6.3
+
+* toArray now returns label as well
 
 ## 6.3 to 6.4
 
