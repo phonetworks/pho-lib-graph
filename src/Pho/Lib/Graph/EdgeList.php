@@ -79,6 +79,20 @@ class EdgeList
         $this->import($data);
     }
 
+    public function delete(ID $id): void
+    {
+        $id = (string) $id;
+        foreach($this->from as $key=>$val) {
+            unset($this->from[$key][$id]);
+        }
+        foreach($this->to as $key=>$val) {
+            unset($this->to[$key][$id]);
+        }
+        unset($this->in[$id]);
+        unset($this->out[$id]);
+        $this->master->emit("modified");
+    }
+
     /**
      * Imports data from given array source
      *
