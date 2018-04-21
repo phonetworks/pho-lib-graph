@@ -126,6 +126,9 @@ class Edge implements
         
         $this->predicate_label = (string) $this->predicate;
         $this->tail->emit("edge.created", [$this]);
+        if(!is_null($head)) {
+            $this->head->emit("edge.connected", [$this]);
+        }
     }
 
     /**
@@ -182,7 +185,7 @@ class Edge implements
         $this->head_id = (string) $head->id();
         $this->head()->edges()->addIncoming($this);
         $this->tail()->edges()->addOutgoing($this);
-        $this->tail->emit("edge.connected", [$this]);
+        $this->head->emit("edge.connected", [$this]);
     }
 
     /**
