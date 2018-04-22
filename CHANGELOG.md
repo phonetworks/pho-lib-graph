@@ -69,3 +69,7 @@ To get the diff between two versions, go to https://github.com/phonetworks/pho-l
 ## 6.3 to 6.4
 
 * added ```delete``` method to EdgeList.
+
+## 6.4 to 6.5
+
+* subgraphs are encompassing. See b0d5ba83faaab1da1a12827c07206e9a8a4013fd
