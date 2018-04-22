@@ -40,17 +40,44 @@ trait GraphTrait
 
     /**
      * {@inheritdoc}
+     * 
+     * should be able to change context of  $node if $node's context is 
      */
-    public function add(NodeInterface $node): NodeInterface
+    public function add(NodeInterface $node, bool $skip_signals = false): NodeInterface
     {
         if($this->contains($node->id())) {
             throw new Exceptions\NodeAlreadyMemberException($node, $this);
         }
         $this->node_ids[] = (string) $node->id();
         $this->nodes[(string) $node->id()] = $node;
-        if($this->canEmitNodeAddSignals()) // sometimes this is not the preferred way
-            $this->emit("node.added", [$node]);
-        $this->emit("modified");
+        if($node instanceof GraphInterface) {
+            foreach($node->members() as $member) {
+                try {
+                    $this->add($member, true);
+                }
+                catch(Exceptions\NodeAlreadyMemberException $e) { /* ignore */ }
+            }
+            $node->on("node.added", function(NodeInterface $subnode) {
+                try {
+                    $this->add($subnode);
+                }
+                catch(Exceptions\NodeAlreadyMemberException $e) { /* ignore */ }
+            });
+            $node->on("node.removed", function(ID $id) {
+                $this->remove($id);
+            });
+        }
+        if(!$this instanceof Graph) {
+            try {
+                $this->context()->add($node);
+            }
+            catch(Exceptions\NodeAlreadyMemberException $e) { /* ignore */ }
+        }
+        if(!$skip_signals) {
+            if($this->canEmitNodeAddSignals()) // sometimes this is not the preferred way
+                $this->emit("node.added", [$node]);
+            $this->emit("modified");
+        }
         return $node;
     }
 
@@ -119,6 +146,7 @@ trait GraphTrait
                 } catch(\Exception $e) { /* ignore, that's fine */ }
             }
             $this->emit("modified");
+            $this->emit("node.removed", [$node_id]);
         }
     }
 
