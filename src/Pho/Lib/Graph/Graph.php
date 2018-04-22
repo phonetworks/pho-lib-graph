@@ -61,7 +61,10 @@ class Graph implements
 
     public function update(\SplSubject $node): void
     {
-        $this->observeNodeDeletion($node);
+        if($subject->inDeletion())
+            $this->observeNodeDeletion($node);
+        else 
+            $this->observeNodeAddition($node);
     }
     
     /**

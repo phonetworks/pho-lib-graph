@@ -57,21 +57,17 @@ trait GraphTrait
                 }
                 catch(Exceptions\NodeAlreadyMemberException $e) { /* ignore */ }
             }
-            $node->on("node.added", function(NodeInterface $subnode) {
-                try {
-                    $this->add($subnode);
-                }
-                catch(Exceptions\NodeAlreadyMemberException $e) { /* ignore */ }
-            });
-            $node->on("node.removed", function(ID $id) {
-                $this->remove($id);
-            });
+            $node->attach($this);
+            $this->notify();
         }
         if(!$this instanceof Graph) {
             try {
                 $this->context()->add($node);
             }
             catch(Exceptions\NodeAlreadyMemberException $e) { /* ignore */ }
+        }
+        if($this instanceof SubGraph) {
+            //$this->notify();
         }
         if(!$skip_signals) {
             if($this->canEmitNodeAddSignals()) // sometimes this is not the preferred way
@@ -207,6 +203,11 @@ trait GraphTrait
     protected function observeNodeDeletion(\SplSubject $node): void
     {
         $this->remove($node->id());
+    }
+
+    protected function observeNodeAddition(\SplSubject $node): void
+    {
+        $this->add($node->id());
     }
 
 }

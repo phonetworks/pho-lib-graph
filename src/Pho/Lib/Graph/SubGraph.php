@@ -64,12 +64,15 @@ class SubGraph extends Node implements GraphInterface
      */
     public function update(\SplSubject $subject): void
     {
-        if($subject instanceof NodeInterface && $subject->inDeletion()) {
-            $this->observeNodeDeletion($subject);
+        if($subject instanceof NodeInterface) {
+            if($subject->inDeletion()) {
+                $this->observeNodeDeletion($subject);
+                return;
+            }
+            $this->observeNodeAddition($subject);
+            return;
         }
-        else {
-            parent::update($subject);
-        }
+        parent::update($subject); // must be AttributeBag
     }
 
 }
