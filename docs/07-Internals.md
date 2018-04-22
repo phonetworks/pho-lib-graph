@@ -22,3 +22,29 @@ To sum up; the observers can be classified as follows, with observers in rows ve
 3. For deletion and notifying the Edge so that the edge and possibly head node are also deleted.
 
 \[\*\] Please note TailNode extends Node, hence it will also notify all classes that Node notifies -- although in a separate context, for a different function.
+
+
+To put it in context, here's how Subject and Observer work:
+
+## AttributeBag (as Subject)
+
+#### \_\_construct:
+
+```
+$this->attach($this->owner);
+```
+
+#### \_\_set:
+
+```
+$this->notify();
+```
+
+## EntityTrait (as Observer)
+
+#### update(\\SplSubject $subject)
+
+```
+if($subject instanceof AttributeBag) 
+  $this->emit("modified");
+```
