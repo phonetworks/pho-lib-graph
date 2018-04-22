@@ -15,12 +15,12 @@ Signals are events emitted by pho-lib-graph on certain critical points:
 * **node.added**: when a new node is added to the graph.
 * **node.removed**: when a node is removed from the graph.
 * **modified**: when the subgraph is modified by its attribute bag.
-* **edge.created**: when there is a new edge originating from this subgraph.
-* **edge.connected**: when the orphan edge of this subgraph is connected to a head.
+* **edge.created**: when there is a new edge originating from this subgraph. (triggered by tail)
+* **edge.connected**: triggered by head, when an orphan edge is connected to them.
 * **deleting**: when the subgraph is being deleted.
 
 ## Node
 * **modified**: when the node is modified by its attribute bag.
 * **edge.created**: when there is a new edge originating from this node.
-* **edge.connected**: when the orphan edge of this node is connected to a head.
+* **edge.connected**: triggered by head, when an orphan edge is connected to them.
 * **deleting**: when the node is being deleted.
