@@ -14,8 +14,37 @@ namespace Pho\Lib\Graph;
 class EncompassingGraph extends TestCase 
 {
 
+    public function testAddAndRemoval() {
+        $subgraph1 = new SubGraph($this->graph);
+        $subgraph2 = new SubGraph($this->graph);
+        $node =new Node($subgraph1);
+        $this->assertCount(1, $subgraph1->members());
+        $this->assertCount(0, $subgraph2->members());
+        $this->assertCount(3, $this->graph->members());
+        $subgraph1->remove($node->id());
+        $this->assertCount(0, $subgraph1->members());
+        $this->assertCount(0, $subgraph2->members());
+        $this->assertCount(2, $this->graph->members());
+        $node =new Node($subgraph1);
+        $this->assertCount(1, $subgraph1->members());
+        $this->assertCount(0, $subgraph2->members());
+        $this->assertCount(3, $this->graph->members());
+        $subgraph2->add($subgraph1);
+        $this->assertCount(1, $subgraph1->members());
+        $this->assertCount(2, $subgraph2->members());
+        $this->assertCount(3, $this->graph->members());
+        $subgraph1->remove($node->id());
+        $this->assertCount(0, $subgraph1->members());
+        $this->assertCount(1, $subgraph2->members()); // PROBLEM
+        $this->assertCount(2, $this->graph->members());
+        $node =new Node($subgraph2);
+        $this->assertCount(0, $subgraph1->members());
+        $this->assertCount(2, $subgraph2->members());
+        $this->assertCount(3, $this->graph->members());
+    }
 
-    public function testGraphContains() {
+
+    public function testRecursiveSubGraphs() {
         $subgraph1 = new SubGraph($this->graph);
         $subgraph2 = new SubGraph($this->graph);
         $node =new Node($subgraph1);
@@ -51,7 +80,7 @@ class EncompassingGraph extends TestCase
     }
 
     /**
-     * @depends testGraphContains
+     * @depends testRecursiveSubGraphs
      */
     public function testGraphRemove(array $graph_elements)
     {
