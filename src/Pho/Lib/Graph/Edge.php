@@ -134,9 +134,7 @@ class Edge implements
 
     public function init(): void
     {
-        $this->tail->on("deleting", function() {
-            $this->observeTailDestruction();
-        });
+        $this->tail->on("deleting", \Closure::fromCallable([$this, "observeTailDestruction"]));
         $this->__init();
     }
 

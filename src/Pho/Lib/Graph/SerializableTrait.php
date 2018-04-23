@@ -19,25 +19,24 @@ namespace Pho\Lib\Graph;
  */
 trait SerializableTrait
 {
-
     /**
      * @internal
      *
-     * Used for serialization. Nothing special here. Declared for 
-     * subclasses.
+     * Used for serialization. 
+     * Removes listeners.
      *
      * @return string in PHP serialized format.
      */
     public function serialize(): string 
     {
-        return serialize(get_object_vars($this));
+        $vars = get_object_vars($this);
+        return serialize($vars);
     }
 
     /**
      * @internal
      *
-     * Used for deserialization. Nothing special here. Declared for 
-     * subclasses.
+     * Used for deserialization. Calls ```init``` method.
      *
      * @param string $data 
      *
@@ -47,7 +46,7 @@ trait SerializableTrait
     {
         $values = unserialize($data);
         foreach ($values as $key=>$value) {
-            $this->$key = $value;
+                $this->$key = $value;
         }
     }
 }

@@ -118,9 +118,7 @@ class AttributeBag implements Event\EmitterInterface
     public function __set(string $attribute, /*string|bool|array*/ $value): void
     {
         $this->bag[$attribute] = $value;
-        //$this->notify();
-        error_log("bacak");
-        $this->emit("modified", [true]);
+        $this->emit("modified");
     }
 
     /**
@@ -136,7 +134,6 @@ class AttributeBag implements Event\EmitterInterface
     public function quietSet(string $attribute, /*string|bool|array*/ $value): void
     {
         $this->bag[$attribute] = $value;
-        $this->emit("modified", [false]);
     }
 
     /**
@@ -150,8 +147,7 @@ class AttributeBag implements Event\EmitterInterface
     public function __unset(string $attribute): void
     {
         unset($this->bag[$attribute]);
-        $this->emit("modified", [true]);
-        //$this->notify();
+        $this->emit("modified");
     }
 
 }

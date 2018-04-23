@@ -30,10 +30,7 @@ class AdjacentNode implements
     NodeInterface, 
     EntityInterface
 {
-
     private $instance;
-
-    
 
     /**
      * Sets the node instance that this 

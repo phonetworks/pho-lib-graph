@@ -44,9 +44,7 @@ trait GraphTrait
     public function init(): void 
     {
         foreach($this->nodes as $node) {
-            $node->on("deleting", function(ID $id) {
-                $this->remove($id);
-            });
+            $node->on("deleting", \Closure::fromCallable([$this, "remove"]));
         }
     }
 
@@ -55,32 +53,22 @@ trait GraphTrait
      * 
      * should be able to change context of  $node if $node's context is 
      */
-    public function add(NodeInterface $node, bool $skip_signals = false): NodeInterface
+    public function add(NodeInterface $node, bool $skip_signals = false, $active_exceptions = false): NodeInterface
     {
         if($this->contains($node->id())) {
-            throw new Exceptions\NodeAlreadyMemberException($node, $this);
+            if($active_exceptions)
+                throw new Exceptions\NodeAlreadyMemberException($node, $this);
+            return $node;
         }
         $this->node_ids[] = (string) $node->id();
         $this->nodes[(string) $node->id()] = $node;
-        $node->on("deleting", function(ID $id) {
-            $this->remove($id);
-        });
+        $node->on("deleting", \Closure::fromCallable([$this, "remove"]));
         if($node instanceof GraphInterface) {
             foreach($node->members() as $member) {
-                try {
-                    $this->add($member, true);
-                }
-                catch(Exceptions\NodeAlreadyMemberException $e) { /* ignore */ }
+                $this->add($member, true);
             }
-            $node->on("node.added", function(NodeInterface $subnode) {
-                try {
-                    $this->add($subnode);
-                }
-                catch(Exceptions\NodeAlreadyMemberException $e) { /* ignore */ }
-            });
-            $node->on("node.removed", function(ID $id) {
-                $this->remove($id);
-            });
+            $node->on("node.added", \Closure::fromCallable([$this, "add"]));
+            $node->on("node.removed", \Closure::fromCallable([$this, "remove"]));
         }
         if(!$this instanceof Graph) {
             try {

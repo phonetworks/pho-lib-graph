@@ -63,10 +63,19 @@ trait EntityTrait
      */
     public function init(): void
     {
-        $this->attributes->on("modified", function($passthrough=true) {
-            if($passthrough)
-                $this->emit("modified");
-        });
+        $this->attributes->on("modified", \Closure::fromCallable([$this, "emitModified"]));
+    }
+
+    /**
+     * Emits modified signal
+     * 
+     * Needed for Closure::fromCallable function
+     *
+     * @return void
+     */
+    protected function emitModified(): void
+    {
+        $this->emit("modified");
     }
 
     /**

@@ -41,9 +41,9 @@ class ObserverPatternTest extends TestCase
         $node2 = new Node($subgraph);
         $this->assertCount(3, $this->graph->members());
         $this->assertCount(1, $subgraph->members());
-        //$node1->destroy();
-        //$this->assertCount(2, $this->graph->members());
-        //$this->assertCount(1, $subgraph->members());
+        $node1->destroy();
+        $this->assertCount(2, $this->graph->members());
+        $this->assertCount(1, $subgraph->members());
     }
 
 }

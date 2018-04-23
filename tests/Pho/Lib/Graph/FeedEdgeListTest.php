@@ -11,19 +11,18 @@
 
 namespace Pho\Lib\Graph;
 
+use DeepCopy\DeepCopy;
+
 class FeedEdgeListTest extends TestCase 
 {
     private $node1, $node2, $edge;
-    private $edge_store;
 
     public function setUp() {
         parent::setUp();
+        $copier = new DeepCopy();
         $this->node1 = new Node($this->graph);
         $this->node2 = new Node($this->graph);
         $this->edge = new Edge($this->node1, $this->node2);
-        $this->edge_store = array( 
-            ((string) $this->edge->id()) => (serialize($this->edge))
-        );
     }
 
     public function tearDown() {
