@@ -58,16 +58,13 @@ trait GraphTrait
                 catch(Exceptions\NodeAlreadyMemberException $e) { /* ignore */ }
             }
             $node->attach($this);
-            $this->notify();
         }
         if(!$this instanceof Graph) {
             try {
                 $this->context()->add($node);
             }
             catch(Exceptions\NodeAlreadyMemberException $e) { /* ignore */ }
-        }
-        if($this instanceof SubGraph) {
-            //$this->notify();
+            $this->notify();
         }
         if(!$skip_signals) {
             if($this->canEmitNodeAddSignals()) // sometimes this is not the preferred way
@@ -137,9 +134,12 @@ trait GraphTrait
             unset($this->nodes[(string) $node_id]);
             unset($this->node_ids[array_search((string)$node_id, $this->node_ids)]);
             if($this instanceof SubGraph) {
+                /*
                 try {
                     $this->context()->remove($node_id);
-                } catch(\Exception $e) { /* ignore, that's fine */ }
+                } catch(\Exception $e) {}  // ignore
+                */
+                $this->notify();
             }
             $this->emit("modified");
             $this->emit("node.removed", [$node_id]);
@@ -207,7 +207,10 @@ trait GraphTrait
 
     protected function observeNodeAddition(\SplSubject $node): void
     {
-        $this->add($node->id());
+        try {
+            $this->add($node);
+        }
+        catch(Exceptions\NodeAlreadyMemberException $e) {} // ignore
     }
 
 }

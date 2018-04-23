@@ -23,7 +23,9 @@ trait SplSubjectTrait {
      *
      * @var array
      */
-    protected $observers = array();
+    public $observers = array();
+
+    public $observer_ids = array();
 
     /**
      * Adds a new observer to the object
@@ -34,7 +36,11 @@ trait SplSubjectTrait {
      */
     public function attach(\SplObserver $observer): void 
     {
-        $this->observers[] = $observer;
+        $id = (string) $observer->id();
+        if(!in_array($id, $this->observer_ids)) {
+            $this->observer_ids[] = $id;
+            $this->observers[] = $observer;
+        }
     }
     
     /**
@@ -46,9 +52,11 @@ trait SplSubjectTrait {
      */
     public function detach(\SplObserver $observer): void 
     {
-        $key = array_search($observer, $this->observers, true);
+        $id = (string) $observer->id();
+        $key = array_search($id, $this->observer_ids, true);
         if($key) {
             unset($this->observers[$key]);
+            unset($this->observer_ids[$key]);
         }
     }
 
