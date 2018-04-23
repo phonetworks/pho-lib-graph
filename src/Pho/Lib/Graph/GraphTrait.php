@@ -139,6 +139,7 @@ trait GraphTrait
                     $this->context()->remove($node_id);
                 } catch(\Exception $e) {}  // ignore
                 */
+                // $this->_removing = $node_id;
                 $this->notify();
             }
             $this->emit("modified");
@@ -205,7 +206,15 @@ trait GraphTrait
         $this->remove($node->id());
     }
 
-    protected function observeNodeAddition(\SplSubject $node): void
+    protected function observeMemberAddition(\SplSubject $node): void
+    {
+        try {
+            $this->add($node);
+        }
+        catch(Exceptions\NodeAlreadyMemberException $e) {} // ignore
+    }
+
+    protected function observeMemberRemoval(\SplSubject $node): void
     {
         try {
             $this->add($node);

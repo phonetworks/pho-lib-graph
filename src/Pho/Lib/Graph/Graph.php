@@ -64,7 +64,7 @@ class Graph implements
         if($node->inDeletion())
             $this->observeNodeDeletion($node);
         else 
-            $this->observeNodeAddition($node);
+            $this->observeMemberAddition($node);
     }
     
     /**
