@@ -111,11 +111,17 @@ trait EntityTrait
      */
     protected function entityToArray(): array
     {
-        return [
+        $array = [
                 "id" => (string) $this->id,
                 "label" => $this->label(),
                 "attributes" => $this->attributes->toArray()
         ];
+        if(isset($this->observers)&&is_array($this->observers)) {
+            $array["observers"] = array_map(function(/*mixed*/$entity) {
+                return (string) $entity->id();
+            }, $this->observers);
+        }
+        return $array;
     }
 
     /**
