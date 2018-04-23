@@ -131,11 +131,15 @@ trait EntityTrait
      */
     protected function entityToArray(): array
     {
-        return [
+        $array = [
                 "id" => (string) $this->id,
                 "label" => $this->label(),
                 "attributes" => $this->attributes->toArray()
         ];
+        if(isset($this->listeners)&&isset($this->listeners_flat)) {
+            $array["listeners"] = $this->listeners_flat;
+        }
+        return $array;
     }
 
     /**

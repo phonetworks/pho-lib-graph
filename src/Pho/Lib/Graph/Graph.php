@@ -65,4 +65,15 @@ class Graph implements
         return (bool) $this->emit_node_add_signal;
     }
 
+    /**
+     * {@inheritdoc}
+     */
+    public function toArray(): array
+    {
+        return array_merge(
+            $this->graphToArray(),
+            ["listeners"=>$this->listeners_flat]
+        );
+    }
+
 }

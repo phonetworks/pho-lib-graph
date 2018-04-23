@@ -174,14 +174,6 @@ trait GraphTrait
     {
         return count($this->node_ids);
     }
-   
-    /**
-     * {@inheritdoc}
-     */
-    public function toArray(): array
-    {
-        return $this->graphToArray();
-    }
 
     /**
      * Converts the object to array
