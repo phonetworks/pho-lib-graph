@@ -11,6 +11,8 @@
 
 namespace Pho\Lib\Graph;
 
+use Opis\Closure\SerializableClosure;
+
 
 /**
  * Implements EntityInterface.
@@ -120,6 +122,16 @@ trait EntityTrait
             $array["observers"] = array_map(function(/*mixed*/$entity) {
                 return (string) $entity->id();
             }, $this->observers);
+        }
+        if(isset($this->listeners)&&is_array($this->listeners)) {
+            $array["listeners"] = [];
+            foreach($this->listeners as $listener=>$callback) {
+                $array["listeners"][$listener] = [ // format taken from sabre-event library
+                    $callback[0],
+                    $callback[1],
+                    [new SerializableClosure($callback[2][0])]
+                ];
+            }
         }
         return $array;
     }

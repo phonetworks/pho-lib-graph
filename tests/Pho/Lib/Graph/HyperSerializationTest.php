@@ -26,11 +26,9 @@ class HyperSerializationTest extends TestCase
         $this->assertContains($subgraph->id()->toString(), $node_serialized["observers"]);
     }
 
-    /**
-     * @depends testAddAndRemoval
-     */
     public function testGraphRemove()
     {
+        eval(\Psy\sh());
         $this->assertTrue(true);
     }
 }

@@ -23,7 +23,7 @@ trait SplSubjectTrait {
      *
      * @var array
      */
-    public $observers = array();
+    protected $observers = array();
 
     /**
      * Adds a new observer to the object
