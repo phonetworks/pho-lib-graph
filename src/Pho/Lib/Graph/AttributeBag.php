@@ -11,8 +11,6 @@
 
 namespace Pho\Lib\Graph;
 
-use Sabre\Event;
-
 /**
  * Holds edge and node attributes
  * 

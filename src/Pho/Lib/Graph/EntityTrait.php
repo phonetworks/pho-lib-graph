@@ -63,7 +63,7 @@ trait EntityTrait
      */
     public function init(): void
     {
-        $this->attributes->on("modified", \Closure::fromCallable([$this, "emitModified"]));
+        $this->attributes->on("modified", [$this, "emitModified"]);
     }
 
     /**
@@ -73,7 +73,7 @@ trait EntityTrait
      *
      * @return void
      */
-    protected function emitModified(): void
+    public function emitModified(): void
     {
         $this->emit("modified");
     }

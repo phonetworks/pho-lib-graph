@@ -11,8 +11,6 @@
 
 namespace Pho\Lib\Graph;
 
-use Sabre\Event;
-
 /**
  * Atomic graph entity, Edge
  * 
@@ -134,7 +132,7 @@ class Edge implements
 
     public function init(): void
     {
-        $this->tail->on("deleting", \Closure::fromCallable([$this, "observeTailDestruction"]));
+        $this->tail->node()->on("deleting", [$this, "observeTailDestruction"]);
         $this->__init();
     }
 
@@ -264,7 +262,7 @@ class Edge implements
      *
      * @return void
      */
-    protected function observeTailDestruction(): void
+    public function observeTailDestruction(): void
     {
         if($this->predicate()->binding()) {
             $this->head()->destroy();

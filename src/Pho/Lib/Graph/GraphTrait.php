@@ -44,7 +44,7 @@ trait GraphTrait
     public function init(): void 
     {
         foreach($this->nodes as $node) {
-            $node->on("deleting", \Closure::fromCallable([$this, "remove"]));
+            $node->on("deleting", [$this, "remove"]);
         }
     }
 
@@ -62,13 +62,13 @@ trait GraphTrait
         }
         $this->node_ids[] = (string) $node->id();
         $this->nodes[(string) $node->id()] = $node;
-        $node->on("deleting", \Closure::fromCallable([$this, "remove"]));
+        $node->on("deleting", [$this, "remove"]);
         if($node instanceof GraphInterface) {
             foreach($node->members() as $member) {
                 $this->add($member, true);
             }
-            $node->on("node.added", \Closure::fromCallable([$this, "add"]));
-            $node->on("node.removed", \Closure::fromCallable([$this, "remove"]));
+            $node->on("node.added", [$this, "add"]);
+            $node->on("node.removed", [$this, "remove"]);
         }
         if(!$this instanceof Graph) {
             try {
