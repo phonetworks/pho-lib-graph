@@ -11,7 +11,7 @@
 
 namespace Pho\Lib\Graph;
 
-class EncompassingGraph extends TestCase 
+class EncompassingGraphTest extends TestCase 
 {
 
     public function testAddAndRemoval() {
