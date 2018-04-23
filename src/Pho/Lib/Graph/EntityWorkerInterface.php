@@ -106,18 +106,6 @@ interface EntityWorkerInterface
      */
     public function toArray(): array;
 
-
-    /**
-     * @internal
-     *
-     * Observed entities use this method to update the entity.
-     *
-     * @param \SplSubject $subject Updater.
-     *
-     * @return void
-     */
-    public function update(\SplSubject $subject): void;
-
     /**
      * Broadcasts a signal
      *
@@ -129,5 +117,16 @@ interface EntityWorkerInterface
      * @return bool
      */
     public function emit(string $signal, array $params = [], ?callable $continueCallBack = null): bool;
+
+
+    /**
+     * Initializer
+     * 
+     * Must be called when the object is initialized.
+     * Either manually or after deserialization.
+     *
+     * @return self
+     */
+    public function init(): void;
 
 }

@@ -150,4 +150,14 @@ interface GraphInterface
      */
     public function canEmitNodeAddSignals(): bool;
 
+    /**
+     * Initializer
+     * 
+     * Must be called when the object is initialized.
+     * Either manually or after deserialization.
+     *
+     * @return self
+     */
+    public function init(): void;
+
 }

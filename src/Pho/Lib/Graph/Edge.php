@@ -31,7 +31,6 @@ class Edge implements
     EntityWorkerInterface,
     EdgeInterface, 
     HookableInterface,
-    \SplObserver, 
     \Serializable,
     Event\EmitterInterface
 {
@@ -40,6 +39,7 @@ class Edge implements
     use Event\EmitterTrait;
     use EntityTrait {
         EntityTrait::__construct as ____construct;
+        EntityTrait::init as __init;
     }
     use HookableTrait;
 
@@ -129,6 +129,15 @@ class Edge implements
         if(!is_null($head)) {
             $this->head->emit("edge.connected", [$this]);
         }
+        $this->init();
+    }
+
+    public function init(): void
+    {
+        $this->tail->on("deleting", function() {
+            $this->observeTailDestruction();
+        });
+        $this->__init();
     }
 
     /**
@@ -255,11 +264,9 @@ class Edge implements
     /**
      * Tail Nodes use this method to update about deletion
      *
-     * @param \SplSubject $subject Updater.
-     *
      * @return void
      */
-    protected function observeTailUpdate(\SplSubject $subject): void
+    protected function observeTailDestruction(): void
     {
         if($this->predicate()->binding()) {
             $this->head()->destroy();

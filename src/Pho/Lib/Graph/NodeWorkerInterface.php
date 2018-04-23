@@ -78,14 +78,5 @@ interface NodeWorkerInterface
      */
     public function changeContext(GraphInterface $context): void;
 
-    /**
-     * Determines whether the node is in self-destruction process.
-     * 
-     * Used by observers.
-     * 
-     * @return bool Yes or no.
-     */
-    public function inDeletion(): bool;
-
 
 }

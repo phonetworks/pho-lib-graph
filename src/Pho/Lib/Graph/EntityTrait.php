@@ -59,6 +59,17 @@ trait EntityTrait
     }
 
     /**
+     * {@inheritDoc}
+     */
+    public function init(): void
+    {
+        $this->attributes->on("modified", function($passthrough=true) {
+            if($passthrough)
+                $this->emit("modified");
+        });
+    }
+
+    /**
      * {@inheritdoc}
      */    
     public function id(): ID
@@ -95,7 +106,7 @@ trait EntityTrait
      */    
     public function destroy(): void
     {
-        $this->emit("deleting");
+        $this->emit("deleting", [$this->id()]);
     }
 
     /**
@@ -111,17 +122,11 @@ trait EntityTrait
      */
     protected function entityToArray(): array
     {
-        $array = [
+        return [
                 "id" => (string) $this->id,
                 "label" => $this->label(),
                 "attributes" => $this->attributes->toArray()
         ];
-        if(isset($this->observers)&&is_array($this->observers)) {
-            $array["observers"] = array_map(function(/*mixed*/$entity) {
-                return (string) $entity->id();
-            }, $this->observers);
-        }
-        return $array;
     }
 
     /**
@@ -130,16 +135,6 @@ trait EntityTrait
     public function toArray(): array
     {
         return $this->entityToArray();
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function update(\SplSubject $subject): void
-    {
-        if($subject instanceof AttributeBag /*&& $this instanceof NodeInterface*/) {
-            $this->emit("modified");
-        }
     }
 
     /**

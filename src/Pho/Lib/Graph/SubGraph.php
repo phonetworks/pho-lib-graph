@@ -24,7 +24,17 @@ class SubGraph extends Node implements GraphInterface
 
     use GraphTrait {
         GraphTrait::add as __add;
+        GraphTrait::init as graphInit;
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function __construct(GraphInterface $context) 
+    {
+        parent::__construct($context);
+        $this->graphInit();
+    }  
 
     /**
      * {@inheritdoc}
@@ -57,19 +67,6 @@ class SubGraph extends Node implements GraphInterface
     public function toArray(): array
     {
         return array_merge(parent::toArray(), $this->graphToArray());
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function update(\SplSubject $subject): void
-    {
-        if($subject instanceof NodeInterface && $subject->inDeletion()) {
-            $this->observeNodeDeletion($subject);
-        }
-        else {
-            parent::update($subject);
-        }
     }
 
 }

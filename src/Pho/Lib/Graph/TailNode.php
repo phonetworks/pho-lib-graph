@@ -22,10 +22,8 @@ namespace Pho\Lib\Graph;
  * 
  * @author Emre Sokullu <emre@phonetworks.org>
  */
-class TailNode extends AdjacentNode implements \SplSubject
+class TailNode extends AdjacentNode
 {
-
-    use SplSubjectTrait;
 
     /**
      * {@inheritdoc}
@@ -37,8 +35,8 @@ class TailNode extends AdjacentNode implements \SplSubject
      */
     public function destroy(): void
     {
+        $this->emit("deleting");
         parent::destroy();
-        $this->notify();
     }
 
 }

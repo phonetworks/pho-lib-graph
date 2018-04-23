@@ -39,17 +39,13 @@ class Node implements
     NodeInterface, 
     NodeWorkerInterface,
     HookableInterface,
-    \SplObserver,  
-    \SplSubject, 
     \Serializable, 
     Event\EmitterInterface
 {
 
     use SerializableTrait;
-    use SplSubjectTrait;
     use EntityTrait {
-        EntityTrait::__construct as onEntityLoad;
-        EntityTrait::destroy as __destroy;
+        EntityTrait::__construct as ____construct;
     }
     use HookableTrait;
     use Event\EmitterTrait;
@@ -76,22 +72,16 @@ class Node implements
     protected $context_id;
 
     /**
-     * A flag that states that the destruction process has begun.
-     *
-     * @var boolean
-     */
-    protected $in_deletion = false;
-
-    /**
      * {@inheritdoc}
      */
     public function __construct(GraphInterface $context) 
     {
-        $this->onEntityLoad();
+        $this->____construct();
         $this->edge_list = new EdgeList($this);
         $context->add($this)->context = $context;
         $this->context_id = (string) $context->id();
-        $this->attachGraphObservers($context);
+        //$this->attachGraphObservers($context);
+        $this->init();
         Logger::info("A node with id \"%s\" and label \"%s\" constructed", $this->id(), $this->label());
     }
 
@@ -103,7 +93,7 @@ class Node implements
      * 
      * @return void
      */
-    private function attachGraphObservers(GraphInterface $context): void
+    /*private function attachGraphObservers(GraphInterface $context): void
     {
         while($context instanceof SubGraph) {
             $this->attach($context);
@@ -111,6 +101,7 @@ class Node implements
         }
         $this->attach($context);
     }
+    */
 
     /**
      * {@inheritdoc}
@@ -160,24 +151,6 @@ class Node implements
     public function edge(string $id): EdgeInterface
     {
         return $this->hookable();
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function destroy(): void 
-    {
-        $this->__destroy();
-        $this->in_deletion = true;
-        $this->notify();
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function inDeletion(): bool
-    {
-        return $this->in_deletion;
     }
 
 }

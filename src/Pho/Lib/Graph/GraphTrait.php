@@ -39,6 +39,18 @@ trait GraphTrait
     protected $node_ids = [];
 
     /**
+     * {@inheritDoc}
+     */
+    public function init(): void 
+    {
+        foreach($this->nodes as $node) {
+            $node->on("deleting", function(ID $id) {
+                $this->remove($id);
+            });
+        }
+    }
+
+    /**
      * {@inheritdoc}
      * 
      * should be able to change context of  $node if $node's context is 
@@ -50,6 +62,9 @@ trait GraphTrait
         }
         $this->node_ids[] = (string) $node->id();
         $this->nodes[(string) $node->id()] = $node;
+        $node->on("deleting", function(ID $id) {
+            $this->remove($id);
+        });
         if($node instanceof GraphInterface) {
             foreach($node->members() as $member) {
                 try {
@@ -194,19 +209,6 @@ trait GraphTrait
     protected function graphToArray(): array
     {
         return ["members"=>$this->node_ids];
-    }
-
-    /**
-     * \SplObserver method that observes nodes and crosses them off of the 
-     * nodes list when they are destroyed.
-     *
-     * @param \SplSubject $node
-     *
-     * @return void
-     */
-    protected function observeNodeDeletion(\SplSubject $node): void
-    {
-        $this->remove($node->id());
     }
 
 }

@@ -24,8 +24,7 @@ use Sabre\Event;
  */
 class Graph implements 
     GraphInterface,
-    HookableInterface, 
-    \SplObserver, 
+    HookableInterface,
     \Serializable, 
     Event\EmitterInterface
 {
@@ -49,6 +48,7 @@ class Graph implements
     public function __construct(bool $emit_node_add_signal = true)
     {
         $this->emit_node_add_signal  = $emit_node_add_signal; 
+        $this->init();
     }
 
     /**
@@ -57,11 +57,6 @@ class Graph implements
     public function id(): ID
     {
         return ID::root();
-    }
-
-    public function update(\SplSubject $node): void
-    {
-        $this->observeNodeDeletion($node);
     }
     
     /**

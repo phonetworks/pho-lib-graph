@@ -11,6 +11,8 @@
 
 namespace Pho\Lib\Graph;
 
+use Sabre\Event;
+
 /**
  * Holds edge and node attributes
  * 
@@ -28,10 +30,9 @@ namespace Pho\Lib\Graph;
  * 
  * @author Emre Sokullu <emre@phonetworks.org>
  */
-class AttributeBag implements \SplSubject
+class AttributeBag implements Event\EmitterInterface
 {
-
-    use SplSubjectTrait;
+    use Event\EmitterTrait;
 
     /**
      * Holds the attributes of a node in an array
@@ -57,7 +58,6 @@ class AttributeBag implements \SplSubject
     public function __construct(EntityInterface $owner, array $bag = []) 
     {
         $this->owner = $owner;
-        $this->attach($this->owner);
         if(count($bag)>0) {
             $this->bag = $bag;
         }
@@ -118,7 +118,9 @@ class AttributeBag implements \SplSubject
     public function __set(string $attribute, /*string|bool|array*/ $value): void
     {
         $this->bag[$attribute] = $value;
-        $this->notify();
+        //$this->notify();
+        error_log("bacak");
+        $this->emit("modified", [true]);
     }
 
     /**
@@ -134,6 +136,7 @@ class AttributeBag implements \SplSubject
     public function quietSet(string $attribute, /*string|bool|array*/ $value): void
     {
         $this->bag[$attribute] = $value;
+        $this->emit("modified", [false]);
     }
 
     /**
@@ -147,7 +150,8 @@ class AttributeBag implements \SplSubject
     public function __unset(string $attribute): void
     {
         unset($this->bag[$attribute]);
-        $this->notify();
+        $this->emit("modified", [true]);
+        //$this->notify();
     }
 
 }
