@@ -132,7 +132,7 @@ class Edge implements
 
     public function init(): void
     {
-        $this->tail->node()->on("deleting", [$this, "observeTailDestruction"]);
+        $this->tail()->node()->on("deleting", [$this, "observeTailDestruction"]);
         $this->__init();
     }
 
