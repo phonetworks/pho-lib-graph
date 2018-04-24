@@ -59,7 +59,7 @@ trait EmitterTrait {
             $this->listeners[$eventName][2][] =  \Closure::fromCallable($callBack);
             if(is_array($callBack)) {
                 $this->listeners_flat[$eventName][0] = false;
-                $this->listeners_flat[$eventName][1] = $priority;
+                $this->listeners_flat[$eventName][1][] = $priority;
                 $this->listeners_flat[$eventName][2][] = [$callBack[0]->id()->toString(), $callBack[1]];
             }
         }
