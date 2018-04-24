@@ -133,9 +133,11 @@ trait EmitterTrait {
 
             // Sorting
             \array_multisort($this->listeners[$eventName][1], SORT_NUMERIC, $this->listeners[$eventName][2]);
+            \array_multisort($this->listeners_flat[$eventName][1], SORT_NUMERIC, $this->listeners_flat[$eventName][2]);
 
             // Marking the listeners as sorted
             $this->listeners[$eventName][0] = true;
+            $this->listeners_flat[$eventName][0] = true;
         }
 
         if(!$flat)
