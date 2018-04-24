@@ -67,3 +67,6 @@ To get the diff between two versions, go to https://github.com/phonetworks/pho-l
 
 ## 7.0 to 7.1
 * toArray returns event listeners too
+
+## 7.1 to 7.2
+* preventing duplicate event listeners
