@@ -116,7 +116,7 @@ interface EntityWorkerInterface
      * 
      * @return bool
      */
-    public function emit(string $signal, array $params = [], ?callable $continueCallBack = null): bool;
+    public function emit(string $signal, array $params = []): bool;
 
 
     /**
