@@ -56,7 +56,7 @@ interface EmitterInterface {
      *
      * @return callable[]
      */
-    function listeners(string $eventName) : array;
+    function listeners(string $eventName, bool $flat=false) : array;
 
     /**
      * Removes all listeners.

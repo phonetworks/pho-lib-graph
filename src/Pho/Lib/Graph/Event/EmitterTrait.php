@@ -40,6 +40,18 @@ trait EmitterTrait {
         if(!is_callable($callBack)) {
             error_log("callback is not callable");
         }
+        if(is_array($callBack)) {
+            foreach($this->listeners($eventName, true) as $listener) {
+                if($listener[1]==$callBack[1]) {
+                    if(is_object($listener[0])) {
+                        if($listener[0]->id()->equals($callBack[0]->id()))
+                            return;
+                    }
+                    if($listener[0]==$callBack[0]->id()->toString())
+                        return;
+                }
+            }
+        }
         if (!isset($this->listeners[$eventName])) {
             $this->listeners[$eventName] = [
                 true,  // If there's only one item, it's sorted
@@ -110,7 +122,7 @@ trait EmitterTrait {
      *
      * @return callable[]
      */
-    function listeners(string $eventName) : array {
+    function listeners(string $eventName, bool $flat=false) : array {
 
         if (!isset($this->listeners[$eventName])) {
             return [];
@@ -126,7 +138,10 @@ trait EmitterTrait {
             $this->listeners[$eventName][0] = true;
         }
 
-        return $this->listeners[$eventName][2];
+        if(!$flat)
+            return $this->listeners[$eventName][2];
+        else
+            return $this->listeners_flat[$eventName][2];
 
     }
 

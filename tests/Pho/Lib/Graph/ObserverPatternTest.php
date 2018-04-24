@@ -26,10 +26,11 @@ class ObserverPatternTest extends TestCase
             public function __construct($graph)
                 {
                     parent::__construct($graph);
-                    $this->on("modified", function() {
-                        $this->node_updated = true;
-                    });
+                    $this->on("modified", [$this, "onModified"]);
                 }
+            public function onModified() {
+                $this->node_updated = true;
+            }
         };
         $node->attributes()->attribute = "value";
         $this->assertTrue($node->node_updated);
