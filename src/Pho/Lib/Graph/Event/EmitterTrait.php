@@ -42,6 +42,8 @@ trait EmitterTrait {
         }
         if(is_array($callBack)) {
             foreach($this->listeners($eventName, true) as $listener) {
+                if(is_object($listener) && $listener instanceof \Closure)
+                    continue;
                 if($listener[1]==$callBack[1]) {
                     if(is_object($listener[0])) {
                         if($listener[0]->id()->equals($callBack[0]->id()))
