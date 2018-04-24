@@ -70,6 +70,8 @@ trait EmitterTrait {
      *
      * This method will return true if 0 or more listeners were succesfully
      * handled. false is returned if one of the events broke the event chain.
+     * 
+     * **Pho: Please note, continueCallback does not exist with Pho**
      *
      * If the continueCallBack is specified, this callback will be called every
      * time before the next event handler is called.
@@ -86,9 +88,7 @@ trait EmitterTrait {
      * Lastly, if there are 5 event handlers for an event. The continueCallback
      * will be called at most 4 times.
      */
-    function emit(string $eventName, array $arguments = [], callable $continueCallBack = null) : bool {
-
-        if (\is_null($continueCallBack)) {
+    function emit(string $eventName, array $arguments = []) : bool {
 
             foreach ($this->listeners($eventName) as $listener) {
 
@@ -97,27 +97,6 @@ trait EmitterTrait {
                     return false;
                 }
             }
-
-        } else {
-
-            $listeners = $this->listeners($eventName);
-            $counter = \count($listeners);
-
-            foreach ($listeners as $listener) {
-
-                $counter--;
-                $result = \call_user_func_array($listener, $arguments);
-                if ($result === false) {
-                    return false;
-                }
-
-                if ($counter > 0) {
-                    if (!$continueCallBack()) break;
-                }
-
-            }
-
-        }
 
         return true;
 
