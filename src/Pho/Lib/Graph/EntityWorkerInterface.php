@@ -105,6 +105,15 @@ interface EntityWorkerInterface
      * @return array The object in array format.
      */
     public function toArray(): array;
+    
+    /**
+     * Checks if given entity is the same as this object.
+     *    
+     * @param EntityInterface $entity Entity to check equality
+     *
+     * @return bool
+     */
+    public function equals(EntityInterface $entity): bool;
 
     /**
      * Broadcasts a signal
