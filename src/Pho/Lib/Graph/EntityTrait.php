@@ -141,6 +141,14 @@ trait EntityTrait
         }
         return $array;
     }
+        
+   /**
+     * {@inheritdoc}
+     */
+   public function equals(EntityInterface $entity): bool
+   {
+        return $this->id()->equals($entity->id());       
+   }
 
     /**
      * {@inheritdoc}
