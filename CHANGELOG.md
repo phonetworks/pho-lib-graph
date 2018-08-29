@@ -70,3 +70,6 @@ To get the diff between two versions, go to https://github.com/phonetworks/pho-l
 
 ## 7.1 to 7.2
 * preventing duplicate event listeners
+
+## 7.2 to 7.3
+* added **equals** function for EntityInterface objects
