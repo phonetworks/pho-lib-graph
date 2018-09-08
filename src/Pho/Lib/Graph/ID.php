@@ -76,13 +76,30 @@ class ID
      */
     public static function generate(EntityInterface $entity): ID
     {
-        return new ID(
-            sprintf("%s", 
+        $headers = static::header($entity);
+        return new \Pho\Lib\Graph\ID(
+            sprintf("%x%x%s", 
+                $headers[0], 
+                $headers[1],
                 bin2hex(
-                    random_bytes(16)
+                    random_bytes(15)
                 )
             )
         );
+    }
+
+     /**
+      * Generates an ID for the header
+      *
+      * This method enables flexibility when it comes to naming an 
+      * entity header by extending ID class.
+      *
+      * @param EntityInterface $entity
+      * @return array An array of two ints (actually hexadecimals) 
+      */
+    protected static function header(EntityInterface $entity): array
+    {
+        return [rand(0,15), rand(0,15)];
     }
     
     /**
