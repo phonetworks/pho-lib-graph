@@ -116,16 +116,6 @@ class SimpleTest extends TestCase
         ID::fromString("invalid");
     }
 
-    public function testIDTypes() {
-        $subgraph = new SubGraph($this->graph);
-        $node = new Node($subgraph);
-        $edge = new Edge($node, $subgraph);
-        $this->assertEquals(0, (int) $this->graph->id()->toString()[0]);
-        $this->assertEquals(1, (int) $node->id()->toString()[0]);
-        $this->assertEquals(2, (int) $subgraph->id()->toString()[0]);
-        $this->assertGreaterThanOrEqual(6, (int) $edge->id()->toString()[0]);
-    }
-
     public function testGraphToArray() {
         $node = new Node($this->graph);
         $this->assertEquals($node->id(), $this->graph->toArray()["members"][0]);
