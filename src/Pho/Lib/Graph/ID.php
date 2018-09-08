@@ -77,7 +77,7 @@ class ID
     public static function generate(EntityInterface $entity): ID
     {
         $headers = static::header($entity);
-        return new \Pho\Lib\Graph\ID(
+        return new ID(
             sprintf("%x%x%s", 
                 $headers[0], 
                 $headers[1],
