@@ -48,13 +48,20 @@ trait EntityTrait
     protected $attributes;
 
     /**
+     * ID generator object
+     *
+     * @var string
+     */
+    protected $id_generator = ID::class;
+
+    /**
      * Constructor.
      * 
      * Assigns a random ID and initializes the object.
      */
     public function __construct()
     {
-        $this->id = ID::generate($this);
+        $this->id = $this->id_generator::generate($this);
         $this->attributes = new AttributeBag($this);
     }
 
