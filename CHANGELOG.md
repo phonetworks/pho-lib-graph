@@ -73,3 +73,6 @@ To get the diff between two versions, go to https://github.com/phonetworks/pho-l
 
 ## 7.2 to 7.3
 * added **equals** function for EntityInterface objects
+
+## 7.3 to 8.0
+* moved ID headers to pho-framework
