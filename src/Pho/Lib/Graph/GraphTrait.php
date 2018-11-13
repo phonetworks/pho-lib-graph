@@ -44,7 +44,7 @@ trait GraphTrait
     public function init(): void 
     {
         foreach($this->nodes as $node) {
-            $node->on("deleting", [$this, "remove"], 100, [$this->id()->toString(), "remove"]);
+            $node->on("deleting", [$this, "remove"]);
         }
     }
 
@@ -62,7 +62,7 @@ trait GraphTrait
         }
         $this->node_ids[] = (string) $node->id();
         $this->nodes[(string) $node->id()] = $node;
-        $node->on("deleting", [$this, "remove"], 100, [$this->id()->toString(), "remove"]);
+        $node->on("deleting", [$this, "remove"]);
         if($node instanceof GraphInterface) {
             foreach($node->members() as $member) {
                 $this->add($member, true);

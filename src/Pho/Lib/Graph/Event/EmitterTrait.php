@@ -32,15 +32,10 @@ trait EmitterTrait {
 
     /**
      * Subscribe to an event.
-     *
-     * @param string $eventName name of the event
-     * @param mixed $callBack callBack in closure format (array)
-     * @param int $priority the order of which to trigger this event
-     * @param ?array $callBackFlat the flat version of callBack
      * 
      * @return void
      */
-    function on(string $eventName, /*mixed*/ $callBack, int $priority = 100, ?array $callBackFlat = null) 
+    function on(string $eventName, /*mixed*/ $callBack, int $priority = 100) 
     {
         if(!is_callable($callBack)) {
             error_log("callback is not callable");
@@ -60,6 +55,7 @@ trait EmitterTrait {
             }
         }
         $closure = \Closure::fromCallable($callBack);
+        $analyzer = new \SuperClosure\Analyzer\TokenAnalyzer();
         //    eval(\Psy\sh());
         if (!isset($this->listeners[$eventName])) {
             $this->listeners[$eventName] = [
@@ -68,16 +64,15 @@ trait EmitterTrait {
                 [$closure]
             ];
             if(is_array($callBack)) {
+                $subject=$analyzer->analyze($closure);
                 $this->listeners_flat[$eventName] = [
                     true,  // If there's only one item, it's sorted
                     [$priority],
                     [
-                        is_null($callBackFlat) ?
                         [
-                            $callBack[0]->id()->toString(), 
+                            $subject["reflection"]->getClosureThis()->id()->toString(),
                             $callBack[1]
                         ]
-                        : $callBackFlat
                     ]
                 ];
             }
@@ -86,15 +81,13 @@ trait EmitterTrait {
             $this->listeners[$eventName][1][] = $priority;
             $this->listeners[$eventName][2][] =  $closure;
             if(is_array($callBack)) {
+                $subject=$analyzer->analyze($closure);
                 $this->listeners_flat[$eventName][0] = false;
                 $this->listeners_flat[$eventName][1][] = $priority;
-                $this->listeners_flat[$eventName][2][] = 
-                    is_null($callBackFlat) ?
-                    [
-                        $callBack[0]->id()->toString(), 
+                $this->listeners_flat[$eventName][2][] = [
+                        $subject["reflection"]->getClosureThis()->id()->toString(), 
                         $callBack[1]
-                    ]
-                    : $callBackFlat;
+                ];
             }
         }
     }
