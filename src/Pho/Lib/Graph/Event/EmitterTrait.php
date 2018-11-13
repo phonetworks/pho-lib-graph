@@ -33,9 +33,14 @@ trait EmitterTrait {
     /**
      * Subscribe to an event.
      *
+     * @param string $eventName name of the event
+     * @param mixed $callBack callBack in closure format (array)
+     * @param int $priority the order of which to trigger this event
+     * @param ?array $callBackFlat the flat version of callBack
+     * 
      * @return void
      */
-    function on(string $eventName, /*mixed*/ $callBack, int $priority = 100) 
+    function on(string $eventName, /*mixed*/ $callBack, int $priority = 100, ?array $callBackFlat = null) 
     {
         if(!is_callable($callBack)) {
             error_log("callback is not callable");
@@ -54,27 +59,42 @@ trait EmitterTrait {
                 }
             }
         }
+        $closure = \Closure::fromCallable($callBack);
+        //    eval(\Psy\sh());
         if (!isset($this->listeners[$eventName])) {
             $this->listeners[$eventName] = [
                 true,  // If there's only one item, it's sorted
                 [$priority],
-                [\Closure::fromCallable($callBack)]
+                [$closure]
             ];
             if(is_array($callBack)) {
                 $this->listeners_flat[$eventName] = [
                     true,  // If there's only one item, it's sorted
                     [$priority],
-                    [[$callBack[0]->id()->toString(), $callBack[1]]]
+                    [
+                        is_null($callBackFlat) ?
+                        [
+                            $callBack[0]->id()->toString(), 
+                            $callBack[1]
+                        ]
+                        : $callBackFlat
+                    ]
                 ];
             }
         } else {
             $this->listeners[$eventName][0] = false; // marked as unsorted
             $this->listeners[$eventName][1][] = $priority;
-            $this->listeners[$eventName][2][] =  \Closure::fromCallable($callBack);
+            $this->listeners[$eventName][2][] =  $closure;
             if(is_array($callBack)) {
                 $this->listeners_flat[$eventName][0] = false;
                 $this->listeners_flat[$eventName][1][] = $priority;
-                $this->listeners_flat[$eventName][2][] = [$callBack[0]->id()->toString(), $callBack[1]];
+                $this->listeners_flat[$eventName][2][] = 
+                    is_null($callBackFlat) ?
+                    [
+                        $callBack[0]->id()->toString(), 
+                        $callBack[1]
+                    ]
+                    : $callBackFlat;
             }
         }
     }

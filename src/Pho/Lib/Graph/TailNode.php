@@ -35,8 +35,9 @@ class TailNode extends AdjacentNode
      */
     public function destroy(): void
     {
-        $this->emit("deleting");
-        parent::destroy();
+        $this->node()->destroy();
+        //$this->emit("deleting");
+        //parent::destroy();
     }
 
 }
