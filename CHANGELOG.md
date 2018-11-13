@@ -78,4 +78,4 @@ To get the diff between two versions, go to https://github.com/phonetworks/pho-l
 * moved ID headers to pho-framework
 
 ## 8.0 to 8.1
-* ability to change flatListeners directly using a 4th parameter on "on" of EmitterTrait
+* [CANCELLED] ability to change flatListeners directly using a 4th parameter on "on" of EmitterTrait

@@ -55,7 +55,7 @@ trait EmitterTrait {
             }
         }
         $closure = \Closure::fromCallable($callBack);
-        $analyzer = new \SuperClosure\Analyzer\TokenAnalyzer();
+        // $analyzer = new \SuperClosure\Analyzer\TokenAnalyzer();
         //    eval(\Psy\sh());
         if (!isset($this->listeners[$eventName])) {
             $this->listeners[$eventName] = [
@@ -64,13 +64,13 @@ trait EmitterTrait {
                 [$closure]
             ];
             if(is_array($callBack)) {
-                $subject=$analyzer->analyze($closure);
+                //$subject=$analyzer->analyze($closure);
                 $this->listeners_flat[$eventName] = [
                     true,  // If there's only one item, it's sorted
                     [$priority],
                     [
                         [
-                            $subject["reflection"]->getClosureThis()->id()->toString(),
+                            $callBack[0]->id()->toString(), // $subject["reflection"]->getClosureThis()->id()->toString(),
                             $callBack[1]
                         ]
                     ]
@@ -81,11 +81,11 @@ trait EmitterTrait {
             $this->listeners[$eventName][1][] = $priority;
             $this->listeners[$eventName][2][] =  $closure;
             if(is_array($callBack)) {
-                $subject=$analyzer->analyze($closure);
+                //$subject=$analyzer->analyze($closure);
                 $this->listeners_flat[$eventName][0] = false;
                 $this->listeners_flat[$eventName][1][] = $priority;
                 $this->listeners_flat[$eventName][2][] = [
-                        $subject["reflection"]->getClosureThis()->id()->toString(), 
+                        $callBack[0]->id()->toString(),    //$subject["reflection"]->getClosureThis()->id()->toString(), 
                         $callBack[1]
                 ];
             }
