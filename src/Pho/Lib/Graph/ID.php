@@ -11,6 +11,8 @@
 
 namespace Pho\Lib\Graph;
 
+use Pho\Lib\DHT\Utils;
+
 /**
  * Immutable, cryptographically secure identifier
  * 
@@ -36,11 +38,16 @@ namespace Pho\Lib\Graph;
  * 
  * @author Emre Sokullu <emre@phonetworks.org>
  */
-class ID
+class ID implements \Pho\Lib\DHT\IDInterface
 {
     
+    const BitLength = 128; // UUID
+    const ByteLength = (self::BitLength / 8);
+
     /**
      * Pho ID in string.
+     * 
+     * In Hex format
      *
      * @var string
      */
@@ -60,6 +67,28 @@ class ID
     private function __construct(string $id) 
     {
         $this->value = $id;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function distance(/*mixed*/ $another_id): int
+    {
+        if($another_id instanceof ID)
+            $another_id = $another_id->toString();
+        if(!is_string($another_id)) {
+            throw new \InvalidArgumentException("This method only accepts string or \\Pho\\Lib\\Graph inputs. The parameter was a ".gettype($another_id));
+        }
+        return Utils::xor_distance($this->value, $another_id);
+
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function bin(): string
+    {
+        return Utils::hex_to_bin($this->value, self::BitLength);
     }
 
     /**
