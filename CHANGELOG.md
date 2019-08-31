@@ -79,3 +79,7 @@ To get the diff between two versions, go to https://github.com/phonetworks/pho-l
 
 ## 8.0 to 8.1
 * [CANCELLED] ability to change flatListeners directly using a 4th parameter on "on" of EmitterTrait
+
+## 8.1 to 9.0
+* inclusion of pho-lib-dht as a requirement
+* added bin() and distance($another_id) methods to ID
