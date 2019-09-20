@@ -12,6 +12,7 @@
 namespace Pho\Lib\Graph;
 
 use Pho\Lib\DHT\Utils;
+use Pho\Lib\DHT\IDInterface;
 
 /**
  * Immutable, cryptographically secure identifier
@@ -38,7 +39,7 @@ use Pho\Lib\DHT\Utils;
  * 
  * @author Emre Sokullu <emre@phonetworks.org>
  */
-class ID implements \Pho\Lib\DHT\IDInterface
+class ID implements IDInterface
 {
     
     const BitLength = 128; // UUID
