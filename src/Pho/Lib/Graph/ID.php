@@ -72,7 +72,7 @@ class ID implements \Pho\Lib\DHT\IDInterface
     /**
      * {@inheritdoc}
      */
-    public function distance(/*mixed*/ $another_id): int
+    public function distance(/*mixed*/ $another_id): string
     {
         if($another_id instanceof ID)
             $another_id = $another_id->toString();
