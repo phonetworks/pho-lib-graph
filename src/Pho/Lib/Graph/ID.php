@@ -79,7 +79,7 @@ class ID implements \Pho\Lib\DHT\IDInterface
         if(!is_string($another_id)) {
             throw new \InvalidArgumentException("This method only accepts string or \\Pho\\Lib\\Graph inputs. The parameter was a ".gettype($another_id));
         }
-        return Utils::xor_distance($this->value, $another_id);
+        return (string) Utils::xor_bucket($this->value, $another_id);
 
     }
 

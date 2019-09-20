@@ -24,7 +24,7 @@
     "require": {
         "php":">=7.1",
         "psr/log": "^1.0",
-        "phonetworks/pho-lib-dht": "*"
+        "phonetworks/pho-lib-dht": "^1.0"
     },
     "require-dev": {
         "phpunit/phpunit": "^5.7",
