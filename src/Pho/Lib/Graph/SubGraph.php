@@ -27,6 +27,16 @@ class SubGraph extends Node implements GraphInterface
         GraphTrait::init as graphInit;
     }
 
+    /**
+     * If enabled, the members of this SubGraph won't 
+     * be deleted once the subgraph itself is deleted.
+     * 
+     * Not the nicest solution to the pho-framework problem.
+     *
+     * @todo Revisit
+     * 
+     * @var boolean
+     */
     protected $no_member_deletion = false;
 
     /**
