@@ -27,6 +27,8 @@ class SubGraph extends Node implements GraphInterface
         GraphTrait::init as graphInit;
     }
 
+    protected $no_member_deletion = false;
+
     /**
      * {@inheritdoc}
      */
@@ -55,8 +57,10 @@ class SubGraph extends Node implements GraphInterface
      */
     public function destroy(): void
     {
-        foreach($this->node_ids as $node_id) {
-            $this->get(ID::fromString($node_id))->destroy();
+        if(!$this->no_member_deletion) {
+            foreach($this->node_ids as $node_id) {
+                $this->get(ID::fromString($node_id))->destroy();
+            }
         }
         parent::destroy();
     }
