@@ -168,9 +168,10 @@ class ID implements IDInterface
     /**
      * Verifies identicality
      *
+     * @param mixed $id ID as ID object or string
      * @return bool
      */
-    public function equals(ID $id) 
+    public function equals(/*ID|string*/ $id) 
     {
         return ($this->value == (string) $id);
     }
